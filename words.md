@@ -1,4 +1,7 @@
-
+---
+layout: base
+title: words
+---
 # Words
 
 ## Introduction
@@ -41,8 +44,10 @@ Written words consists of characters. We can write down characters in
 Haskell with single quotes. If you type in a character in *ghci*, it
 will simply echo back the character:
 
-    Prelude> 'h'
-	'h'
+{% highlight haskell %}
+Prelude> 'h'
+'h'
+{% endhighlight %}
 
 This is all that *ghci* does, it evaluates whatever you type. A character
 evaluates to... a character. We confirm that Haskell agrees with us that
@@ -74,10 +79,12 @@ writing down words like this is not very convenient. And as the second to last
 example already suggests, there is a more convenient notation: wrap the
 characters in double quotes:
 
-    Prelude> "hello"
-	"hello"
-	Prelude> :type "hello"
-	"hello" :: [Char]
+{% highlight haskell %}
+Prelude> "hello"
+"hello"
+Prelude> :type "hello"
+"hello" :: [Char]
+{% endhighlight %}
 
 I will take this opportunity to seriously demolish some words, but all
 with the noble cause of learning some commonly-used Haskell list functions.
