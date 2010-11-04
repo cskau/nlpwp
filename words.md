@@ -4,6 +4,13 @@ title: Words
 ---
 # Words
 
+## Contents
+
+* [Introduction](#introduction)
+* [Playing with words](#playwithwords)
+* [From words to sentences](#sentences)
+
+<a name="introduction"/>
 ## Introduction
 
 Words are one of the most fundamental building blocks of our language.
@@ -38,6 +45,7 @@ For now, you should only know about two:
 
 Now, with that out of the way, let's get some work done.
 
+<a name="playwithwords"/>
 ## Playing with words
 
 Written words consists of characters. We can write down characters in
@@ -238,7 +246,8 @@ out application of the function stepwise:
 Congratulations, you have made your first function, which is in essence
 a small program!
 
-## From words to sentences
+<a name="sentences"/>
+## From words to sentences 
 
 A higher level of representation that is often useful are sentences. With
 the previous section, you should also be able to store sentences. A first
