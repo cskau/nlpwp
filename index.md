@@ -1,6 +1,6 @@
 ---
 layout: base
-title: contents
+title: Corpus Linguistics for the Working Programmer
 ---
 
 # Table of contents

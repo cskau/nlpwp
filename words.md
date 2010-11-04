@@ -1,6 +1,6 @@
 ---
 layout: base
-title: words
+title: Words
 ---
 # Words
 
