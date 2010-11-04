@@ -5,7 +5,7 @@ title: Corpus Linguistics for the Working Programmer
 
 # Corpus Linguistics for the Working Programmer
 
-*Daniël de Kok <me@danieldk.eu>*
+*Daniël de Kok &lt;<me@danieldk.eu>&gt;*
 
 ## Table of contents
 
