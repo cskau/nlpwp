@@ -3,6 +3,12 @@ layout: base
 title: Corpus Linguistics for the Working Programmer
 ---
 
-# Table of contents
+# Corpus Linguistics for the Working Programmer
 
+*Daniël de Kok <me@danieldk.eu>*
+
+## Table of contents
+
+* Introduction
 * [Words](words.html)
+* N-grams
