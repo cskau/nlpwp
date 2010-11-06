@@ -8,11 +8,17 @@ title: Natural Language Processing for the Working Programmer
 
 ## Table of contents
 
-* Introduction
-* [Words](words.html)
-* N-grams
-* Part of speech tagging
-* Named entity recognition
-* Regular expressions
-* Parsing
-* Information retrieval
+1. Introduction
+1. [Words](words.html)
+  1. [Introduction](words.html#introduction)
+  1. [Playing with words](words.html#playwithwords)
+  1. [From words to sentences](words.html#sentences)
+  1. [A note on tokenization](words.html#tokenization)
+  1. [Word lists](words.html#wordlist)
+  1. [Word frequency lists](words.html#freqlist)
+1. N-grams
+1. Part of speech tagging
+1. Named entity recognition
+1. Regular expressions
+1. Parsing
+1. Information retrieval
