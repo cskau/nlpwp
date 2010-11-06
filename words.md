@@ -53,7 +53,7 @@ Now, with that out of the way, let's get some work done.
 <a name="playwithwords"/>
 ## Playing with words
 
-Written words consists of characters. We can write down characters in
+Written words consist of characters. We can write down characters in
 Haskell with single quotes. If you type in a character in *ghci*, it
 will simply echo back the character:
 
@@ -72,14 +72,16 @@ Prelude> :t 'h'
 'h' :: Char
 {% endhighlight %}
 
-Great. Not all that practical with the small amount of single-lettered words
-in English. Rather than a single character, we want a sequence of characters.
-Not surprisingly, Haskell has a data types to build sequences. The most
-commonly used sequence is the list. You can have lists of many things: lists
-of groceries, lists of planets, and lists of characters. We can make a
-literal list in Haskell by enumerating its elements, separated by commas and
-surrounded by square brackets. For instance, the list *1, 2, 3, 4, 5* is
-written as *[1, 2, 3, 4, 5]*. Let's try to make a list of characters:
+Great. Haskell indeed confirms that 'h' is a character, or in Haskell's words
+of type *Char*. Not all that practical with the small amount of
+single-lettered words in English though. Rather than a single character, we
+want a sequence of characters. Not surprisingly, Haskell has a data types to
+build sequences. The most commonly used sequence is the list. You can have
+lists of many things: lists of groceries, lists of planets, and lists of
+characters. We can make a literal list in Haskell by enumerating its elements,
+separated by commas and surrounded by square brackets. For instance, the list
+*1, 2, 3, 4, 5* is written as *[1, 2, 3, 4, 5]*. Let's try to make a list of
+characters:
 
 {% highlight haskell %}
 Prelude> ['h','e','l','l','o']
@@ -94,9 +96,9 @@ Prelude> :t ['h','e','l','l','o']
 {% endhighlight %}
 
 Its type is *[Char]*, which should be read as 'list of characters'. Of course,
-writing down words like this is not very convenient. And as the second to last
-example already suggests, there is a more convenient notation: wrap the
-characters in double quotes:
+writing down words in this manner is not very convenient. Fortunately, as the
+second to last example already suggests, there is a more convenient notation:
+wrap the characters in double quotes:
 
 {% highlight haskell %}
 Prelude> "hello"
@@ -105,7 +107,7 @@ Prelude> :type "hello"
 "hello" :: [Char]
 {% endhighlight %}
 
-I will take this opportunity to seriously demolish some words, but all
+We will take this opportunity to seriously demolish some words, but all
 with the noble cause of learning some commonly-used Haskell list functions.
 The first function *length* returns the length of a list:
 
@@ -124,11 +126,13 @@ Prelude> :type length
 length :: [a] -> Int
 {% endhighlight %}
 
-That's one heck of a type! Basically, it says 'give me a list of something,
-then I will give you an Int'. In these so-called *type signatures*, letters
-that are not capitalized are generic, meaning that they can be of some
-unspecified type. Consequently, *[a]* is a list with elements of some type. **But:** all elements should be of the same type. An *Int* is an integral
-number: a positive or negative whole number.
+That's one heck of a type! Basically, it says 'give me a list of something
+(denoted by the *a* between the list brackets), then I will give you an Int'.
+In these so-called *type signatures*, letters that are not capitalized are
+generic, meaning that they can be of some unspecified type. Consequently,
+*[a]* is a list with elements of some type. **But:** all elements should be of
+the same type. An *Int* is an integral number: a positive or negative whole
+number.
 
 Two other basic list functions are *head* and *tail*. *head* returns the first
 element of a list, *tail* everything but the first element:
@@ -164,10 +168,10 @@ tail :: [a] -> [a]
 We apply *tail* to a list of some type, and get back a list with the same
 type.
 
-Finally, the last function for now is *reverse*. I have to admit presenting
+Finally, the last function for now is *reverse*. We have to admit presenting
 this function with a bit of joy, since it will allow us to write our first
-little useful Haskell program. As expected, *reverse* reverses the elements
-of a list:
+little useful Haskell program. As expected, *reverse* reverses the elements of
+a list:
 
 {% highlight haskell %}
 Prelude> reverse "hello"
@@ -182,10 +186,10 @@ Prelude> reverse "level"
 {% endhighlight %}
 
 We bumped into a *palindrome*, a word that can be read forward and backward.
-Now, suppose we would like to write our own function to detect wether a word
-is a palindrome? We first need to make a slightly more abstract definition
-of a palindrome: a word is a palindrome if it is equal to its reverse. In
-Haskell we can compare values using the *==* operator:
+Now, suppose we would like to write our own function to determine wether a
+word is a palindrome? We first need to make a slightly more abstract
+definition of a palindrome: a word is a palindrome if it is equal to its
+reverse. In Haskell we can compare values using the *==* operator:
 
 {% highlight haskell %}
 Prelude> "hello" == "hello"
@@ -195,7 +199,7 @@ False
 {% endhighlight %}
 
 Such a comparison evaluates to *True* if both values are equal, or to *False*
-when they are not. *True* and *False* are the only values of the *Bool*
+in case they are not. *True* and *False* are the only values of the *Bool*
 type. Since *reverse* also returns a value, nothing holds us from using it
 in comparisons:
 
@@ -236,12 +240,15 @@ True
 {% endhighlight %}
 
 If this function is still a mystery to you, it may be useful two write
-out application of the function stepwise:
+out application of the function stepwise, for a word that is not
+a palindrome:
 
     palindrome "hello"
 	palindrome "hello" = "hello" == reverse "hello"
 	palindrome "hello" = "hello" == "olleh"
 	palindrome "hello" = False
+
+and a word that *is* a palindrome:
 	
 	palindrome "racecar"
 	palindrome "racecar" = "racecar" == reverse "racecar"
