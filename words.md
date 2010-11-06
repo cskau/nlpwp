@@ -704,3 +704,131 @@ Prelude> notElem "pony" ["foo","bar","baz"]
 True
 {% endhighlight %}
 
+Ok, so we want to add an element to a list if, but only if, it is true that it
+is not yet a member of that list. Or in other words, the addition is conditional.
+Haskell provides a set of keywords to model conditionals, if..then..else. The
+structure is like this:
+
+{% highlight haskell %}
+if expr then a else b
+{% endhighlight %}
+
+This whole structure itself is an expression. This expression evaluates to
+*a* if *expr* evaluates to *True* or to *a* if *expr* evaluates to False.
+To give a working, but useless example:
+
+{% highlight haskell %}
+Prelude> if 1 == 2 then "cuckoo" else "egg"
+"egg"
+Prelude> if 1 == 1 then "cuckoo" else "egg"
+"cuckoo"
+{% endhighlight %}
+
+This looks exactly like what we need. Just fill in the blanks:
+
+{% highlight haskell %}
+Prelude> if elem "foo" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "foo" : ["foo", "bar", "baz"]
+["foo","bar","baz"]
+Prelude> if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "pony" : ["foo", "bar", "baz"]
+["pony","foo","bar","baz"]
+{% endhighlight %}
+
+That's a bit contrived, but not if we rewrite it to a function:
+
+{% highlight haskell %}
+Prelude> let elemOrAdd e l = if elem e l then l else e:l
+Prelude> elemOrAdd "foo" ["foo", "bar", "baz"]
+["foo","bar","baz"]
+Prelude> elemOrAdd "pony" ["foo", "bar", "baz"]
+["pony","foo","bar","baz"]
+{% endhighlight %}
+
+Now we need to apply this to all words in a text, starting with an empty
+list. Haskell provides a function to do this, but brace yourself, the
+first time it may look a bit 'difficult'. It is named *foldl* (a so-called)
+left-fold. A left fold traverses a list from head to tail, applying a
+function to each element, just like *map*. However, the difference is that
+it can, but does not necessarily return a list. As such, it is a generalization
+of the *map* function. As usual, you can inspect the type signature to
+see the arguments of *foldl*:
+
+{% highlight haskell %}
+Prelude> :type foldl
+foldl :: (a -> b -> a) -> a -> [b] -> a
+{% endhighlight %}
+
+Now consider this example using *foldl*:
+
+{% highlight haskell %}
+Prelude> foldl (+) 0 [1,2,3,4,5]
+15
+{% endhighlight %}
+
+Stepwise, this fold is executed in the following manner:
+
+{% highlight haskell %}
+foldl (+) 0 [1,2,3,4,5]
+foldl (+) ((0)+1) [2,3,4,5]
+foldl (+) (((0)+1)+2) [3,4,5]
+foldl (+) ((((0)+1)+2)+3) [4,5]
+foldl (+) (((((0)+1)+2)+3)+4) [5]
+foldl (+) ((((((0)+1)+2)+3)+4)+5)) []
+((((((0)+1)+2)+3)+4)+5))
+15
+{% endhighlight %}
+
+So, it works by applying a function to some initial argument (*0* in this case)
+as its first argument, and the first element of the list as its second argument.
+When processing the second element of the list, this expression is then the
+first argument of the function, and the second element is the second argument,
+etc. The first argument of the function that is applied is also called the
+*accumulator*, since it accumulates results up till that point.
+
+This could also work for our *elemOrAdd* function. Unfortunately, *elemOrAdd*
+requires the accumulator as the second argument, and the function passed to
+*foldl* as the first argument. Compare the type signatures:
+
+{% highlight haskell %}
+Prelude> :type foldl
+foldl :: (a -> b -> a) -> a -> [b] -> a
+Prelude> :type elemOrAdd
+elemOrAdd :: (Eq a) => a -> [a] -> [a]
+{% endhighlight %}
+
+In the function that is the first argument to *foldl*, the return type is
+the same as the type of the first argument. In the case of *elemOrAdd*,
+the type of the second argument corresponds to that of the first. Of course,
+an easy 'hack' to solve this, is to redefine elemOrAdd, switching its
+arguments, and plug it into foldl:
+
+{% highlight haskell %}
+Prelude> let elemOrAdd l e = if elem e l then l else e:l
+Prelude> foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]
+["red","blue"]
+{% endhighlight %}
+
+Since we are building a list, we use the empty list (*[]*) as the
+initial accumulator for this fold. Stepwise, the fold works like this:
+
+{% highlight haskell %}
+foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["blue", "blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["red", "blue", "red"]
+foldl elemOrAdd ("red":("blue":([]))) ["blue", "red"]
+foldl elemOrAdd ("red":("blue":([]))) ["red"]
+foldl elemOrAdd ("red":("blue":([]))) []
+("red":("blue":([])))
+["red","blue"]
+{% endhighlight %}
+
+Now we wrap it up in another function, and you have constructed two
+functions that, together, make word lists: 
+
+{% highlight haskell %}
+Prelude> let wordList l = foldl elemOrAdd [] l
+Prelude> wordList ["blue", "blue", "red", "blue", "red"]
+["red","blue"]
+{% endhighlight %}
