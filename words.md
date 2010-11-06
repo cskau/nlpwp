@@ -2,7 +2,6 @@
 layout: base
 title: Words
 ---
-# Words
 
 ## Contents
 
