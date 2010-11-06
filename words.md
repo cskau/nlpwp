@@ -95,10 +95,11 @@ Prelude> :t ['h','e','l','l','o']
 ['h','e','l','l','o'] :: [Char]
 {% endhighlight %}
 
-Its type is *[Char]*, which should be read as 'list of characters'. Of course,
-writing down words in this manner is not very convenient. Fortunately, as the
-second to last example already suggests, there is a more convenient notation:
-wrap the characters in double quotes:
+Its type is *[Char]*, which should be read as 'list of characters'. Such a
+list of characters is known as *a string* Of course, writing down words in
+this manner is not very convenient. Fortunately, as the second to last example
+already suggests, there is a more convenient notation: wrap the characters in
+double quotes:
 
 {% highlight haskell %}
 Prelude> "hello"
@@ -261,28 +262,31 @@ a small program!
 <a name="sentences"/>
 ## From words to sentences 
 
-A higher level of representation that is often useful are sentences. With
-the previous section, you should also be able to store sentences. A first
-try:
+So far, we have looked at words in isolation. However, in language, words are
+often combined to form a higher level of meaning representation: a sentence.
+Provided what we have learned about representing words in Haskell, the step
+towards representing sentences should be a minor one. We could, for example,
+represent sentences in the exactly the same way we represented words:
 
 {% highlight haskell %}
 Prelude> "The cat is on the mat."
 "The cat is on the mat."
 {% endhighlight %}
 
-That's fine for a beginning, although not so convenient. What if I ask you
-to give me the first word of a sentence? We know that *head* can be used
-to get the first element of an array:
+That's fine for a beginning, although not so convenient. Let us see why.
+Assume we ask you to give us the first word of a sentence? In the previous
+section, we learned that *head* can be used to get the first element of 
+a list. Let's try to apply that here:
 
 {% highlight haskell %}
 Prelude> head "The cat is on the mat."
 'T'
 {% endhighlight %}
 
-As you probably expected, that didn't work. We represented a sentence as
-a list of characters (a string), and asking for the first element will give
-the first character. But wait, what if we represented a sentence as a list
-of words?
+As you probably expected, that didn't work. We represented a sentence as a
+list of characters (a string), and hence asking for the first element will
+give the first character. But wait! What if we represented a sentence as a
+list of words?
 
 {% highlight haskell %}
 Prelude> ["The", "cat", "is", "on", "the", "mat", "."]
@@ -291,11 +295,11 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
 ["The", "cat", "is", "on", "the", "mat", "."] :: [[Char]]
 {% endhighlight %}
 
-Nifty! We just constructed a list of a list of characters. Though, you may 
-wonder why I made the punctation at the end of the sentence a separate word.
-This is mostly a pragmatic choice, because gluing this punctuation sign
-to *mat* does not really form a word either. Having the period sign separate
-is more practical for future processing. Formally, we say that a sentence
+Nifty! We just constructed a list, of a list of characters. Though, you may
+wonder why we made the punctation at the end of the sentence a separate word.
+This is mostly a pragmatic choice, because gluing this punctuation sign to
+*mat* does not really form a word either. Having the period sign separate is
+more practical for future processing. Hence, formally we say that a sentence
 consists of tokens, where a token can be a word, a number, and a punctuation
 sign.
 
@@ -307,8 +311,7 @@ Prelude> head ["The", "cat", "is", "on", "the", "mat", "."]
 {% endhighlight %}
 
 Since a word is also a list, we can apply a function to words as well. For
-example, we can get the first character of the first word by applying *head*
-to the *head* of a sentence:
+example, we can get the first character of the first word by applying *head*, to the *head* of a sentence:
 
 {% highlight haskell %}
 Prelude> head (head ["The", "cat", "is", "on", "the", "mat", "."])
@@ -320,12 +323,13 @@ parentheses first. If we do not enforce this order of evaluation, Haskell
 will try to evaluate *head head* first, which makes no sense. Remember that
 *head* requires a list as its argument, and *head* is not a list.
 
-This is a good time to try to write yet another small program. This time,
-we will write a function to calculate the average token length in a corpus.
-Since we did not look at real corpora yet, pick any sentence you like as
-*My First Corpus*™. I will use *"Oh, no, flying pink ponies."* The average
-token length is the sum of the lengths of all tokens, divided by the number
-of tokens. So, stepwise, we have to:
+Now that we know how to represent sentence, this is a good time to try to
+write yet another small program. This time, we will write a function to
+compute the average token length in a corpus (a collection of texts, not a
+part of an organ). Since we did not look at real corpora yet, pick any
+sentence you like as *My First Corpus*™. The authors will use *"Oh, no, flying
+pink ponies."* The average token length is the sum of the lengths of all
+tokens, divided by the number of tokens. So, stepwise, we have to:
 
 1. Get the length of each token in the corpus.
 2. Sum the lengths of the tokens.
@@ -338,11 +342,12 @@ Prelude> length "flying"
 6
 {% endhighlight %}
 
-Since you are lazy (and if not, you should!), you are not going to apply
-*length* token by token manually. And in our final function, this will not
-work anyway, since we do not know the length of the sentence beforehand.
-Instead we want to say to Haskell "Hey Haskell! Please apply this length
-function to each element of the array." It turns out that Haskell has a
+Since you are lazy (and if not, you should spend more time on your
+girlfriend!), you are not going to apply *length* token by token manually.
+Moreover, in our final function, this will not work anyway, since we do not
+know the length of the sentence beforehand (how nice, Haskell wants us to be
+lazy). Instead we want to say to Haskell "Hey Haskell! Please apply this
+length function to each element of the list." It turns out that Haskell has a
 function to do this called *map*. Time to inspect *map*:
 
 {% highlight haskell %}
@@ -356,7 +361,7 @@ we now see three types, *(a -> b)*, *[a]* and *[b]*. The latter is simple:
 this function takes two arguments, *(a -> b)* and *[a]*, and returns *[b]*.
 *(a -> b)* as the notation suggests, is a function taking an *a* and returning
 a *b*. So, *map* is actually a function that takes a function as its argument,
-or in functional programming-speak a *higher order* function. 
+or in functional programming-speak: a *higher order* function. 
 
 So, *map* is a function that takes a function that maps from *a* to *b*, takes
 a list of *a*s, and returns a list of *b*s. That looks a suspiciously lot like
@@ -365,43 +370,45 @@ length that takes a list and returns its length as an integer, and we want to
 have a list of integers representing the lengths. Looks like we have a winner!
 
 {% highlight haskell %}
-Prelude> map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
+Prelude> map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
 [2,1,2,1,6,1,4,6]
 {% endhighlight %}
 
-We have now completed out first step: we have the length of each token in the
-corpus. We now have to sum the lengths that we just retrieved. Fortunately,
-Haskell has a *sum* function:
+We have now completed our first step: we have the length of each token in the
+corpus. Next, we have to sum the lengths that we have just retrieved.
+Fortunately, Haskell has a *sum* function:
 
 {% highlight haskell %}
 Prelude> :type sum
 sum :: (Num a) => [a] -> a
 {% endhighlight %}
 
-Ok, sum takes a list of *a*, and returns an *a*. But where did the
-*(Num a) =>* come from? *Num* is a so-called typeclass. A type can belong
-to one or more typeclasses. But this does not come without cost, belonging
-to a typeclass requires that certain functions need to be defined. For
-instance, the typeclass *Num* is a typeclass for numbers, that requires 
-amongst others functions that define addition or subtraction. Coming back to 
-the type signature, *sum* will sum a list of *a*, but not just any *a*, only
-those that belong to the typeclass *Num*. And after all, this makes sense:
-we cannot sum strings or planets, only numbers.
+Ok, sum takes a list of *a*s, and returns an *a*. But where did the *(Num a)
+=>* come from? Well, *Num* is a so-called typeclass. A type can belong to one
+or more of such typeclasses. But belonging to a typeclass does not come
+without cost. In fact, it requires that certain functions need to be defined
+for types that belong to it. For instance, the typeclass *Num* is a typeclass
+for numbers, which requires amongst others, functions that define addition or
+subtraction. Coming back to the type signature, *sum* will sum a list of *a*s,
+but not just any *a*s, only those that belong to the typeclass *Num*. And
+after all, this makes sense, doesn't it? We cannot sum strings or planets, but
+we can sum numbers. In fact, we can only sum numbers.
 
 After this solemn introduction into typeclasses, feel free to take a cup
-of tea, and try step two:
+of tea (or coffee, as one of the authors prefers), and try step two:
 
 {% highlight haskell %}
-Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"])
+Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
 23
 {% endhighlight %}
 
-By now, you will probably smell victory. You only need to divide the sum
-by the length of the sentence using the division operator (*/*):
+By now, you will probably smell victory. The only step that remains is to
+divide the sum by the length of the sentence using the division operator
+(*/*):
 
 {% highlight haskell %}
-Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]) /
-  length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
+Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]) /
+  length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
 
 <interactive>:1:0:
     No instance for (Fractional Int)
@@ -415,24 +422,26 @@ Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
            / length ["Oh", ",", "no", ....]
 {% endhighlight %}
 
-I hope you poured yourself a cup of herb tea! While this is all a bit cryptic,
-the second line (*No instance for (Fractional Int)*) gives some idea where 
-this comes from. *Fractional* is typeclass for fractional numbers, and Haskell
-complains that Int is not defined to be of the typeclass *Int*. This sounds
-obvious, since an integer is not a fractional number. In other words, Haskell
-is trying to tell us that there is an *Int* in some place where it expected
-a type belonging to the typeclass *Fractional*. Since the division is the
-only new component, it is the first suspect:
+I hope you poured yourself a cup of herb tea! (or alternatively: espresso!)
+While this is all a bit cryptic, the second line (*No instance for (Fractional
+Int)*) gives some idea where this comes from. *Fractional* is typeclass for
+fractional numbers, and Haskell complains that Int is not defined to be of the
+typeclass *Fractional*. This sounds obvious, since an integer is not a
+fractional number. In other words, Haskell is trying to tell us that there is
+an *Int* in some place where it expected a type belonging to the typeclass
+*Fractional*. Since the division is the only new component, it is the first
+suspect of the breakdown:
 
 {% highlight haskell %}
 Prelude> :type (/)
 (/) :: (Fractional a) => a -> a -> a
 {% endhighlight %}
 
-First off, I put the division operator in parentheses. This is a so-called 
-*infix function* that is put between its arguments (like *1.0 / 2.0*). By 
-putting an infix operator in parentheses, you are stating that you would like
-to use it as a regular function. This means you can things like this:
+First off, we put the division operator in parentheses. We have done this
+because the division operator is used as a so-called *infix function*: it is a
+function that is put between its arguments (like *1.0 / 2.0*). By putting an
+infix operator in parentheses, you are stating that you would like to use it
+as a regular function. This means you can do things like this:
 
 {% highlight haskell %}
 Prelude> (/) 1.0 2.0
@@ -445,11 +454,11 @@ that we calculated clearly do not belong to this typeclass, since they are
 of the type *Int*:
 
 {% highlight haskell %}
-Prelude> :type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"])
-sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"])
+Prelude> :type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
   :: Int
-Prelude> :type length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
-length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
+Prelude> :type length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
   :: Int
 {% endhighlight %}
 
@@ -458,15 +467,15 @@ integer to any kind of number. Add *fromIntegral*, and you surely do get the
 average token length of the corpus:
 
 {% highlight haskell %}
-Prelude> fromIntegral (sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"])) /
-  fromIntegral (length ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"])
+Prelude> fromIntegral (sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])) /
+  fromIntegral (length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
 2.875
 {% endhighlight %}
 
-That's a bumpier ride than you may have expected. Don't worry! During my first
-forays into Haskell, I was convinced that I am too stupid for this. After more 
-practice, you will learn that Haskell is actually a very simple and logical
-language.
+Well, that was a bumpier ride than you may have expected. Don't worry! During
+our first forays into Haskell, we were convinced that were too stupid for this
+too (and here we are writing a book). However, after more practice, you will
+learn that Haskell is actually a very simple and logical language.
 
 Maybe it will feel more like a victory after generalizing this to a function.
 You can follow the same pattern as in the palindrome example: replace the
@@ -500,11 +509,12 @@ Prelude> averageLength [["I", "like", "Haskell", "."],
 4.333333333333333
 {% endhighlight %}
 
-That's the average sentence length. It turns out that, although we set out
-to make a function to calculate the average token length, we wrote a function
-that calculates the average length of lists in a list. This happens very often
-when you write Haskell programs: lots of functions are generic and can be
-reused for other tasks.
+That's the average sentence length, expressed in number of words. It turns out
+that, although we set out to make a function to calculate the average token
+length, we wrote a function that calculates the average length of lists in a
+list (e.g., characters in words, words in sentences, or sentences in a text).
+This happens very often when you write Haskell programs: lots of functions are
+generic and can be reused for other tasks.
 
 <a name="tokenization"/>
 # A note on tokenization
