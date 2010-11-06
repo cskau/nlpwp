@@ -383,8 +383,7 @@ Prelude> :type sum
 sum :: (Num a) => [a] -> a
 {% endhighlight %}
 
-Ok, sum takes a list of *a*s, and returns an *a*. But where did the *(Num a)
-=>* come from? Well, *Num* is a so-called typeclass. A type can belong to one
+Ok, sum takes a list of *a*s, and returns an *a*. But where did the *(Num a) =>* come from? Well, *Num* is a so-called typeclass. A type can belong to one
 or more of such typeclasses. But belonging to a typeclass does not come
 without cost. In fact, it requires that certain functions need to be defined
 for types that belong to it. For instance, the typeclass *Num* is a typeclass
@@ -608,8 +607,8 @@ should evaluate *lines text* first, or otherwise it will try to map over the fun
 function applications of the form *f(g(x))*, or *f(g(h(x)))*, etc. Haskell provides the
 *(.)* function to combine such function applications. So, *f(g(x))* can be rewritten to
 *(f . g) x* (apply function *f* to the outcome of *g(x)*) and *f(g(h(x)))* as *(f . g .
-h) x (apply function *f* to the outcome of a function *g*, which is in turn applied to
-the outcome of *h(x))*. As you can see, this so-called *function composition* makes
+h) x* (apply function *f* to the outcome of a function *g*, which is in turn applied to
+the outcome of *h(x)). As you can see, this so-called *function composition* makes
 things much easier to read. We can now rewrite our tokenization function by using function composition:
 
 {% highlight haskell %}
