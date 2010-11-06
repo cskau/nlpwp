@@ -28,8 +28,9 @@ inflections that is shared (*walk*) is what we call the *stem*. The
 parts that are not common are named *affixes*. We inflect verbs
 to indicate tense (present, past, etc.), the person of the verb's subject
 (first, second, and third person), and the number (singular or plural).
-The affix *s* in John walk*s*, for instance, tells us that the verb *walk*
-is in present tense, second person singular.
+The affix *s* in John walk*s*, for instance, tells us (in combination
+with the subject John) that the verb *walk* is in present tense, 
+third person singular.
 
 Other types of words have inflections as well. For example, we inflect
 nouns to distinguish singular and plural:
