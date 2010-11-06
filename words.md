@@ -153,8 +153,8 @@ head :: [a] -> a
 
 Hey, two *a*'s! Equipped with the knowledge we have, we know that *head*
 is a function that takes a list of something, and gives back something.
-But there is an additional constraint here: although $a$ is some type,
-all $a$'s have to be the same type. So, applying *head* to a list of numbers
+But there is an additional constraint here: although *a* is some type,
+all *a*'s have to be the same type. So, applying *head* to a list of numbers
 gives a number, applying *head* to a list of characters gives a character,
 etc.
 
@@ -645,5 +645,69 @@ Prelude> :type splitTokenize
 splitTokenize :: String -> [[String]]
 Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
 [["This","is","Jack","."],["He","is","a","Haskeller","."]]
+{% endhighlight %}
+
+<a name="wordlist"/>
+## Word lists
+
+In the following two sections, we will introduce two prototypical tasks related words.
+The first is to make a word (or actually token) list,the second task is making a word
+frequency.
+
+A word list is a very simple data structure: it is just a list of words or tokens that
+occur in a text, without duplicates. Our corpus is also just a list of words, but since
+it contains duplicates, it is not a word list. The obvious method to make a word list
+is to go through a corpus word by word, and adding words that we did not see yet to a
+second list. This requires some functions we haven't seen yet:
+
+* Adding an element to a list.
+* Checking whether an element is (or is not) in a list.
+* Constructing a list while traversing another list.
+
+We like easy things first, so let's start with the first item: adding an element to a
+list. We have seen the *head* function before that chops of the head of the list and
+returns it. But we can also do the reverse: take a list and give it a new head. The old
+head then becomes the head of the tail (are you still following?). In Haskell, we can
+do this using the *(:)* function:
+
+{% highlight haskell %}
+Prelude> 2 : [3,4,5]
+[2,3,4,5]
+{% endhighlight %}
+
+Ain't that great? We can also add a head, and yet another:
+
+{% highlight haskell %}
+Prelude> 1 : 2 : [3,4,5]
+[1,2,3,4,5]
+{% endhighlight %}
+
+What if we do not have an element yet? Add the head to the empty list (*[]*):
+
+{% highlight haskell %}
+Prelude> "Hi" : []
+["Hi"]
+{% endhighlight %}
+
+With that covered, the next thing we need to be able to do is checking whether some
+element belongs to a list. We can do this using the *elem* function. It takes an
+element as its first argument, and a list as its second. It will return a Bool of the
+value *True* if the element was in the list, or *False* otherwise. For example:
+
+{% highlight haskell %}
+Prelude> elem 2 [1,2,3,4,5]
+True
+Prelude> elem 6 [1,2,3,4,5]
+False
+{% endhighlight %}
+
+The function *notElem* is exactly the inverse of *elem*, and returns *True* if an
+element is not in the list, and *False* otherwise:
+
+{% highlight haskell %}
+Prelude> notElem "foo" ["foo","bar","baz"]
+False
+Prelude> notElem "pony" ["foo","bar","baz"]
+True
 {% endhighlight %}
 
