@@ -11,3 +11,8 @@ title: Natural Language Processing for the Working Programmer
 * Introduction
 * [Words](words.html)
 * N-grams
+* Part of speech tagging
+* Named entity recognition
+* Regular expressions
+* Parsing
+* Information retrieval
