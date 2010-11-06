@@ -149,8 +149,8 @@ head :: [a] -> a
 
 Hey, two *a*'s! Equipped with the knowledge we have, we know that *head*
 is a function that takes a list of something, and gives back something.
-But there is an additional constraint here: although $a$ is some type,
-all $a$'s have to be the same type. So, applying *head* to a list of numbers
+But there is an additional constraint here: although *a* is some type,
+all *a*'s have to be the same type. So, applying *head* to a list of numbers
 gives a number, applying *head* to a list of characters gives a character,
 etc.
 
