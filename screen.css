@@ -3,6 +3,7 @@ body {
   margin: 0px auto;
 
   font-family: verdana, arial, helvetica, sans-serif;
+  text-align: justify;
 }
 
 .highlight { background-color: #000000; padding-left: 0.5em; padding-right: 0.5em; }
