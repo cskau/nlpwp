@@ -524,7 +524,7 @@ and tokens. For example, consider this book - punctuation is usually glued to
 words. These processes, sentence splitting and tokenization may seem trivial,
 unfortunately they are not. Consider the following sentence:
 
-*Eg. Jack doesn't have 19.99 to spend.
+*E.g. Jack doesn't have 19.99 to spend.
 
 If we simply perform sentence splitting on periods (*.*), we will find four
 sentences:
@@ -536,20 +536,21 @@ sentences:
 
 Of course, it is just one sentence. Similar problems arise during punctuation:
 how do we know that *E.g.* and *19.99* should not be split? And how about
-*doesn't*, which should probably be split as *does n't* or *does not*? Tokenization
-can be performed accurately, but it requires techniques that you will see in
-later chapters. So, we will come back to tokenization later. We promise!
+*doesn't*, which should probably be split as *does n't* or *does not*?
+Tokenization can be performed accurately, but it requires techniques that you
+will see in later chapters. So, we will come back to tokenization later. We
+promise!
 
-Of course, up to the point where we handle tokenization, we need material to work
-on. To make life easier for you, the material for the first chapters of the book
-is pre-tokenized in a plain-text file using two simple rules:
+Of course, up to the point where we handle tokenization, we need material to
+work on. To make life easier for you, the material for the first chapters of
+the book is pre-tokenized in a plain-text file using two simple rules:
 
 1. One sentence per line.
 2. Tokens are separated by a space.
 
-To convert a text file to a Haskell representation, sentence splitting is a matter
-of splitting by line, and tokenization splitting by space. Have a look at the
-following example:
+To convert a text file to a Haskell representation, sentence splitting is a
+matter of splitting by line, and tokenization splitting by space. Have a look
+at the following example:
 
 {% highlight haskell %}
 Prelude> "This is Jack .\nHe is a Haskeller ."
@@ -557,9 +558,9 @@ Prelude> "This is Jack .\nHe is a Haskeller ."
 {% endhighlight %}
 
 This is exactly the representation that we will be using for our textual data.
-As you can see, the tokens are separated by spaces. Both sentences are separated
-using a newline. When writing down a string literally, you can insert a newline
-using *\n*.
+As you can see, the tokens are separated by spaces. Both sentences are
+separated using a newline. When writing down a string literally, you can
+insert a newline using *\n*.
 
 Haskell provides a *lines* function to split up a string by line. Not surprisingly,
 this function accepts a string as its first argument, and will return a list of
@@ -572,7 +573,7 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
 ["This is Jack .","He is a Haskeller ."]
 {% endhighlight %}
 
-That was easy! Now the actual tokenization. For all sentences, we have a string
+That was easy! Now to the actual tokenization. For all sentences, we have a string
 representing the sentence. We want to split this string on the space character.
 Haskell also has a function to do this, named *words*. *words* is nearly the same
 function as *lines*, except that it splits on spaces rather than newlines:
@@ -583,7 +584,7 @@ Prelude> words "This is Jack ."
 {% endhighlight %}
 
 That will do, but we have to apply this to every sentence in the list of sentences.
-We can use the *map* function we have seen earlier to apply the *words* function
+Recall that we can use the *map* function we have seen earlier to apply the *words* function
 to each element of the list of (untokenized) sentences:
 
 {% highlight haskell %}
@@ -604,17 +605,18 @@ This is a good moment to beautify this function a bit. To make it simpler, we fi
 need to get rid of the parentheses. We use the parentheses to tell Haskell that it
 should evaluate *lines text* first, or otherwise it will try to map over the function
 *lines*, which will fail, because it is not a list. Very often, you will encounter
-function applications of the form *f(g(x))*, or *f(g(h(x)))*, etc. Haskell provides
-the *(.)* function to combine such function applications. So, *f(g(x))* can be rewritten
-to *(f . g) x* and *f(g(h(x)))* as *(f . g . h) x*. As you can see, this so-called
-*function composition* makes things much easier to read. We can rewrite our function
-by using function composition:
+function applications of the form *f(g(x))*, or *f(g(h(x)))*, etc. Haskell provides the
+*(.)* function to combine such function applications. So, *f(g(x))* can be rewritten to
+*(f . g) x* (apply function *f* to the outcome of *g(x)*) and *f(g(h(x)))* as *(f . g .
+h) x (apply function *f* to the outcome of a function *g*, which is in turn applied to
+the outcome of *h(x))*. As you can see, this so-called *function composition* makes
+things much easier to read. We can now rewrite our tokenization function by using function composition:
 
 {% highlight haskell %}
 Prelude> let splitTokenize text = (map words . lines) text
 {% endhighlight %}
 
-This may not yet seem so interesting. However, it allows us to make yet another
+This states that we apply *map words* to the outcome *lines text*. This may not yet seem so interesting. However, it allows us to make yet another
 simplification step. Consider the type of the *map* function:
 
 {% highlight haskell %}
@@ -632,22 +634,22 @@ map words :: [String] -> [[String]]
 
 Applying *map* to just one argument will give... another function! What we just did
 is to bind just one argument of the map function, and that gives another function
-that has implicitly bound that argument. This process is called *currying* in functional
+that has implicitly bound that argument. This process is called *currying* (indeed, named after the mathematician Haskell Curry) in functional
 programming slang.
 
 If we look back at our *splitTokenize* function, and look up the type of *map words .
 lines*, we see that it is a function that takes a *String* and returns a list of a
-list of a string:
+list of strings:
 
 {% highlight haskell %}
 Prelude> :type map words . lines
 map words . lines :: String -> [[String]]
 {% endhighlight %}
 
-In our function body, we apply this function to the argument *text*. Of course, this
-is not really necessary, because *map words . lines* already defines our function.
-We just need to bind this to the name *splitTokenize*. Consequently the function can
-be simplified:
+In our function body, we apply this function to the argument *text*. Of course, this is
+not really necessary, because *map words . lines* already defines our function (as we
+have shown above). We just need to bind this to the name *splitTokenize*. Consequently
+the function can once more be simplified:
 
 {% highlight haskell %}
 Prelude> let splitTokenize = (map words . lines)
