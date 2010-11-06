@@ -15,11 +15,11 @@ title: Words
 <a name="introduction"/>
 ## Introduction
 
-Words are one of the most fundamental building blocks of our language.
-Although words may look simple on the surface, they are very ingenious
-devices that pack useful information. For our purposes, we will say
-that a words consists of a *stem* and *affixes*. Let's look at three simple
-sentences:
+Words are the most fundamental building blocks of our language.
+Although they may look simple on the surface, they are very ingenious
+devices that pack not only meaning, but also grammatical information. 
+For our purposes, we will say that a words consists of a *stem* and 
+*affixes*. Let's look at three simple sentences:
 
 I **walk**.<br/>
 John **walk**s.<br/>
@@ -31,6 +31,9 @@ inflections that is shared (*walk*) is what we call the *stem*. The
 parts that are not common are named *affixes*. We inflect verbs
 to indicate tense (present, past, etc.), the person of the verb's subject
 (first, second, and third person), and the number (singular or plural).
+The affix *s* in John walk*s*, for instance, tells us (in combination
+with the subject John) that the verb *walk* is in present tense, 
+third person singular.
 
 Other types of words have inflections as well. For example, we inflect
 nouns to distinguish singular and plural:
