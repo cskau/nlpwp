@@ -3,6 +3,9 @@ body {
   margin: 0px auto;
 
   font-family: verdana, arial, helvetica, sans-serif;
+}
+
+p {
   text-align: justify;
 }
 
