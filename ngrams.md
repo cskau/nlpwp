@@ -53,7 +53,21 @@ greater. Let us start with bigrams.
 
 <a name="bigrams"/>
 ## Bigrams
-stub
+
+An unigram can be thought of as a window placed over a text, such that we only look at
+one word at a time. In similar fashion, a bigram can be thought of as a window that
+shows two words at a time. The sentence *Colorless green ideas sleep furiously*
+contains four bigrams:
+
+* Colorless, green
+* green, ideas
+* ideas, sleep
+* sleep, furiously
+
+To stick to our 'window' analogy, we could say that all bigrams of a sentence can be
+found by placing a window on its first two words, and by moving this window to the
+right one word at a time in a stepwise manner. We then repeat this procedure, until 
+the window covers the last two words of a sentence.
 
 <a name="ngrams"/>
 ## From bigrams to n-grams
