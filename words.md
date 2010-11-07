@@ -988,7 +988,13 @@ myFun s e = Data.Set.insert e s
 Back to our *wordSet* function. We used the lambda to swap the arguments of
 *Data.Set.insert*. *Data.Set.insert* takes a value and a set, our lambda takes
 a set and a value. The rest of the function follows the same pattern as *wordList*,
-except that we start with an empty set rather than an empty list.
+except that we start with an empty set rather than an empty list. The function
+works as expected:
+
+{% highlight haskell %}
+Prelude> wordSet ["blue", "blue", "red", "blue", "red"]
+fromList ["blue","red"]
+{% endhighlight %}
 
 You have done it! You are now not only able to make a function that creates a word
 list, but also one that is performant.
