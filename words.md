@@ -992,3 +992,14 @@ except that we start with an empty set rather than an empty list.
 
 You have done it! You are now not only able to make a function that creates a word
 list, but also one that is performant.
+
+## Exercises
+
+1. To measure the vocabulary of a writer, a so-called type-token ratio can be
+   calculated. This is the number of different tokens occurring in a text
+   (so-called 'types') divided by the number of tokens in that text. For instance the
+   phrase "to be or not to be" contains six tokens and four types (*to*, *be*, *or*, *not*).
+   The type-token ratio of this phrase is *4 / 6 = 2 / 3*.
+
+   Write a function that calculates the type-token ratio of a list of tokens. You can use the
+   *Data.Set.size* function to get the number of elements in a set.
