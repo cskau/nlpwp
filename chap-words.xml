@@ -1,0 +1,1560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbookxi.rng" type="xml"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <title>Words</title>
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            Words are the most fundamental building blocks of our language.
+            Although they may look simple on the surface, they are very
+            ingenious devices that pack not only meaning, but also grammatical
+            information. For our purposes, we will say that a words consists of
+            a <emphasis>stem</emphasis> and <emphasis>affixes</emphasis>. Let's
+            look at three simple sentences:
+        </para>
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>I <emphasis role="bold">walk</emphasis>.</para>
+                </listitem>
+                <listitem>
+                    <para>John <emphasis role="bold">walk</emphasis>s.</para>
+                </listitem>
+                <listitem>
+                    <para>Jack <emphasis role="bold">walk</emphasis>ed. </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        <para>
+            All three sentences contain some 'form' of
+            <emphasis>walk</emphasis>. We say that these instances are all
+            <emphasis>inflections</emphasis> of the verb
+            <emphasis>walk</emphasis>. The part of the inflections that is
+            shared (<emphasis>walk</emphasis>) is what we call the
+            <emphasis>stem</emphasis>. The parts that are not common are named
+            <emphasis>affixes</emphasis>. We inflect verbs to indicate tense
+            (present, past, etc.), the person of the verb's subject (first,
+            second, and third person), and the number (singular or plural). The
+            affix <emphasis>s</emphasis> in John walk<emphasis>s</emphasis>,
+            for instance, tells us (in combination with the subject John) that
+            the verb <emphasis>walk</emphasis> is in present tense, third
+            person singular.
+        </para>
+        <para>
+            Other types of words have inflections as well. For example, we
+            inflect nouns to distinguish singular and plural:
+        </para>
+        <para>
+            I saw one <emphasis role="bold">duck</emphasis>. I saw two
+            <emphasis role="bold">duck</emphasis>s.
+        </para>
+        <para>
+            Up to this point, we have just seen one kind of affix: one that is
+            glued to the end of the word. There are actually many kinds of
+            affixes. For now, you should only know about two:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para> Prefix: appears in front of the stem. For example, <emphasis role="bold"
+                            >un</emphasis>believable. </para>
+            </listitem>
+            <listitem>
+                <para> Suffix: appears after the stem. For example, duck<emphasis role="bold"
+                        >s</emphasis>. </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            Now, with that out of the way, let's get some work done.
+        </para>
+    </sect1>
+    <sect1>
+        <title>Playing with words</title>
+        <para>
+            Written words consist of characters. We can write down characters
+            in Haskell with single quotes. If you type in a character in
+            <emphasis>ghci</emphasis>, it will simply echo back the character:
+        </para>
+        <para>
+            <programlisting>Prelude> 'h'
+'h'</programlisting>
+        </para>
+        <para>
+            This is all that <emphasis>ghci</emphasis> does, it evaluates
+            whatever you type. A character evaluates to... a character. We
+            confirm that Haskell agrees with us that this actually a character
+            by asking the type with <emphasis>:type</emphasis> or its shorthand
+            <emphasis>:t</emphasis>:
+        </para>
+        <para>
+            <programlisting>Prelude> :t 'h'
+'h' :: Char    </programlisting>
+        </para>
+        <para>
+            Great. Haskell indeed confirms that 'h' is a character, or in
+            Haskell's words of type <emphasis>Char</emphasis>. Not all that
+            practical with the small amount of single-lettered words in English
+            though. Rather than a single character, we want a sequence of
+            characters. Not surprisingly, Haskell has a data types to build
+            sequences. The most commonly used sequence is the list. You can
+            have lists of many things: lists of groceries, lists of planets,
+            and lists of characters. We can make a literal list in Haskell by
+            enumerating its elements, separated by commas and surrounded by
+            square brackets. For instance, the list
+            <emphasis>1, 2, 3, 4, 5</emphasis> is written as
+            <emphasis>[1, 2, 3, 4, 5]</emphasis>. Let's try to make a list of
+            characters:
+        </para>
+        <para>
+            <programlisting>Prelude> ['h','e','l','l','o']
+"hello" </programlisting>
+        </para>
+        <para>
+            Now we are getting somewhere! Let's look at the type of this list:
+        </para>
+        <para>
+            <programlisting>Prelude> :t ['h','e','l','l','o']
+['h','e','l','l','o'] :: [Char] </programlisting>
+        </para>
+        <para>Its type is <emphasis>[Char]</emphasis>, which should be read as 'list of characters'.
+            Such a list of characters is known as <emphasis>a string</emphasis> Of course, writing
+            down words in this manner is not very convenient. Fortunately, as the second to last
+            example already suggests, there is a more convenient notation: wrap the characters in
+            double quotes: </para>
+        <para>
+            <programlisting>Prelude> "hello"
+"hello"
+Prelude> :type "hello"
+"hello" :: [Char] </programlisting>
+        </para>
+        <para>
+            We will take this opportunity to seriously demolish some words, but
+            all with the noble cause of learning some commonly-used Haskell
+            list functions. The first function <emphasis>length</emphasis>
+            returns the length of a list:
+        </para>
+        <para>
+            <programlisting>Prelude> length "hello"
+5
+Prelude> length [1,2,3]
+3 </programlisting>
+        </para>
+        <para>
+            To get a better impression of functions, it is often useful to look
+            at its type:
+        </para>
+        <para>
+            <programlisting>Prelude> :type length
+length :: [a] -> Int </programlisting>
+        </para>
+        <para>
+            That's one heck of a type! Basically, it says 'give me a list of
+            something (denoted by the <emphasis>a</emphasis> between the list
+            brackets), then I will give you an Int'. In these so-called
+            <emphasis>type signatures</emphasis>, letters that are not
+            capitalized are generic, meaning that they can be of some
+            unspecified type. Consequently, <emphasis>[a]</emphasis> is a list
+            with elements of some type. <emphasis role="bold">But:</emphasis>
+            all elements should be of the same type. An
+            <emphasis>Int</emphasis> is an integral number: a positive or
+            negative whole number.
+        </para>
+        <para>
+            Two other basic list functions are <emphasis>head</emphasis> and
+            <emphasis>tail</emphasis>. <emphasis>head</emphasis> returns the
+            first element of a list, <emphasis>tail</emphasis> everything but
+            the first element:
+        </para>
+        <para>
+            <programlisting>Prelude> head "hello"
+'h'
+Prelude> tail "hello"
+"ello"</programlisting>
+        </para>
+        <para>
+            The type of head is the following:
+        </para>
+        <para>
+            <programlisting>Prelude> :type head
+head :: [a] -> a
+            </programlisting>
+        </para>
+        <para>
+            Hey, two <emphasis>a</emphasis>'s! Equipped with the knowledge we
+            have, we know that <emphasis>head</emphasis> is a function that
+            takes a list of something, and gives back something. But there is
+            an additional constraint here: although <emphasis>a</emphasis> is
+            some type, all <emphasis>a</emphasis>'s have to be the same type.
+            So, applying <emphasis>head</emphasis> to a list of numbers gives a
+            number, applying <emphasis>head</emphasis> to a list of characters
+            gives a character, etc.
+        </para>
+        <para>
+            The type of <emphasis>tail</emphasis> should now be easy to
+            understand:
+        </para>
+        <para>
+            <programlisting>Prelude> :type tail
+tail :: [a] -> [a] </programlisting>
+        </para>
+        <para>
+            We apply <emphasis>tail</emphasis> to a list of some type, and get
+            back a list with the same type.
+        </para>
+        <para>
+            Finally, the last function for now is <emphasis>reverse</emphasis>.
+            We have to admit presenting this function with a bit of joy, since
+            it will allow us to write our first little useful Haskell program.
+            As expected, <emphasis>reverse</emphasis> reverses the elements of
+            a list:
+        </para>
+        <para>
+            <programlisting>Prelude> reverse "hello"
+"olleh"</programlisting>
+        </para>
+        <para>
+            Olé! And another one:
+        </para>
+        <para>
+            <programlisting>Prelude> reverse "level"
+"level"</programlisting>
+        </para>
+        <para>We bumped into a <emphasis>palindrome</emphasis>, a word that can be read forward and
+            backward. Now, suppose we would like to write our own function to determine wether a
+            word is a palindrome? We first need to make a slightly more abstract definition of a
+            palindrome: a word is a palindrome if it is equal to its reverse. In Haskell we can
+            compare values using the <emphasis>==</emphasis> operator: </para>
+        <para>
+            <programlisting>Prelude> "hello" == "hello"
+True
+Prelude> "hello" == "olleh"
+False </programlisting>
+        </para>
+        <para>Such a comparison evaluates to <emphasis>True</emphasis> if both values are equal, or
+            to <emphasis>False</emphasis> in case they are not. <emphasis>True</emphasis> and
+                <emphasis>False</emphasis> are the only values of the <emphasis>Bool</emphasis>
+            type. Since <emphasis>reverse</emphasis> also returns a value, nothing holds us from
+            using it in comparisons: </para>
+        <para>
+            <programlisting>Prelude> "hello" == reverse "hello"
+False
+Prelude> "level" == reverse "level"
+True </programlisting>
+        </para>
+        <para>
+            The test that we devised for detecting palindromes seems to work.
+            But it is a lot of typing. We can generalize this into a function.
+            Let's replace both words by the symbolic name
+            <emphasis>word</emphasis> (but don't execute this in
+            <emphasis role="bold">ghci</emphasis> yet, since it does not know
+            this symbolic name):
+        </para>
+        <programlisting>word == reverse word </programlisting>
+        <para>
+            Let's do some magic:
+        </para>
+        <para>
+            <programlisting>Prelude> let palindrome word = word == reverse word </programlisting>
+        </para>
+        <para>
+            This defines the function <emphasis>palindrome</emphasis> taking
+            one argument, and binds this argument to the symbolic name
+            <emphasis>word</emphasis>. To this function we assign the
+            expression <emphasis>word == reverse word</emphasis>. Play a little
+            with this function to be convinced that it actually works. Some
+            examples:
+        </para>
+        <para>
+            <programlisting>Prelude> palindrome "hello"
+False
+Prelude> palindrome "level"
+True
+Prelude> palindrome "racecar"
+True </programlisting>
+        </para>
+        <para>
+            If this function is still a mystery to you, it may be useful two
+            write out application of the function stepwise, for a word that is
+            not a palindrome:
+        </para>
+        <screen>palindrome "hello"
+palindrome "hello" = "hello" == reverse "hello"
+palindrome "hello" = "hello" == "olleh"
+palindrome "hello" = False     </screen>
+        <para>
+            and a word that <emphasis>is</emphasis> a palindrome:
+        </para>
+        <screen>palindrome "racecar"
+palindrome "racecar" = "racecar" == reverse "racecar"
+palindrome "racecar" = "racecar" == "racecar"
+palindrome "racecar" = True</screen>
+        <para>
+            Congratulations, you have made your first function, which is in
+            essence a small program!
+        </para>
+    </sect1>
+    <sect1>
+        <title>From words to sentences</title>
+        <para>
+            So far, we have looked at words in isolation. However, in language,
+            words are often combined to form a higher level of meaning
+            representation: a sentence. Provided what we have learned about
+            representing words in Haskell, the step towards representing
+            sentences should be a minor one. We could, for example, represent
+            sentences in the exactly the same way we represented words:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; &quot;The cat is on the
+                mat.&quot; &quot;The cat is on the mat.&quot; </programlisting>
+        </para>
+        <para>
+            That's fine for a beginning, although not so convenient. Let us see
+            why. Assume we ask you to give us the first word of a sentence? In
+            the previous section, we learned that <emphasis>head</emphasis> can
+            be used to get the first element of a list. Let's try to apply that
+            here:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; head &quot;The cat is on the
+                mat.&quot; 'T' </programlisting>
+        </para>
+        <para>
+            As you probably expected, that didn't work. We represented a
+            sentence as a list of characters (a string), and hence asking for
+            the first element will give the first character. But wait! What if
+            we represented a sentence as a list of words?
+        </para>
+        <para>
+            <programlisting> Prelude&gt; [&quot;The&quot;,
+                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
+                &quot;mat&quot;, &quot;.&quot;]
+                [&quot;The&quot;,&quot;cat&quot;,&quot;is&quot;,&quot;on&quot;,&quot;the&quot;,&quot;mat&quot;,&quot;.&quot;]
+                Prelude&gt; :type [&quot;The&quot;, &quot;cat&quot;,
+                &quot;is&quot;, &quot;on&quot;, &quot;the&quot;, &quot;mat&quot;,
+                &quot;.&quot;] [&quot;The&quot;, &quot;cat&quot;, &quot;is&quot;,
+                &quot;on&quot;, &quot;the&quot;, &quot;mat&quot;, &quot;.&quot;] ::
+                [[Char]] </programlisting>
+        </para>
+        <para>
+            Nifty! We just constructed a list, of a list of characters. Though,
+            you may wonder why we made the punctation at the end of the
+            sentence a separate word. This is mostly a pragmatic choice,
+            because gluing this punctuation sign to <emphasis>mat</emphasis>
+            does not really form a word either. Having the period sign separate
+            is more practical for future processing. Hence, formally we say
+            that a sentence consists of tokens, where a token can be a word, a
+            number, and a punctuation sign.
+        </para>
+        <para>
+            Rinse and repeat:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; head [&quot;The&quot;,
+                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
+                &quot;mat&quot;, &quot;.&quot;] &quot;The&quot; </programlisting>
+        </para>
+        <para>
+            Since a word is also a list, we can apply a function to words as
+            well. For example, we can get the first character of the first word
+            by applying <emphasis>head</emphasis>, to the
+            <emphasis>head</emphasis> of a sentence:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; head (head [&quot;The&quot;,
+                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
+                &quot;mat&quot;, &quot;.&quot;]) 'T' </programlisting>
+        </para>
+        <para>
+            Note that we need parenthesis to force Haskell to evaluate the part
+            in parentheses first. If we do not enforce this order of
+            evaluation, Haskell will try to evaluate
+            <emphasis>head head</emphasis> first, which makes no sense.
+            Remember that <emphasis>head</emphasis> requires a list as its
+            argument, and <emphasis>head</emphasis> is not a list.
+        </para>
+        <para>
+            Now that we know how to represent sentence, this is a good time to
+            try to write yet another small program. This time, we will write a
+            function to compute the average token length in a corpus (a
+            collection of texts, not a part of an organ). Since we did not look
+            at real corpora yet, pick any sentence you like as
+            <emphasis>My First Corpus</emphasis>™. The authors will use
+            <emphasis>&quot;Oh, no, flying pink ponies.&quot;</emphasis> The
+            average token length is the sum of the lengths of all tokens,
+            divided by the number of tokens. So, stepwise, we have to:
+        </para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para>
+                    Get the length of each token in the corpus.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Sum the lengths of the tokens.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Divide the sum by the length of the corpus.
+                </para>
+            </listitem>
+        </orderedlist>
+        <para>
+            You know how to get the in characters length of a single token:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; length &quot;flying&quot; 6
+            </programlisting>
+        </para>
+        <para>
+            Since you are lazy (and if not, you should spend more time on your
+            girlfriend!), you are not going to apply
+            <emphasis>length</emphasis> token by token manually. Moreover, in
+            our final function, this will not work anyway, since we do not know
+            the length of the sentence beforehand (how nice, Haskell wants us
+            to be lazy). Instead we want to say to Haskell &quot;Hey Haskell!
+            Please apply this length function to each element of the
+            list.&quot; It turns out that Haskell has a function to do this
+            called <emphasis>map</emphasis>. Time to inspect
+            <emphasis>map</emphasis>:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type map map :: (a -&gt; b)
+                -&gt; [a] -&gt; [b] </programlisting>
+        </para>
+        <para>
+            And we are in for another surprise. The most surprising element is
+            probably the first element in the type signature,
+            <emphasis>(a -&gt; b)</emphasis>. Also surprising is that we now
+            see three types, <emphasis>(a -&gt; b)</emphasis>,
+            <emphasis>[a]</emphasis> and <emphasis>[b]</emphasis>. The latter
+            is simple: this function takes two arguments,
+            <emphasis>(a -&gt; b)</emphasis> and <emphasis>[a]</emphasis>, and
+            returns <emphasis>[b]</emphasis>. <emphasis>(a -&gt; b)</emphasis>
+            as the notation suggests, is a function taking an
+            <emphasis>a</emphasis> and returning a <emphasis>b</emphasis>. So,
+            <emphasis>map</emphasis> is actually a function that takes a
+            function as its argument, or in functional programming-speak: a
+            <emphasis>higher order</emphasis> function.
+        </para>
+        <para>
+            So, <emphasis>map</emphasis> is a function that takes a function
+            that maps from <emphasis>a</emphasis> to <emphasis>b</emphasis>,
+            takes a list of <emphasis>a</emphasis>s, and returns a list of
+            <emphasis>b</emphasis>s. That looks a suspiciously lot like what we
+            want! We have a list of tokens represented as strings, the function
+            length that takes a list and returns its length as an integer, and
+            we want to have a list of integers representing the lengths. Looks
+            like we have a winner!
+        </para>
+        <para>
+            <programlisting> Prelude&gt; map length [&quot;Oh&quot;,
+                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
+                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]
+                [2,1,2,1,6,1,4,6] </programlisting>
+        </para>
+        <para>
+            We have now completed our first step: we have the length of each
+            token in the corpus. Next, we have to sum the lengths that we have
+            just retrieved. Fortunately, Haskell has a <emphasis>sum</emphasis>
+            function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type sum sum :: (Num a) =&gt;
+                [a] -&gt; a </programlisting>
+        </para>
+        <para>
+            Ok, sum takes a list of <emphasis>a</emphasis>s, and returns an
+            <emphasis>a</emphasis>. But where did the
+            <emphasis>(Num a) =&gt;</emphasis> come from? Well,
+            <emphasis>Num</emphasis> is a so-called typeclass. A type can
+            belong to one or more of such typeclasses. But belonging to a
+            typeclass does not come without cost. In fact, it requires that
+            certain functions need to be defined for types that belong to it.
+            For instance, the typeclass <emphasis>Num</emphasis> is a typeclass
+            for numbers, which requires amongst others, functions that define
+            addition or subtraction. Coming back to the type signature,
+            <emphasis>sum</emphasis> will sum a list of
+            <emphasis>a</emphasis>s, but not just any <emphasis>a</emphasis>s,
+            only those that belong to the typeclass <emphasis>Num</emphasis>.
+            And after all, this makes sense, doesn't it? We cannot sum strings
+            or planets, but we can sum numbers. In fact, we can only sum
+            numbers.
+        </para>
+        <para>
+            After this solemn introduction into typeclasses, feel free to take
+            a cup of tea (or coffee, as one of the authors prefers), and try
+            step two:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; sum (map length
+                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
+                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
+                &quot;ponies&quot;]) 23 </programlisting>
+        </para>
+        <para>
+            By now, you will probably smell victory. The only step that remains
+            is to divide the sum by the length of the sentence using the
+            division operator (<emphasis>/</emphasis>):
+        </para>
+        <para>
+            <programlisting> Prelude&gt; sum (map length
+                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
+                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
+                &quot;ponies&quot;]) / length [&quot;Oh&quot;, &quot;,&quot;,
+                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
+                &quot;pink&quot;, &quot;ponies&quot;]
+                :1:0: No instance for (Fractional Int) arising from a use of
+                <literal>/' at &lt;interactive&gt;:1:0-136     Possible fix: add an instance declaration for (Fractional Int)     In the expression:           sum (map length [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, ....])         / length [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, ....]     In the definition of</literal>it':
+                it = sum (map length [&quot;Oh&quot;, &quot;,&quot;,
+                &quot;no&quot;, ....]) / length [&quot;Oh&quot;, &quot;,&quot;,
+                &quot;no&quot;, ....] </programlisting>
+        </para>
+        <para>
+            I hope you poured yourself a cup of herb tea! (or alternatively:
+            espresso!) While this is all a bit cryptic, the second line
+            (<emphasis>No instance for (Fractional Int)</emphasis>) gives some
+            idea where this comes from. <emphasis>Fractional</emphasis> is
+            typeclass for fractional numbers, and Haskell complains that Int is
+            not defined to be of the typeclass <emphasis>Fractional</emphasis>.
+            This sounds obvious, since an integer is not a fractional number.
+            In other words, Haskell is trying to tell us that there is an
+            <emphasis>Int</emphasis> in some place where it expected a type
+            belonging to the typeclass <emphasis>Fractional</emphasis>. Since
+            the division is the only new component, it is the first suspect of
+            the breakdown:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type (/) (/) :: (Fractional a)
+                =&gt; a -&gt; a -&gt; a </programlisting>
+        </para>
+        <para>
+            First off, we put the division operator in parentheses. We have
+            done this because the division operator is used as a so-called
+            <emphasis>infix function</emphasis>: it is a function that is put
+            between its arguments (like <emphasis>1.0 / 2.0</emphasis>). By
+            putting an infix operator in parentheses, you are stating that you
+            would like to use it as a regular function. This means you can do
+            things like this:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; (/) 1.0 2.0 0.5</programlisting>
+        </para>
+        <para>
+            Anyway, the verdict of the typesignature of
+            <emphasis>(/)</emphasis> is clear, it requires two arguments that
+            belong to the <emphasis>Fractional</emphasis> typeclass. The sum
+            and length that we calculated clearly do not belong to this
+            typeclass, since they are of the type <emphasis>Int</emphasis>:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type sum (map length
+                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
+                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
+                &quot;ponies&quot;]) sum (map length [&quot;Oh&quot;,
+                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
+                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]) :: Int
+                Prelude&gt; :type length [&quot;Oh&quot;, &quot;,&quot;,
+                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
+                &quot;pink&quot;, &quot;ponies&quot;] length [&quot;Oh&quot;,
+                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
+                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;] :: Int</programlisting>
+        </para>
+        <para>
+            Fortunately, Haskell provides the function
+            <emphasis>fromIntegral</emphasis> that converts an integer to any
+            kind of number. Add <emphasis>fromIntegral</emphasis>, and you
+            surely do get the average token length of the corpus:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; fromIntegral (sum (map length
+                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
+                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
+                &quot;ponies&quot;])) / fromIntegral (length [&quot;Oh&quot;,
+                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
+                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]) 2.875 </programlisting>
+        </para>
+        <para>
+            Well, that was a bumpier ride than you may have expected. Don't
+            worry! During our first forays into Haskell, we were convinced that
+            were too stupid for this too (and here we are writing a book).
+            However, after more practice, you will learn that Haskell is
+            actually a very simple and logical language.
+        </para>
+        <para>
+            Maybe it will feel more like a victory after generalizing this to a
+            function. You can follow the same pattern as in the palindrome
+            example: replace the sentence with a symbolic name and transform it
+            into a function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let averageLength l =
+                fromIntegral (sum (map length l)) / fromIntegral (length l)
+                Prelude&gt; averageLength [&quot;Oh&quot;, &quot;,&quot;,
+                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
+                &quot;pink&quot; ,&quot;ponies&quot;] 2.875 </programlisting>
+        </para>
+        <para>
+            Congratulations, you just wrote your second function! But wait, you
+            actually accomplished more than you may expect. Check the type
+            signature of <emphasis>averageLength</emphasis>.
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type averageLength
+                averageLength :: (Fractional b) =&gt; [[a]] -&gt; b </programlisting>
+        </para>
+        <para>
+            You made your first weird type signature. Show it off to your
+            colleague, significant other, or dog.
+            <emphasis>averageLength</emphasis> is a function that takes a list
+            of a list of <emphasis>a</emphasis>, and returns a
+            <emphasis>b</emphasis> that belongs to the
+            <emphasis>Fractional</emphasis> typeclass. But wait,
+            <emphasis>a</emphasis> can be anything, right? What happens if we
+            apply this function to a list of sentences?
+        </para>
+        <para>
+            <programlisting> Prelude&gt; averageLength [[&quot;I&quot;,
+                &quot;like&quot;, &quot;Haskell&quot;, &quot;.&quot;],
+                [&quot;Ruby&quot;, &quot;rocks&quot;, &quot;the&quot;,
+                &quot;too&quot;, &quot;.&quot;], [&quot;Who&quot;,
+                &quot;needs&quot;, &quot;Java&quot;, &quot;?&quot;]]
+                4.333333333333333 </programlisting>
+        </para>
+        <para>
+            That's the average sentence length, expressed in number of words.
+            It turns out that, although we set out to make a function to
+            calculate the average token length, we wrote a function that
+            calculates the average length of lists in a list (e.g., characters
+            in words, words in sentences, or sentences in a text). This happens
+            very often when you write Haskell programs: lots of functions are
+            generic and can be reused for other tasks.
+        </para>
+        <para>
+            # A note on tokenization
+        </para>
+        <para>
+            When dealing with real-world text, it is usually not neatly split
+            in sentences and tokens. For example, consider this book -
+            punctuation is usually glued to words. These processes, sentence
+            splitting and tokenization may seem trivial, unfortunately they are
+            not. Consider the following sentence:
+        </para>
+        <para>
+            *E.g. Jack doesn't have 19.99 to spend.
+        </para>
+        <para>
+            If we simply perform sentence splitting on periods
+            (<emphasis>.</emphasis>), we will find four sentences:
+        </para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para>
+                    <emphasis>E.</emphasis>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <emphasis>g.</emphasis>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <emphasis>Jack doesn't have 19.</emphasis>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <emphasis>99 to spend.</emphasis>
+                </para>
+            </listitem>
+        </orderedlist>
+        <para>
+            Of course, it is just one sentence. Similar problems arise during
+            punctuation: how do we know that <emphasis>E.g.</emphasis> and
+            <emphasis>19.99</emphasis> should not be split? And how about
+            <emphasis>doesn't</emphasis>, which should probably be split as
+            <emphasis>does n't</emphasis> or <emphasis>does not</emphasis>?
+            Tokenization can be performed accurately, but it requires
+            techniques that you will see in later chapters. So, we will come
+            back to tokenization later. We promise!
+        </para>
+        <para>
+            Of course, up to the point where we handle tokenization, we need
+            material to work on. To make life easier for you, the material for
+            the first chapters of the book is pre-tokenized in a plain-text
+            file using two simple rules:
+        </para>
+        <orderedlist numeration="arabic">
+            <listitem>
+                <para>
+                    One sentence per line.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Tokens are separated by a space.
+                </para>
+            </listitem>
+        </orderedlist>
+        <para>
+            To convert a text file to a Haskell representation, sentence
+            splitting is a matter of splitting by line, and tokenization
+            splitting by space. Have a look at the following example:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; &quot;This is Jack . is a
+                Haskeller .&quot; &quot;This is Jack . is a Haskeller .&quot; </programlisting>
+        </para>
+        <para>
+            This is exactly the representation that we will be using for our
+            textual data. As you can see, the tokens are separated by spaces.
+            Both sentences are separated using a newline. When writing down a
+            string literally, you can insert a newline using *.
+        </para>
+        <para>
+            Haskell provides a <emphasis>lines</emphasis> function to split up
+            a string by line. Not surprisingly, this function accepts a string
+            as its first argument, and will return a list of strings:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type lines lines :: String
+                -&gt; [String] Prelude&gt; lines &quot;This is Jack . is a
+                Haskeller .&quot; [&quot;This is Jack .&quot;,&quot;He is a
+                Haskeller .&quot;] </programlisting>
+        </para>
+        <para>
+            That was easy! Now to the actual tokenization. For all sentences,
+            we have a string representing the sentence. We want to split this
+            string on the space character. Haskell also has a function to do
+            this, named <emphasis>words</emphasis>. <emphasis>words</emphasis>
+            is nearly the same function as <emphasis>lines</emphasis>, except
+            that it splits on spaces rather than newlines:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; words &quot;This is Jack
+                .&quot;
+                [&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;] </programlisting>
+        </para>
+        <para>
+            That will do, but we have to apply this to every sentence in the
+            list of sentences. Recall that we can use the
+            <emphasis>map</emphasis> function we have seen earlier to apply the
+            <emphasis>words</emphasis> function to each element of the list of
+            (untokenized) sentences:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; map words (lines &quot;This is
+                Jack . is a Haskeller .&quot;)
+                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
+            </programlisting>
+        </para>
+        <para>
+            Allright! That will do the job. We know how to turn this into a
+            full-fledged function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let splitTokenize text = map
+                words (lines text) Prelude&gt; splitTokenize &quot;This is Jack .
+                is a Haskeller .&quot;
+                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
+            </programlisting>
+        </para>
+        <para>
+            This is a good moment to beautify this function a bit. To make it
+            simpler, we first need to get rid of the parentheses. We use the
+            parentheses to tell Haskell that it should evaluate
+            <emphasis>lines text</emphasis> first, or otherwise it will try to
+            map over the function <emphasis>lines</emphasis>, which will fail,
+            because it is not a list. Very often, you will encounter function
+            applications of the form <emphasis>f(g(x))</emphasis>, or
+            <emphasis>f(g(h(x)))</emphasis>, etc. Haskell provides the
+            <emphasis>(.)</emphasis> function to combine such function
+            applications. So, <emphasis>f(g(x))</emphasis> can be rewritten to
+            <emphasis>(f . g) x</emphasis> (apply function
+            <emphasis>f</emphasis> to the outcome of <emphasis>g(x)</emphasis>)
+            and <emphasis>f(g(h(x)))</emphasis> as
+            <emphasis>(f . g . h) x</emphasis> (apply function
+            <emphasis>f</emphasis> to the outcome of a function
+            <emphasis>g</emphasis>, which is in turn applied to the outcome of
+            <emphasis>h(x)). As you can see, this so-called</emphasis>function
+            composition* makes things much easier to read. We can now rewrite
+            our tokenization function by using function composition:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let splitTokenize text = (map
+                words . lines) text </programlisting>
+        </para>
+        <para>
+            This states that we apply <emphasis>map words</emphasis> to the
+            outcome <emphasis>lines text</emphasis>. This may not yet seem so
+            interesting. However, it allows us to make yet another
+            simplification step. Consider the type of the
+            <emphasis>map</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type map map :: (a -&gt; b)
+                -&gt; [a] -&gt; [b] </programlisting>
+        </para>
+        <para>
+            <emphasis>map</emphasis> takes a function, and a list, and returns
+            a list. Now we will do something that may look weird, but is very
+            common in functional programming.
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type map words map words ::
+                [String] -&gt; [[String]] </programlisting>
+        </para>
+        <para>
+            Applying <emphasis>map</emphasis> to just one argument will give...
+            another function! What we just did is to bind just one argument of
+            the map function, and that gives another function that has
+            implicitly bound that argument. This process is called
+            <emphasis>currying</emphasis> (indeed, named after the
+            mathematician Haskell Curry) in functional programming slang.
+        </para>
+        <para>
+            If we look back at our <emphasis>splitTokenize</emphasis> function,
+            and look up the type of <emphasis>map words . lines</emphasis>, we
+            see that it is a function that takes a <emphasis>String</emphasis>
+            and returns a list of a list of strings:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type map words . lines map
+                words . lines :: String -&gt; [[String]] </programlisting>
+        </para>
+        <para>
+            In our function body, we apply this function to the argument
+            <emphasis>text</emphasis>. Of course, this is not really necessary,
+            because <emphasis>map words . lines</emphasis> already defines our
+            function (as we have shown above). We just need to bind this to the
+            name <emphasis>splitTokenize</emphasis>. Consequently the function
+            can once more be simplified:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let splitTokenize = (map words
+                . lines) Prelude&gt; :type splitTokenize splitTokenize :: String
+                -&gt; [[String]] Prelude&gt; splitTokenize &quot;This is Jack . is
+                a Haskeller .&quot;
+                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
+            </programlisting>
+        </para>
+    </sect1>
+    <sect1>
+        <title>Word lists</title>
+        <para>
+            In the following two sections, we will introduce two prototypical
+            tasks related words. The first is to make a word (or actually
+            token) list,the second task is making a word frequency.
+        </para>
+        <para>
+            A word list is a very simple data structure: it is just a list of
+            <emphasis>unique</emphasis> words or tokens that occur in a text.
+            Our corpus is also just a list of words, but since it contains
+            duplicates, it is not a word list. The obvious method to make a
+            word list is to go through a corpus word by word, and adding words
+            that we did not see yet to a second list. This requires some
+            functions we haven't seen yet:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    Adding an element to a list.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Checking whether an element is (or is not) in a list.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Constructing a list while traversing another list.
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            We like easy things first, so let's start with the first item:
+            adding an element to a list. We have seen the
+            <emphasis>head</emphasis> function before that chops of the head of
+            the list and returns it. But we can also do the reverse: take a
+            list and give it a new head. The old head then becomes the head of
+            the tail (are you still following?). In Haskell, we can do this
+            using the <emphasis>(:)</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; 2 : [3,4,5] [2,3,4,5] </programlisting>
+        </para>
+        <para>
+            Ain't that great? We can also add a head, and yet another:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; 1 : 2 : [3,4,5] [1,2,3,4,5] </programlisting>
+        </para>
+        <para>
+            What if we do not have an element yet? Add the head to the empty
+            list (<emphasis>[]</emphasis>):
+        </para>
+        <para>
+            <programlisting> Prelude&gt; &quot;Hi&quot; : []
+                [&quot;Hi&quot;] </programlisting>
+        </para>
+        <para>
+            With that covered, the next thing we need to be able to do is
+            checking whether some element belongs to a list. We can do this
+            using the <emphasis>elem</emphasis> function. It takes an element
+            as its first argument, and a list as its second. It will return a
+            Bool of the value <emphasis>True</emphasis> if the element was in
+            the list, or <emphasis>False</emphasis> otherwise. For example:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; elem 2 [1,2,3,4,5] True
+                Prelude&gt; elem 6 [1,2,3,4,5] False </programlisting>
+        </para>
+        <para>
+            The function <emphasis>notElem</emphasis> is exactly the inverse of
+            <emphasis>elem</emphasis>, and returns <emphasis>True</emphasis> if
+            an element is not in the list, and <emphasis>False</emphasis>
+            otherwise:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; notElem &quot;foo&quot;
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] False Prelude&gt;
+                notElem &quot;pony&quot;
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] True</programlisting>
+        </para>
+        <para>
+            Ok, so we want to add an element to a list if, but only if, it is
+            true that it is not yet a member of that list. Or in other words,
+            the addition is conditional. Haskell provides a set of keywords to
+            model conditionals, if..then..else. The structure is like this:
+        </para>
+        <para>
+            <programlisting> if expr then a else b </programlisting>
+        </para>
+        <para>
+            This whole structure itself is an expression. This expression
+            evaluates to <emphasis>a</emphasis> if <emphasis>expr</emphasis>
+            evaluates to <emphasis>True</emphasis> or to <emphasis>b</emphasis>
+            if <emphasis>expr</emphasis> evaluates to False. To give a working,
+            but useless example:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; if 1 == 2 then
+                &quot;cuckoo&quot; else &quot;egg&quot; &quot;egg&quot; Prelude&gt;
+                if 1 == 1 then &quot;cuckoo&quot; else &quot;egg&quot;
+                &quot;cuckoo&quot; </programlisting>
+        </para>
+        <para>
+            This looks exactly like what we need. Just fill in the blanks:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; if elem &quot;foo&quot;
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] then
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] else
+                &quot;foo&quot; : [&quot;foo&quot;, &quot;bar&quot;,
+                &quot;baz&quot;] [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
+                Prelude&gt; if elem &quot;pony&quot;
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] then
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] else
+                &quot;pony&quot; : [&quot;foo&quot;, &quot;bar&quot;,
+                &quot;baz&quot;]
+                [&quot;pony&quot;,&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
+            </programlisting>
+        </para>
+        <para>
+            That's a bit contrived, but (as you hopefully see) not if we
+            rewrite it to a function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let elemOrAdd e l = if elem e l
+                then l else e:l Prelude&gt; elemOrAdd &quot;foo&quot;
+                [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
+                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] Prelude&gt;
+                elemOrAdd &quot;pony&quot; [&quot;foo&quot;, &quot;bar&quot;,
+                &quot;baz&quot;]
+                [&quot;pony&quot;,&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
+            </programlisting>
+        </para>
+        <para>
+            Now we need to apply this to all words in a text, starting with an
+            empty list. Haskell provides a function to do this, but brace
+            yourself, the first time it may look a bit 'difficult'. It is named
+            <emphasis>foldl</emphasis> (a so-called) left-fold. A left fold
+            traverses a list from head to tail, applying a function to each
+            element, just like <emphasis>map</emphasis>. However, the
+            difference is that it can, but does not necessarily return a list.
+            As such, it is a generalization of the <emphasis>map</emphasis>
+            function. As usual, you can inspect the type signature to see the
+            arguments of <emphasis>foldl</emphasis>:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type foldl foldl :: (a -&gt; b
+                -&gt; a) -&gt; a -&gt; [b] -&gt; a </programlisting>
+        </para>
+        <para>
+            Now consider this example using <emphasis>foldl</emphasis>:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; foldl (+) 0 [1,2,3,4,5] 15</programlisting>
+        </para>
+        <para>
+            Stepwise, this fold is executed in the following manner:
+        </para>
+        <para>
+            <programlisting> foldl (+) 0 [1,2,3,4,5] foldl (+) ((0)+1)
+                [2,3,4,5] foldl (+) (((0)+1)+2) [3,4,5] foldl (+) ((((0)+1)+2)+3)
+                [4,5] foldl (+) (((((0)+1)+2)+3)+4) [5] foldl (+)
+                ((((((0)+1)+2)+3)+4)+5)) [] ((((((0)+1)+2)+3)+4)+5)) 15</programlisting>
+        </para>
+        <para>
+            So, it works by applying a function to some initial argument
+            (<emphasis>0</emphasis> in this case) as its first argument, and
+            the first element of the list as its second argument. When
+            processing the second element of the list, this expression is then
+            the first argument of the function, and the second element is the
+            second argument, etc. The first argument of the function that is
+            applied is also called the <emphasis>accumulator</emphasis>, since
+            it accumulates results up till that point.
+        </para>
+        <para>
+            This could also work for our <emphasis>elemOrAdd</emphasis>
+            function. Unfortunately, <emphasis>elemOrAdd</emphasis> requires
+            the accumulator as the second argument, and the function passed to
+            <emphasis>foldl</emphasis> as the first argument. Compare the type
+            signatures:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type foldl foldl :: (a -&gt; b
+                -&gt; a) -&gt; a -&gt; [b] -&gt; a Prelude&gt; :type elemOrAdd
+                elemOrAdd :: (Eq a) =&gt; a -&gt; [a] -&gt; [a] </programlisting>
+        </para>
+        <para>
+            In the function that is the first argument to
+            <emphasis>foldl</emphasis>, the return type is the same as the type
+            of the first argument. In the case of
+            <emphasis>elemOrAdd</emphasis>, the type of the second argument
+            corresponds to that of the first. Of course, an easy 'hack' to
+            solve this, is to redefine elemOrAdd, switching its arguments, and
+            plug it into foldl:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let elemOrAdd l e = if elem e l
+                then l else e:l Prelude&gt; foldl elemOrAdd [] [&quot;blue&quot;,
+                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
+                &quot;red&quot;] [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+        </para>
+        <para>
+            Since we are building a list, we use the empty list
+            (<emphasis>[]</emphasis>) as the initial accumulator for this fold.
+            Stepwise, the fold works like this:
+        </para>
+        <para>
+            <programlisting> foldl elemOrAdd [] [&quot;blue&quot;,
+                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
+                &quot;red&quot;] foldl elemOrAdd (&quot;blue&quot;:([]))
+                [&quot;blue&quot;, &quot;blue&quot;, &quot;red&quot;,
+                &quot;blue&quot;, &quot;red&quot;] foldl elemOrAdd
+                (&quot;blue&quot;:([])) [&quot;blue&quot;, &quot;red&quot;,
+                &quot;blue&quot;, &quot;red&quot;] foldl elemOrAdd
+                (&quot;blue&quot;:([])) [&quot;red&quot;, &quot;blue&quot;,
+                &quot;red&quot;] foldl elemOrAdd
+                (&quot;red&quot;:(&quot;blue&quot;:([]))) [&quot;blue&quot;,
+                &quot;red&quot;] foldl elemOrAdd
+                (&quot;red&quot;:(&quot;blue&quot;:([]))) [&quot;red&quot;] foldl
+                elemOrAdd (&quot;red&quot;:(&quot;blue&quot;:([]))) []
+                (&quot;red&quot;:(&quot;blue&quot;:([])))
+                [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+        </para>
+        <para>
+            Now we wrap it up in another function, and you have constructed two
+            functions that, together, make word lists:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let wordList = foldl elemOrAdd
+                [] Prelude&gt; wordList [&quot;blue&quot;, &quot;blue&quot;,
+                &quot;red&quot;, &quot;blue&quot;, &quot;red&quot;]
+                [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+        </para>
+        <para>
+            While our little word list function works fine on small texts, it
+            will not be very efficient for big corpora. The reason is simple -
+            suppose that we have already found 100,000 different tokens. For
+            every word, it would have to check the list of 100,000 tokens.
+            There is no other way of doing this than to traverse the list word
+            by word. Or, on average, we compare a token to 100,000 / 2 = 50,000
+            elements in the list. As a computer scientist would say:
+            <emphasis>elemOrAdd</emphasis> works in linear time, its processing
+            time is linear to the number of different tokens that were seen.
+        </para>
+        <para>
+            This is a typical case of picking the wrong data structure for the
+            task. But for illustrative purposes, using lists was nice and
+            simple. But since you are a working programmer, you want workable
+            solutions. Bring in the sets! A set is, like the mathematical set,
+            a collection that does not contain duplicate elements. That is
+            good, because a word list does not contain duplicate elements.
+            Silly us, we were fooled by the word <emphasis>list</emphasis>.
+            What we actually want to build is a word set. It is just for
+            historical purposes, people used paper in a long gone past, that it
+            is called a word list.
+        </para>
+        <para>
+            Another nice property of sets, as they are normally implemented, is
+            that set membership can be checked rather quickly. In the sets that
+            we will use, membership checking is in logarithmic time. Or in
+            other words, if comparison took one second, we would on average
+            need 50,000 seconds to search the list mentioned earlier, but only
+            <emphasis>log(100,000)</emphasis> or approximately 11.5 seconds to
+            check whether the element in in a set. Talking about optimizations!
+        </para>
+        <para>
+            Haskell provides sets, but not in the so-called
+            <emphasis>Prelude</emphasis>. <emphasis>Prelude</emphasis> is a
+            module that contains functions. The <emphasis>Prelude</emphasis>
+            module is always loaded, so its functions are always available
+            (unless you explicitly ask Haskell to hide them). The functions
+            <emphasis>map</emphasis>, <emphasis>head</emphasis>,
+            <emphasis>tail</emphasis>, and <emphasis>length</emphasis>, for
+            instance, are defined in the <emphasis>Prelude</emphasis>.
+            Functions for set manipulation, on the other hand, are defined in a
+            module named <emphasis>Data.Set</emphasis>. For the time being, we
+            will access functions from modules by prefixing the name of the
+            module. For instance, this will give us the empty set:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Set.empty fromList [] </programlisting>
+        </para>
+        <para>
+            Like a list, a set can contain elements of various types. We see
+            this when inspecting the type signature of the
+            <emphasis>empty</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type Data.Set.empty
+                Data.Set.empty :: Data.Set.Set a </programlisting>
+        </para>
+        <para>
+            <emphasis>empty</emphasis> returns a Set of some type
+            <emphasis>a</emphasis>. We can also construct a
+            <emphasis>Set</emphasis> from a list using the
+            <emphasis>fromList</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Set.fromList
+                [5,2,5,8,1,1,23] fromList [1,2,5,8,23] </programlisting>
+        </para>
+        <para>
+            As you can see here, the set does not contain duplicates. Another
+            nice property of Haskell sets is that they are ordered. We can also
+            do the inverse, convert a set to a list using
+            <emphasis>toList</emphasis>:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Set.toList
+                (Data.Set.fromList [5,2,5,8,1,1,23]) [1,2,5,8,23] </programlisting>
+        </para>
+        <para>
+            Elements can be added to or removed from a <emphasis>Set</emphasis>
+            using respectively the <emphasis>insert</emphasis> and
+            <emphasis>delete</emphasis> functions. Both functions return a set
+            with that element inserted or removed:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Set.insert 42
+                (Data.Set.fromList [5,2,5,8,1,1,23]) fromList [1,2,5,8,23,42]
+                Prelude&gt; Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])
+                fromList [1,2,8,23] </programlisting>
+        </para>
+        <para>
+            Finally, we can check whether some value is a member of a set by
+            using the <emphasis>member</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Set.member 23
+                (Data.Set.fromList [5,2,5,8,1,1,23]) True Prelude&gt;
+                Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23]) False</programlisting>
+        </para>
+        <para>
+            We have now seen enough to change our word list function. Rather
+            than checking whether a value is in a list and adding it if not, we
+            check whether it is in a <emphasis>Set</emphasis> and add it if it
+            is not:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let elemOrAdd s e = if
+                Data.Set.member e s then s else Data.Set.insert e s Prelude&gt;
+                elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24 fromList
+                [1,2,5,8,23,24] </programlisting>
+        </para>
+        <para>
+            That was simple. But it feels a weird, right? The most vital
+            characteristic of a set is that it never contains duplicate
+            elements, why do we need to check for duplicates? We don't. So,
+            forget about <emphasis>elemOrAdd</emphasis>, we will only use
+            <emphasis>Data.Set.insert</emphasis> from this point. Our objective
+            now is to traverse a list of tokens, adding each token to a set,
+            starting with the empty set. Our first take is this:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let wordSet = foldl
+                Data.Set.insert Data.Set.empty </programlisting>
+        </para>
+        <para>
+            However, this will not work. Remember that in the function we give
+            to <emphasis>foldl</emphasis>, the accumulator has to be the first
+            argument? We are accumulating a <emphasis>Set</emphasis>, but the
+            set is the second argument to <emphasis>Data.Set.insert</emphasis>.
+            We will pull a little trick out of our hat.
+        </para>
+        <para>
+            <programlisting> Prelude&gt; let wordSet = foldl ( e -&gt;
+                Data.Set.insert e s) Data.Set.empty </programlisting>
+        </para>
+        <para>
+            You might be thinking &quot;Oh, no, more syntax terror! Does it
+            ever stop?&quot; Actually,
+            <emphasis>( e -&gt; Data.Set.insert e s)</emphasis> is very
+            familiar. You could see it as an inline function. In functional
+            programming jargon, this is called a <emphasis>lambda</emphasis>.
+            Check out the type signature of the lambda:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type ( e -&gt; Data.Set.insert
+                e s) ( e -&gt; Data.Set.insert e s) :: (Ord a) =&gt; Data.Set.Set a
+                -&gt; a -&gt; Data.Set.Set a </programlisting>
+        </para>
+        <para>
+            It is just a function, it takes a set of some type
+            <emphasis>a</emphasis>, a value of type <emphasis>a</emphasis>, and
+            returns <emphasis>a</emphasis>. The lambda has two arguments that
+            are bound to <emphasis>s</emphasis> and <emphasis>e</emphasis>. The
+            function body comes after the arrow. To emphasize that this is just
+            a function, the following functions are equivalent:
+        </para>
+        <para>
+            <programlisting> myFun = ( e -&gt; Data.Set.insert e s)
+                myFun s e = Data.Set.insert e s </programlisting>
+        </para>
+        <para>
+            Back to our <emphasis>wordSet</emphasis> function. We used the
+            lambda to swap the arguments of
+            <emphasis>Data.Set.insert</emphasis>.
+            <emphasis>Data.Set.insert</emphasis> takes a value and a set, our
+            lambda takes a set and a value. The rest of the function follows
+            the same pattern as <emphasis>wordList</emphasis>, except that we
+            start with an empty set rather than an empty list. The function
+            works as expected:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; wordSet [&quot;blue&quot;,
+                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
+                &quot;red&quot;] fromList [&quot;blue&quot;,&quot;red&quot;]</programlisting>
+        </para>
+        <para>
+            You have done it! You are now not only able to make a function that
+            creates a word list, but also one that is performant.
+        </para>
+        <sect2>
+            <title>Exercises</title>
+            <orderedlist numeration="arabic">
+                <listitem>
+                    <para> To measure the vocabulary of a writer, a so-called type-token ratio can
+                        be calculated. This is the number of different tokens occurring in a text
+                        (so-called 'types') divided by the number of tokens in that text. For
+                        instance the phrase &quot;to be or not to be&quot; contains six tokens and
+                        four types (<emphasis>to</emphasis>, <emphasis>be</emphasis>,
+                        <emphasis>or</emphasis>, <emphasis>not</emphasis>). The type-token ratio
+                        of this phrase is <emphasis>4 / 6 = 2 / 3</emphasis>.</para>
+                    <para>Write a function that calculates the type-token ratio of a list of tokens.
+                        You can use the <emphasis>Data.Set.size</emphasis> function to get the
+                        number of elements in a set. </para>
+                </listitem>
+            </orderedlist>
+        </sect2>
+    </sect1>
+    <sect1>
+        <title>Storing functions in a file</title>
+        <para>
+            Now that we are writing longer and longer functions, it becomes
+            more convenient to define functions in a file rather than the
+            <emphasis role="bold">ghci</emphasis> prompt. You can do this by
+            creating a file using a plain-text editor with the
+            <emphasis>.hs</emphasis> extension. Functions can be written down
+            in the same manner as in <emphasis>ghci</emphasis>, but without the
+            preceding <emphasis>let</emphasis> keyword. It is also highly
+            recommended to add a type signature before the function. Haskell
+            will check the function against the type signature, and report an
+            error if they do not correspond. This will help you catch incorrect
+            function definitions.
+        </para>
+        <para>
+            The <emphasis>palindrome</emphasis> function discussed earlier in
+            this chapter can be written to a file like this:
+        </para>
+        <para>
+            <programlisting> palindrome :: (Eq a) =&gt; [a] -&gt; Bool
+                palindrome word = word == reverse word </programlisting>
+        </para>
+        <para>
+            If you saved this file as <emphasis>chapter2.hs</emphasis>, you can
+            load it in <emphasis role="bold">ghci</emphasis> using the
+            <emphasis>:l</emphasis> (shorthand for <emphasis>:load</emphasis>)
+            command:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :l chapter1 [1 of 1] Compiling
+                Main ( chapter1.hs, interpreted ) Ok, modules loaded: Main.
+                *Main&gt; palindrome &quot;racecar&quot; True </programlisting>
+        </para>
+        <para>
+            For code fragments that use a module other than the prelude, add an
+            import statement at the top of the file. For example, the
+            <emphasis>wordSet</emphasis> function from the previous section
+            should be saved to a text file in the following manner:
+        </para>
+        <para>
+            <programlisting> import qualified Data.Set
+                
+                wordSet :: Ord a =&gt; [a] -&gt; Data.Set.Set a wordSet = foldl ( e
+                -&gt; Data.Set.insert e s) Data.Set.empty </programlisting>
+        </para>
+        <para>
+            From now on, we assume that examples are written to a text file,
+            except when the <emphasis>Prelude&gt;</emphasis> occurs in the
+            example.
+        </para>
+    </sect1>
+    <sect1>
+        <title>Word frequency lists</title>
+        <para>
+            The word list function that we built in the previous section works
+            is useful for various tasks, like calculating the type-token ratio
+            for a text. For some other tasks this is not good enough - we want
+            to be able to find out how often a word was used. We can expand a
+            word list with frequencies to make a
+            <emphasis>word frequency list</emphasis>.
+        </para>
+        <para>
+            To be able to store word frequencies, every word has to be
+            associated with an integer. We could store such an association as a
+            tuple. A tuple is a data type with a fixed number of elements and a
+            fixed type for an element. Examples of tuples are:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    (1,2,3)
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    (&quot;hello&quot;,&quot;world&quot;)
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    (&quot;hello&quot;,1)
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            As you can see, they differ from lists in that they can have values
+            of different types as elements. However, if you inspect the type
+            signatures of these tuples, you will see that the length and type
+            for each position is fixed:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type (1,2,3) (1,2,3) :: (Num
+                t, Num t1, Num t2) =&gt; (t, t1, t2) Prelude&gt; :type
+                (&quot;hello&quot;,&quot;world&quot;)
+                (&quot;hello&quot;,&quot;world&quot;) :: ([Char], [Char])
+                Prelude&gt; :type (&quot;hello&quot;,1) (&quot;hello&quot;,1) ::
+                (Num t) =&gt; ([Char], t) </programlisting>
+        </para>
+        <para>
+            To store frequencies, we could use a list of tuples of the type
+            <emphasis>[([Char], Int)]</emphasis>. The phrase &quot;to be or not
+            to be&quot; could be stored as
+        </para>
+        <para>
+            <programlisting>
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
+            </programlisting>
+        </para>
+        <para>
+            However, this would be even less efficient than using lists for
+            constructing word lists. First, like <emphasis>elemOrAdd</emphasis>
+            we would potentially have to search the complete list to locate a
+            word. Second, we would have to reconstruct the list up to the point
+            of the element. In the <emphasis>elemOrAdd</emphasis> function we
+            could just give the list a new head, but now we would have to
+            replace the element to update the word frequency and add all
+            preceding list items again. Since Haskell is a 'pure' language, we
+            cannot modify existing values.
+        </para>
+        <para>
+            A more appropriate data type for this task is a map (not to be
+            confused with the <emphasis>map</emphasis> function). A map maps a
+            key to a value. In Haskell, maps are provided in the
+            <emphasis>Data.Map</emphasis> module. Like sets, we can make an
+            empty map:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.empty fromList []</programlisting>
+        </para>
+        <para>
+            When you inspect the type signature of the empty map, you can see
+            that it parametrizes over two types, a type for the key and a type
+            for values:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type Data.Map.empty
+                Data.Map.empty :: Data.Map.Map k a </programlisting>
+        </para>
+        <para>
+            We can construct a <emphasis>Map</emphasis> from a list of binary
+            tuples (tuples with two elements), where the first element of the
+            tuple becomes the key, and the second the value:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
+                fromList
+                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
+                Prelude&gt; :type Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
+                Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
+                :: (Num t) =&gt; Data.Map.Map [Char] t </programlisting>
+        </para>
+        <para>
+            This also binds the types for the map: we are mapping from keys of
+            type string to values of type t that belongs to the
+            <emphasis>t</emphasis> typeclass. No specific value for types is
+            used (yet), because the numbers could be integers or fractionals.
+        </para>
+        <para>
+            The <emphasis>insert</emphasis> function is used to add a new
+            mapping to the <emphasis>Map</emphasis>. If a mapping with the
+            given key already exists, the existing mapping is replaced:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.insert &quot;hello&quot; 1 (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                fromList
+                [(&quot;be&quot;,2),(&quot;hello&quot;,1),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
+                Prelude&gt; Data.Map.insert &quot;be&quot; 1 (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                fromList
+                [(&quot;be&quot;,1),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
+            </programlisting>
+        </para>
+        <para>
+            Looking up values is a bit peculiar. You can lookup a value with
+            the <emphasis>lookup</emphasis> function. However, if you inspect
+            the type signature, you will see that the value is not returned as
+            is:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; :type Data.Map.lookup
+                Data.Map.lookup :: (Ord k) =&gt; k -&gt; Data.Map.Map k a -&gt;
+                Maybe a </programlisting>
+        </para>
+        <para>
+            Rather than returning a value, it returns the value packed in some
+            box called <emphasis>Maybe</emphasis>. <emphasis>Maybe a</emphasis>
+            is a type that has just two possible so-called
+            <emphasis>constructors</emphasis>, <emphasis>Just a</emphasis> or
+            <emphasis>Nothing</emphasis>. You can put your own values in a
+            <emphasis>Maybe</emphasis> box using the
+            <emphasis>Just a</emphasis> constructor:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Just 22 Just 22 Prelude&gt;
+                :type Just 22 Just 22 :: (Num t) =&gt; Maybe t Prelude&gt; Just
+                [1,2,3,4,5] Just [1,2,3,4,5] Prelude&gt; Just &quot;stay calm&quot;
+                Just &quot;stay calm&quot; Prelude&gt; :type Just &quot;stay
+                calm&quot; Just &quot;stay calm&quot; :: Maybe [Char]</programlisting>
+        </para>
+        <para>
+            You can also make a box that contains vast emptiness with the
+            <emphasis>Nothing</emphasis> constructor:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Nothing Nothing Prelude&gt;
+                :type Nothing Nothing :: Maybe a </programlisting>
+        </para>
+        <para>
+            These boxes turn out to be pretty cool: you can use them to return
+            something or nothing from functions, without resorting to all kinds
+            of abominations as exceptions or null pointers (if you never heard
+            of exceptions or pointers, do not worry, you have a life full of
+            bliss). Since <emphasis>Maybe</emphasis> is so nice, the
+            <emphasis>lookup</emphasis> function uses it. It will return the
+            value packed with in a <emphasis>Just</emphasis> constructor if the
+            key occurred in the map, or nothing otherwise:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.lookup &quot;to&quot;
+                (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                Just 2 Prelude&gt; Data.Map.lookup &quot;wrong&quot;
+                (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                Nothing </programlisting>
+        </para>
+        <para>
+            As for handling these values - we will come to that later. Mappings
+            are deleted from a <emphasis>Map</emphasis> by key with the
+            <emphasis>delete</emphasis> function. If a key did not occur in the
+            <emphasis>Map</emphasis>, the original map is returned:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.delete &quot;to&quot;
+                (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                fromList
+                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1)]
+                Prelude&gt; Data.Map.delete &quot;wrong&quot; (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+            </programlisting>
+        </para>
+        <para>
+            Finally, a <emphasis>Map</emphasis> can be converted to a list
+            using the <emphasis>toList</emphasis> function:
+        </para>
+        <para>
+            <programlisting> Prelude&gt; Data.Map.toList
+                (Data.Map.fromList
+                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
+                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
+            </programlisting>
+        </para>
+        <para>
+            Alright. Back to our task at hand: constructing a word frequency
+            list. As with word lists, we want to traverse a list of words,
+            accumulating data. So, the use of <emphasis>foldl</emphasis> is a
+            appropriate for this task. During each folding step, we take the
+            map created in a previous step. We then lookup the value for the
+            current step in the map. If it does not exist, we add it to the map
+            giving it a frequency of one. Otherwise, we want to increase the
+            frequency by one. The <emphasis>countElem</emphasis> function does
+            this:
+        </para>
+        <para>
+            <programlisting> countElem :: (Ord k) =&gt; Data.Map.Map k
+                Int -&gt; k -&gt; Data.Map.Map k Int countElem m e = case
+                (Data.Map.lookup e m) of Just v -&gt; Data.Map.insert e (v + 1) m
+                Nothing -&gt; Data.Map.insert e 1 m </programlisting>
+        </para>
+        <para>
+            <emphasis>* Not done here yet!</emphasis>*
+        </para>
+    </sect1>
+    <sect1><title>Reading a text corpus</title>
+        <para>
+            Stub
+        </para>
+    </sect1>
+</chapter>
