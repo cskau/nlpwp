@@ -18,6 +18,7 @@ title: Natural Language Processing for the Working Programmer
   1. [Word frequency lists](words.html#freqlist)
 1. [N-grams](ngrams.html)
   1. [Introduction](ngrams.html#introduction)
+  1. [Bigrams](ngrams.htmls#bigrams)
 1. Part of speech tagging
 1. Named entity recognition
 1. Regular expressions
