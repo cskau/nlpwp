@@ -15,7 +15,9 @@ title: Natural Language Processing for the Working Programmer
   1. [From words to sentences](words.html#sentences)
   1. [A note on tokenization](words.html#tokenization)
   1. [Word lists](words.html#wordlist)
+  1. [Storing functions in a file](words.html#loadfile)
   1. [Word frequency lists](words.html#freqlist)
+  1. [Reading a text corpus](words.html#readcorpus)
 1. [N-grams](ngrams.html)
 1. Part of speech tagging
 1. Named entity recognition

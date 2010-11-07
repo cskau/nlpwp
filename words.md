@@ -10,7 +10,9 @@ title: Words
 * [From words to sentences](#sentences)
 * [A note on tokenization](#tokenization)
 * [Word lists](#wordlist)
+* [Storing functions in a file](#loadfile)
 * [Word frequency lists](#freqlist)
+* [Reading a text corpus](#readcorpus)
 
 <a name="introduction"/>
 ## Introduction
@@ -1009,3 +1011,219 @@ list, but also one that is performant.
 
    Write a function that calculates the type-token ratio of a list of tokens. You can use the
    *Data.Set.size* function to get the number of elements in a set.
+
+<a name="loadfile"/>
+## Storing functions in a file
+
+Now that we are writing longer and longer functions, it becomes more convenient to
+define functions in a file rather than the **ghci** prompt. You can do this by creating
+a file using a plain-text editor with the *.hs* extension. Functions can be written
+down in the same manner as in *ghci*, but without the preceding *let* keyword. It is
+also highly recommended to add a type signature before the function. Haskell
+will check the function against the type signature, and report an error if they do not
+correspond. This will help you catch incorrect function definitions.
+
+The *palindrome* function discussed earlier in this chapter can be written to a file
+like this:
+
+{% highlight haskell %}
+palindrome :: (Eq a) => [a] -> Bool
+palindrome word = word == reverse word
+{% endhighlight %}
+
+If you saved this file as *chapter2.hs*, you can load it in **ghci** using the *:l*
+(shorthand for *:load*) command:
+
+{% highlight haskell %}
+Prelude> :l chapter1
+[1 of 1] Compiling Main             ( chapter1.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> palindrome "racecar"
+True
+{% endhighlight %}
+
+For code fragments that use a module other than the prelude, add an import statement
+at the top of the file. For example, the *wordSet* function from the previous section
+should be saved to a text file in the following manner:
+
+{% highlight haskell %}
+import qualified Data.Set
+
+wordSet :: Ord a => [a] -> Data.Set.Set a
+wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty
+{% endhighlight %}
+
+From now on, we assume that examples are written to a text file, except when the *Prelude>*
+occurs in the example.
+
+<a name="freqlist"/>
+## Word frequency lists
+
+The word list function that we built in the previous section works is useful for
+various tasks, like calculating the type-token ratio for a text. For some other tasks
+this is not good enough - we want to be able to find out how often a word was used.
+We can expand a word list with frequencies to make a *word frequency list*. 
+
+To be able to store word frequencies, every word has to be associated with an integer.
+We could store such an association as a tuple. A tuple is a data type with a fixed number
+of elements and a fixed type for an element. Examples of tuples are:
+
+* (1,2,3)
+* ("hello","world")
+* ("hello",1)
+
+As you can see, they differ from lists in that they can have values of different types
+as elements. However, if you inspect the type signatures of these tuples, you will see
+that the length and type for each position is fixed:
+
+{% highlight haskell %}
+Prelude> :type (1,2,3)
+(1,2,3) :: (Num t, Num t1, Num t2) => (t, t1, t2)
+Prelude> :type ("hello","world")
+("hello","world") :: ([Char], [Char])
+Prelude> :type ("hello",1)
+("hello",1) :: (Num t) => ([Char], t)
+{% endhighlight %}
+
+To store frequencies, we could use a list of tuples of the type *[([Char], Int)]*. The
+phrase "to be or not to be" could be stored as
+
+{% highlight haskell %}
+[("to",2),("be",2),("or",1),("not",1)]
+{% endhighlight %}
+
+However, this would be even less efficient than using lists for constructing word lists.
+First, like *elemOrAdd* we would potentially have to search the complete list to locate a word.
+Second, we would have to reconstruct the list up to the point of the element. In the *elemOrAdd*
+function we could just give the list a new head, but now we would have to replace the
+element to update the word frequency and add all preceding list items again. Since Haskell
+is a 'pure' language, we cannot modify existing values.
+
+A more appropriate data type for this task is a map (not to be confused with the *map*
+function). A map maps a key to a value. In Haskell, maps are provided in the *Data.Map*
+module. Like sets, we can make an empty map:
+
+{% highlight haskell %}
+Prelude> Data.Map.empty
+fromList []
+{% endhighlight %}
+
+When you inspect the type signature of the empty map, you can see that it parametrizes over
+two types, a type for the key and a type for values:
+
+{% highlight haskell %}
+Prelude> :type Data.Map.empty
+Data.Map.empty :: Data.Map.Map k a
+{% endhighlight %}
+
+We can construct a *Map* from a list of binary tuples (tuples with two elements), where the
+first element of the tuple becomes the key, and the second the value:
+
+{% highlight haskell %}
+Prelude> Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+fromList [("be",2),("not",1),("or",1),("to",2)]
+Prelude> :type Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+  :: (Num t) => Data.Map.Map [Char] t
+{% endhighlight %}
+
+This also binds the types for the map: we are mapping from keys of type string to values of
+type t that belongs to the *t* typeclass. No specific value for types is used (yet), because
+the numbers could be integers or fractionals.
+
+The *insert* function is used to add a new mapping to the *Map*. If a mapping with the given
+key already exists, the existing mapping is replaced:
+
+{% highlight haskell %}
+Prelude> Data.Map.insert "hello" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",2),("hello",1),("not",1),("or",1),("to",2)]
+Prelude> Data.Map.insert "be" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",1),("not",1),("or",1),("to",2)]
+{% endhighlight %}
+
+Looking up values is a bit peculiar. You can lookup a value with the *lookup* function.
+However, if you inspect the type signature, you will see that the value is not returned
+as is:
+
+{% highlight haskell %}
+Prelude> :type Data.Map.lookup
+Data.Map.lookup :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
+{% endhighlight %}
+
+Rather than returning a value, it returns the value packed in some box called *Maybe*.
+*Maybe a* is a type that has just two possible so-called *constructors*, *Just a* or *Nothing*.
+You can put your own values in a *Maybe* box using the *Just a* constructor:
+
+{% highlight haskell %}
+Prelude> Just 22
+Just 22
+Prelude> :type Just 22
+Just 22 :: (Num t) => Maybe t
+Prelude> Just [1,2,3,4,5]
+Just [1,2,3,4,5]
+Prelude> Just "stay calm"
+Just "stay calm"
+Prelude> :type Just "stay calm"
+Just "stay calm" :: Maybe [Char]
+{% endhighlight %}
+
+You can also make a box that contains vast emptiness with the *Nothing* constructor:
+
+{% highlight haskell %}
+Prelude> Nothing
+Nothing
+Prelude> :type Nothing
+Nothing :: Maybe a
+{% endhighlight %}
+
+These boxes turn out to be pretty cool: you can use them to return something or nothing
+from functions, without resorting to all kinds of abominations as exceptions or null
+pointers (if you never heard of exceptions or pointers, do not worry, you have a life
+full of bliss). Since *Maybe* is so nice, the *lookup* function uses it. It will return
+the value packed with in a *Just* constructor if the key occurred in the map, or nothing
+otherwise:
+
+{% highlight haskell %}
+Prelude> Data.Map.lookup "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Just 2
+Prelude> Data.Map.lookup "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Nothing
+{% endhighlight %}
+
+As for handling these values - we will come to that later. Mappings are deleted from a *Map*
+by key with the *delete* function. If a key did not occur in the *Map*, the original map is
+returned:
+
+{% highlight haskell %}
+Prelude> Data.Map.delete "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",2),("not",1),("or",1)]
+Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+{% endhighlight %}
+
+Finally, a *Map* can be converted to a list using the *toList* function:
+
+{% highlight haskell %}
+Prelude> Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+[("be",2),("not",1),("or",1),("to",2)]
+{% endhighlight %}
+
+Alright. Back to our task at hand: constructing a word frequency list. As with word lists,
+we want to traverse a list of words, accumulating data. So, the use of *foldl* is a appropriate
+for this task. During each folding step, we take the map created in a previous step. We then
+lookup the value for the current step in the map. If it does not exist, we add it to the map
+giving it a frequency of one. Otherwise, we want to increase the frequency by one. The
+*countElem* function does this:
+
+{% highlight haskell %}
+countElem :: (Ord k) => Data.Map.Map k Int -> k -> Data.Map.Map k Int
+countElem m e = case (Data.Map.lookup e m) of
+                  Just v  -> Data.Map.insert e (v + 1) m
+                  Nothing -> Data.Map.insert e 1 m
+{% endhighlight %}
+
+** Not done here yet! **
+
+<a name="readcorpus"/>
+## Reading a text corpus
+
+Stub
