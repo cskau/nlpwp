@@ -29,8 +29,8 @@ furiously colorless sleep green*: these sentences do not play by the rules of th
 english language. In other words, the fact that languages have rules constraints the
 way in which words can be combined into an acceptable sentences. 
 
-Hey! That sounds good (we can almost here your think) for us NLP programmers, language
-play by rules, computers work with rules, well, we're done, aren't we? We'll infer a
+Hey! That sounds good for us NLP programmers (we can almost here you think), language
+plays by rules, computers work with rules, well, we're done, aren't we? We'll infer a
 set of rules, and there! we have ourselves *language model*. A model that describes how
 a language, say English, works and behaves. Well, not so fast buster! Although we will
 certainly discuss our share of such rule-based language models later on (in the chapter
