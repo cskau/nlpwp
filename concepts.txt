@@ -1,0 +1,30 @@
+Concept map
+-----------
+
+Concepts
+========
+
+Accumulator -> words -> wordlist
+Currying: words -> tokenization
+if/then/else: words -> wordlist
+Modules (basic function calling): words -> wordlist
+
+Data types
+==========
+
+[]: words -> playwithwords, words -> sentences
+Bool: words -> playwithwords
+Data.Set: words -> wordlist
+
+Functions
+=========
+
+(.): lines: words -> tokenization
+elem: words -> wordlist
+foldl: words -> wordlist
+fromIntegral: words -> sentences
+lines: words -> tokenization
+map: words -> sentences
+sum: words -> sentences
+words: words -> tokenization
+
