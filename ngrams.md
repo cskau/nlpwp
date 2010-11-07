@@ -75,7 +75,7 @@ to a list of words representing the sentence *Colorless green ideas sleep furiou
 {% highlight haskell %}
 Prelude> ["Colorless", "green", "ideas", "sleep", "furiously"]
 ["Colorless","green","ideas","sleep","furiously"]
-{% endhighlight}
+{% endhighlight %}
 
 Hey! That looks like... indeed, that looks like a list of unigrams! Well, that was
 convenient. Unfortunately, things do not remain so simple if we move from unigrams to
@@ -85,12 +85,14 @@ bigrams or *some-very-large-n*-grams.
 Prelude> take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]
 ["Colorless","green"]
 Prelude> 
+{% endhighlight %}
 
-{% endhighlight}
 <a name="ngrams"/>
 ## From bigrams to n-grams
-stub
+
+Stub
 
 <a name="collocations"/>
 ## Collocations
-stub
+
+Stub
