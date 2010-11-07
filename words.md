@@ -965,8 +965,8 @@ Prelude> let wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty
 {% endhighlight %}
 
 You might be thinking "Oh, no, more syntax terror! Does it ever stop?" Actually,
-(\s e -> Data.Set.insert e s) is very familiar. You could see it as an inline
-function notation. In functional programming jargon, this is called a *lambda*.
+*(\s e -> Data.Set.insert e s)* is very familiar. You could see it as an inline
+function. In functional programming jargon, this is called a *lambda*.
 Check out the type signature of the lambda:
 
 {% highlight haskell %}
