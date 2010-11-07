@@ -29,8 +29,8 @@ furiously colorless sleep green*: these sentences do not play by the rules of th
 english language. In other words, the fact that languages have rules constraints the
 way in which words can be combined into an acceptable sentences. 
 
-Hey! That sounds good (we can almost here your think) for us NLP programmers, language
-play by rules, computers work with rules, well, we're done, aren't we? We'll infer a
+Hey! That sounds good for us NLP programmers (we can almost here you think), language
+plays by rules, computers work with rules, well, we're done, aren't we? We'll infer a
 set of rules, and there! we have ourselves *language model*. A model that describes how
 a language, say English, works and behaves. Well, not so fast buster! Although we will
 certainly discuss our share of such rule-based language models later on (in the chapter
@@ -53,12 +53,45 @@ greater. Let us start with bigrams.
 
 <a name="bigrams"/>
 ## Bigrams
-stub
+
+An unigram can be thought of as a window placed over a text, such that we only look at
+one word at a time. In similar fashion, a bigram can be thought of as a window that
+shows two words at a time. The sentence *Colorless green ideas sleep furiously*
+contains four bigrams:
+
+* Colorless, green
+* green, ideas
+* ideas, sleep
+* sleep, furiously
+
+To stick to our 'window' analogy, we could say that all bigrams of a sentence can be
+found by placing a window on its first two words, and by moving this window to the
+right one word at a time in a stepwise manner. We then repeat this procedure, until the
+window covers the last two words of a sentence. In fact, the same holds for unigrams
+and N-grams with *n* greater than two. So, say we we have a body of text represented as
+a list of words or tokens (whatever you prefer). For the sake of legacy, we will stick
+to a list of words representing the sentence *Colorless green ideas sleep furiously*:
+
+{% highlight haskell %}
+Prelude> ["Colorless", "green", "ideas", "sleep", "furiously"]
+["Colorless","green","ideas","sleep","furiously"]
+{% endhighlight %}
+
+Hey! That looks like... indeed, that looks like a list of unigrams! Well, that was
+convenient. Unfortunately, things do not remain so simple if we move from unigrams to
+bigrams or *some-very-large-n*-grams.
+
+{% highlight haskell %}
+Prelude> take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]
+["Colorless","green"]
+{% endhighlight %}
 
 <a name="ngrams"/>
 ## From bigrams to n-grams
-stub
+
+Stub
 
 <a name="collocations"/>
 ## Collocations
-stub
+
+Stub
