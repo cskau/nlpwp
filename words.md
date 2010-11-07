@@ -846,7 +846,7 @@ Now we wrap it up in another function, and you have constructed two
 functions that, together, make word lists: 
 
 {% highlight haskell %}
-Prelude> let wordList l = foldl elemOrAdd [] l
+Prelude> let wordList = foldl elemOrAdd []
 Prelude> wordList ["blue", "blue", "red", "blue", "red"]
 ["red","blue"]
 {% endhighlight %}
