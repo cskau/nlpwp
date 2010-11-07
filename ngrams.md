@@ -42,14 +42,14 @@ random order. That is, we can learn a lot from a word and its neighbors. Languag
 models that exploit the ordering of words, are called *n-gram language models*, in
 which the *n* represents any integer greater than zero.
 
-N-gram models can be imagined as placing a small window over a sentence or a text,
-in which only *n* words are visible at the same time. The simplest n-gram model
-is therefore a so-called *unigram* model. This is a model in which we only look
-at one word at a time. The sentence *Colorless green ideas sleep furiously*, for
-instance, contains five unigrams: "colorless", "green", "ideas", "sleep", and
-"furiously". Of course, this is not very informative, as these are just the
-words that form the sentence. In fact, N-grams start to become interesting
-when *n* is two (a *bigram*) or greater. Let us start with bigrams.
+N-gram models can be imagined as placing a small window over a sentence or a text, in
+which only *n* words are visible at the same time. The simplest n-gram model is
+therefore a so-called *unigram* model. This is a model in which we only look at one
+word at a time. The sentence *Colorless green ideas sleep furiously*, for instance,
+contains five unigrams: "colorless", "green", "ideas", "sleep", and "furiously". Of
+course, this is not very informative, as these are just the words that form the
+sentence. In fact, N-grams start to become interesting when *n* is two (a *bigram*) or
+greater. Let us start with bigrams.
 
 <a name="bigrams"/>
 ## Bigrams
