@@ -850,3 +850,145 @@ Prelude> let wordList l = foldl elemOrAdd [] l
 Prelude> wordList ["blue", "blue", "red", "blue", "red"]
 ["red","blue"]
 {% endhighlight %}
+
+While our little word list function works fine on small texts, it will not be
+very efficient for big corpora. The reason is simple - suppose that we have
+already found 100,000 different tokens. For every word, it would have to check
+the list of 100,000 tokens. There is no other way of doing this than to traverse
+the list word by word. Or, on average, we compare a token to 100,000 / 2 = 50,000
+elements in the list. As a computer scientist would say: *elemOrAdd* works in linear
+time, its processing time is linear to the number of different tokens that were
+seen.
+
+This is a typical case of picking the wrong data structure for the task. But
+for illustrative purposes, using lists was nice and simple. But since you
+are a working programmer, you want workable solutions. Bring in the sets!
+A set is, like the mathematical set, a collection that does not contain duplicate
+elements. That is good, because a word list does not contain duplicate elements.
+Silly us, we were fooled by the word *list*. What we actually want to build is
+a word set. It is just for historical purposes, people used paper in a long gone
+past, that it is called a word list.
+
+Another nice property of sets, as they are normally implemented, is that set
+membership can be checked rather quickly. In the sets that we will use, membership
+checking is in logarithmic time. Or in other words, if comparison took one second,
+we would on average need 50,000 seconds to search the list mentioned earlier,
+but only *log(100,000)* or approximately 11.5 seconds to check whether the element
+in in a set. Talking about optimizations!
+
+Haskell provides sets, but not in the so-called *Prelude*. *Prelude* is a module
+that contains functions. The *Prelude* module is always loaded, so its functions
+are always available (unless you explicitly ask Haskell to hide them). Sets are
+in a module named *Data.Set*. For the time being, we will access functions from
+modules by prefixing the name of the module. For instance, this will give us
+the empty set:
+
+{% highlight haskell %}
+Prelude> Data.Set.empty
+fromList []
+{% endhighlight %}
+
+Like a list, a set can contain elements of various types. We see this when
+inspecting the type signature of the *empty* function:
+
+{% highlight haskell %}
+Prelude> :type Data.Set.empty
+Data.Set.empty :: Data.Set.Set a
+{% endhighlight %}
+
+*empty* returns a Set of some type *a*. We can also construct a *Set* from a
+list using the *fromList* function:
+
+{% highlight haskell %}
+Prelude> Data.Set.fromList [5,2,5,8,1,1,23]
+fromList [1,2,5,8,23]
+{% endhighlight %}
+
+As you can see here, the set does not contain duplicates. Another nice property
+of Haskell sets is that they are ordered. We can also do the inverse, convert
+a set to a list using *toList*:
+
+{% highlight haskell %}
+Prelude> Data.Set.toList (Data.Set.fromList [5,2,5,8,1,1,23])
+[1,2,5,8,23]
+{% endhighlight %}
+
+Elements can be added to or removed from a *Set* using respectively the *insert*
+and *delete* functions. Both functions return a set with that element inserted
+or removed:
+
+{% highlight haskell %}
+Prelude> Data.Set.insert 42 (Data.Set.fromList [5,2,5,8,1,1,23])
+fromList [1,2,5,8,23,42]
+Prelude> Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])
+fromList [1,2,8,23]
+{% endhighlight %}
+
+Finally, we can check whether some value is a member of a set by using the
+*member* function:
+
+{% highlight haskell %}
+Prelude> Data.Set.member 23 (Data.Set.fromList [5,2,5,8,1,1,23])
+True
+Prelude> Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23])
+False
+{% endhighlight %}
+
+We have now seen enough to change our word list function. Rather than
+checking whether a value is in a list and adding it if not, we check whether
+it is in a *Set* and add it if it is not:
+
+{% highlight haskell %}
+Prelude> let elemOrAdd s e = if Data.Set.member e s then s else Data.Set.insert e s
+Prelude> elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24
+fromList [1,2,5,8,23,24]
+{% endhighlight %}
+
+That was simple. But it feels a weird, right? The most vital characteristic
+of a set is that it never contains duplicate elements, why do we need
+to check for duplicates? We don't. So, forget about *elemOrAdd*, we will
+only use *Data.Set.insert* from this point. Our objective now is to traverse
+a list of tokens, adding each token to a set, starting with the empty
+set. Our first take is this:
+
+{% highlight haskell %}
+Prelude> let wordSet = foldl Data.Set.insert Data.Set.empty
+{% endhighlight %}
+
+However, this will not work. Remember that in the function we give to *foldl*,
+the accumulator has to be the first argument? We are accumulating a *Set*, but
+the set is the second argument to *Data.Set.insert*. We will pull a little trick
+out of our hat.
+
+{% highlight haskell %}
+Prelude> let wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty
+{% endhighlight %}
+
+You might be thinking "Oh, no, more syntax terror! Does it ever stop?" Actually,
+(\s e -> Data.Set.insert e s) is very familiar. You could see it as an inline
+function notation. In functional programming jargon, this is called a *lambda*.
+Check out the type signature of the lambda:
+
+{% highlight haskell %}
+Prelude> :type (\s e -> Data.Set.insert e s)
+(\s e -> Data.Set.insert e s)
+  :: (Ord a) => Data.Set.Set a -> a -> Data.Set.Set a
+{% endhighlight %}
+
+It is just a function, it takes a set of some type *a*, a value of type *a*, and
+returns *a*. The lambda has two arguments that are bound to *s* and *e*. The
+function body comes after the arrow. To emphasize that this is just a function,
+the following functions are equivalent:
+
+{% highlight haskell %}
+myFun = (\s e -> Data.Set.insert e s)
+myFun s e = Data.Set.insert e s
+{% endhighlight %}
+
+Back to our *wordSet* function. We used the lambda to swap the arguments of
+*Data.Set.insert*. *Data.Set.insert* takes a value and a set, our lambda takes
+a set and a value. The rest of the function follows the same pattern as *wordList*,
+except that we start with an empty set rather than an empty list.
+
+You have done it! You are now not only able to make a function that creates a word
+list, but also one that is performant.
