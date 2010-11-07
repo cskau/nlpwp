@@ -993,7 +993,7 @@ except that we start with an empty set rather than an empty list.
 You have done it! You are now not only able to make a function that creates a word
 list, but also one that is performant.
 
-## Exercises
+### Exercises
 
 1. To measure the vocabulary of a writer, a so-called type-token ratio can be
    calculated. This is the number of different tokens occurring in a text
