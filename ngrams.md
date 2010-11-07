@@ -66,9 +66,27 @@ contains four bigrams:
 
 To stick to our 'window' analogy, we could say that all bigrams of a sentence can be
 found by placing a window on its first two words, and by moving this window to the
-right one word at a time in a stepwise manner. We then repeat this procedure, until 
-the window covers the last two words of a sentence.
+right one word at a time in a stepwise manner. We then repeat this procedure, until the
+window covers the last two words of a sentence. In fact, the same holds for unigrams
+and N-grams with *n* greater than two. So, say we we have a body of text represented as
+a list of words or tokens (whatever you prefer). For the sake of legacy, we will stick
+to a list of words representing the sentence *Colorless green ideas sleep furiously*:
 
+{% highlight haskell %}
+Prelude> ["Colorless", "green", "ideas", "sleep", "furiously"]
+["Colorless","green","ideas","sleep","furiously"]
+{% endhighlight}
+
+Hey! That looks like... indeed, that looks like a list of unigrams! Well, that was
+convenient. Unfortunately, things do not remain so simple if we move from unigrams to
+bigrams or *some-very-large-n*-grams.
+
+{% highlight haskell %}
+Prelude> take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]
+["Colorless","green"]
+Prelude> 
+
+{% endhighlight}
 <a name="ngrams"/>
 ## From bigrams to n-grams
 stub
