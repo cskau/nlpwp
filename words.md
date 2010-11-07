@@ -665,8 +665,7 @@ In the following two sections, we will introduce two prototypical tasks related 
 The first is to make a word (or actually token) list,the second task is making a word
 frequency.
 
-A word list is a very simple data structure: it is just a list of words or tokens that
-occur in a text, without duplicates. Our corpus is also just a list of words, but since
+A word list is a very simple data structure: it is just a list of *unique* words or tokens that occur in a text. Our corpus is also just a list of words, but since
 it contains duplicates, it is not a word list. The obvious method to make a word list
 is to go through a corpus word by word, and adding words that we did not see yet to a
 second list. This requires some functions we haven't seen yet:
@@ -732,7 +731,7 @@ if expr then a else b
 {% endhighlight %}
 
 This whole structure itself is an expression. This expression evaluates to
-*a* if *expr* evaluates to *True* or to *a* if *expr* evaluates to False.
+*a* if *expr* evaluates to *True* or to *b* if *expr* evaluates to False.
 To give a working, but useless example:
 
 {% highlight haskell %}
@@ -753,7 +752,7 @@ Prelude> if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
 ["pony","foo","bar","baz"]
 {% endhighlight %}
 
-That's a bit contrived, but not if we rewrite it to a function:
+That's a bit contrived, but (as you hopefully see) not if we rewrite it to a function:
 
 {% highlight haskell %}
 Prelude> let elemOrAdd e l = if elem e l then l else e:l
@@ -876,12 +875,13 @@ we would on average need 50,000 seconds to search the list mentioned earlier,
 but only *log(100,000)* or approximately 11.5 seconds to check whether the element
 in in a set. Talking about optimizations!
 
-Haskell provides sets, but not in the so-called *Prelude*. *Prelude* is a module
-that contains functions. The *Prelude* module is always loaded, so its functions
-are always available (unless you explicitly ask Haskell to hide them). Sets are
-in a module named *Data.Set*. For the time being, we will access functions from
-modules by prefixing the name of the module. For instance, this will give us
-the empty set:
+Haskell provides sets, but not in the so-called *Prelude*. *Prelude* is a module that
+contains functions. The *Prelude* module is always loaded, so its functions are always
+available (unless you explicitly ask Haskell to hide them). The functions *map*,
+*head*, *tail*, and *length*, for instance, are defined in the *Prelude*. Functions for
+set manipulation, on the other hand, are defined in a module named *Data.Set*. For the
+time being, we will access functions from modules by prefixing the name of the module.
+For instance, this will give us the empty set:
 
 {% highlight haskell %}
 Prelude> Data.Set.empty
