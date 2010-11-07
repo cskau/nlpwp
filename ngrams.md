@@ -84,7 +84,6 @@ bigrams or *some-very-large-n*-grams.
 {% highlight haskell %}
 Prelude> take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]
 ["Colorless","green"]
-Prelude> 
 {% endhighlight %}
 
 <a name="ngrams"/>
