@@ -10,18 +10,18 @@ title: N-grams
 * [From bigrams to n-grams](#ngrams)
 * [Collocations](#collocations)
 
-<a name="introduction"/a>
+<a name="introduction"/>
 ## Introduction
 stub
 
-<a name="bigrams">
+<a name="bigrams"/>
 ## Bigrams
 stub
 
-<a name="ngrams">
+<a name="ngrams"/>
 ## From bigrams to n-grams
 stub
 
-<a name="collocations">
+<a name="collocations"/>
 ## Collocations
 stub
