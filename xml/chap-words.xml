@@ -8,13 +8,11 @@
     <sect1>
         <title>Introduction</title>
         <para>
-            Words are the most fundamental building blocks of our language.
-            Although they may look simple on the surface, they are very
-            ingenious devices that pack not only meaning, but also grammatical
-            information. For our purposes, we will say that a words consists of
-            a <emphasis>stem</emphasis> and <emphasis>affixes</emphasis>. Let's
-            look at three simple sentences:
-        </para>
+            Words are the most fundamental building blocks of our language. Although they may look
+            simple on the surface, they are very ingenious devices that pack not only meaning, but
+            also grammatical information. For our purposes, we will say that a words consists of a
+                <emphasis>stem</emphasis> and <emphasis>affixes</emphasis>. Let's look at three
+            simple sentences: </para>
         <para>
             <itemizedlist>
                 <listitem>
@@ -132,7 +130,7 @@ Prelude> :type "hello"
         <para>
             We will take this opportunity to seriously demolish some words, but
             all with the noble cause of learning some commonly-used Haskell
-            list functions. The first function <emphasis>length</emphasis>
+            list functions. The first function <function>length</function>
             returns the length of a list:
         </para>
         <para>
@@ -162,9 +160,9 @@ length :: [a] -> Int </screen>
             negative whole number.
         </para>
         <para>
-            Two other basic list functions are <emphasis>head</emphasis> and
-            <emphasis>tail</emphasis>. <emphasis>head</emphasis> returns the
-            first element of a list, <emphasis>tail</emphasis> everything but
+            Two other basic list functions are <function>head</function> and
+            <function>tail</function>. <function>head</function> returns the
+            first element of a list, <function>tail</function> everything but
             the first element:
         </para>
         <para>
@@ -183,16 +181,16 @@ head :: [a] -> a
         </para>
         <para>
             Hey, two <emphasis>a</emphasis>'s! Equipped with the knowledge we
-            have, we know that <emphasis>head</emphasis> is a function that
+            have, we know that <function>head</function> is a function that
             takes a list of something, and gives back something. But there is
             an additional constraint here: although <emphasis>a</emphasis> is
             some type, all <emphasis>a</emphasis>'s have to be the same type.
-            So, applying <emphasis>head</emphasis> to a list of numbers gives a
-            number, applying <emphasis>head</emphasis> to a list of characters
+            So, applying <function>head</function> to a list of numbers gives a
+            number, applying <function>head</function> to a list of characters
             gives a character, etc.
         </para>
         <para>
-            The type of <emphasis>tail</emphasis> should now be easy to
+            The type of <function>tail</function> should now be easy to
             understand:
         </para>
         <para>
@@ -200,14 +198,14 @@ head :: [a] -> a
 tail :: [a] -> [a] </screen>
         </para>
         <para>
-            We apply <emphasis>tail</emphasis> to a list of some type, and get
+            We apply <function>tail</function> to a list of some type, and get
             back a list with the same type.
         </para>
         <para>
-            Finally, the last function for now is <emphasis>reverse</emphasis>.
+            Finally, the last function for now is <function>reverse</function>.
             We have to admit presenting this function with a bit of joy, since
             it will allow us to write our first little useful Haskell program.
-            As expected, <emphasis>reverse</emphasis> reverses the elements of
+            As expected, <function>reverse</function> reverses the elements of
             a list:
         </para>
         <para>
@@ -221,11 +219,11 @@ tail :: [a] -> [a] </screen>
             <screen>Prelude> reverse "level"
 "level"</screen>
         </para>
-        <para>We bumped into a <emphasis>palindrome</emphasis>, a word that can be read forward and
+        <para>We bumped into a <function>palindrome</function>, a word that can be read forward and
             backward. Now, suppose we would like to write our own function to determine wether a
             word is a palindrome? We first need to make a slightly more abstract definition of a
             palindrome: a word is a palindrome if it is equal to its reverse. In Haskell we can
-            compare values using the <emphasis>==</emphasis> operator: </para>
+            compare values using the <function>==</function> operator: </para>
         <para>
             <screen>Prelude> "hello" == "hello"
 True
@@ -235,7 +233,7 @@ False </screen>
         <para>Such a comparison evaluates to <emphasis>True</emphasis> if both values are equal, or
             to <emphasis>False</emphasis> in case they are not. <emphasis>True</emphasis> and
                 <emphasis>False</emphasis> are the only values of the <emphasis>Bool</emphasis>
-            type. Since <emphasis>reverse</emphasis> also returns a value, nothing holds us from
+            type. Since <function>reverse</function> also returns a value, nothing holds us from
             using it in comparisons: </para>
         <para>
             <screen>Prelude> "hello" == reverse "hello"
@@ -259,7 +257,7 @@ True </screen>
             <screen>Prelude> let palindrome word = word == reverse word </screen>
         </para>
         <para>
-            This defines the function <emphasis>palindrome</emphasis> taking
+            This defines the function <function>palindrome</function> taking
             one argument, and binds this argument to the symbolic name
             <emphasis>word</emphasis>. To this function we assign the
             expression <emphasis>word == reverse word</emphasis>. Play a little
@@ -312,7 +310,7 @@ palindrome "racecar" = True</screen>
         <para>
             That's fine for a beginning, although not so convenient. Let us see
             why. Assume we ask you to give us the first word of a sentence? In
-            the previous section, we learned that <emphasis>head</emphasis> can
+            the previous section, we learned that <function>head</function> can
             be used to get the first element of a list. Let's try to apply that
             here:
         </para>
@@ -352,8 +350,8 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
         <para>
             Since a word is also a list, we can apply a function to words as
             well. For example, we can get the first character of the first word
-            by applying <emphasis>head</emphasis>, to the
-            <emphasis>head</emphasis> of a sentence:
+            by applying <function>head</function>, to the
+            <function>head</function> of a sentence:
         </para>
         <para>
             <screen>Prelude> head (head ["The", "cat", "is", "on", "the", "mat", "."])
@@ -364,8 +362,8 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
             in parentheses first. If we do not enforce this order of
             evaluation, Haskell will try to evaluate
             <emphasis>head head</emphasis> first, which makes no sense.
-            Remember that <emphasis>head</emphasis> requires a list as its
-            argument, and <emphasis>head</emphasis> is not a list.
+            Remember that <function>head</function> requires a list as its
+            argument, and <function>head</function> is not a list.
         </para>
         <para>
             Now that we know how to represent sentence, this is a good time to
@@ -405,14 +403,14 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
         <para>
             Since you are lazy (and if not, you should spend more time on your
             girlfriend!), you are not going to apply
-            <emphasis>length</emphasis> token by token manually. Moreover, in
+            <function>length</function> token by token manually. Moreover, in
             our final function, this will not work anyway, since we do not know
             the length of the sentence beforehand (how nice, Haskell wants us
             to be lazy). Instead we want to say to Haskell &quot;Hey Haskell!
             Please apply this length function to each element of the
             list.&quot; It turns out that Haskell has a function to do this
-            called <emphasis>map</emphasis>. Time to inspect
-            <emphasis>map</emphasis>:
+            called <function>map</function>. Time to inspect
+            <function>map</function>:
         </para>
         <para>
             <screen>Prelude> :type map
@@ -429,12 +427,12 @@ map :: (a -> b) -> [a] -> [b]</screen>
             returns <emphasis>[b]</emphasis>. <emphasis>(a -&gt; b)</emphasis>
             as the notation suggests, is a function taking an
             <emphasis>a</emphasis> and returning a <emphasis>b</emphasis>. So,
-            <emphasis>map</emphasis> is actually a function that takes a
+            <function>map</function> is actually a function that takes a
             function as its argument, or in functional programming-speak: a
             <emphasis>higher order</emphasis> function.
         </para>
         <para>
-            So, <emphasis>map</emphasis> is a function that takes a function
+            So, <function>map</function> is a function that takes a function
             that maps from <emphasis>a</emphasis> to <emphasis>b</emphasis>,
             takes a list of <emphasis>a</emphasis>s, and returns a list of
             <emphasis>b</emphasis>s. That looks a suspiciously lot like what we
@@ -450,7 +448,7 @@ map :: (a -> b) -> [a] -> [b]</screen>
         <para>
             We have now completed our first step: we have the length of each
             token in the corpus. Next, we have to sum the lengths that we have
-            just retrieved. Fortunately, Haskell has a <emphasis>sum</emphasis>
+            just retrieved. Fortunately, Haskell has a <function>sum</function>
             function:
         </para>
         <para>
@@ -468,7 +466,7 @@ sum :: (Num a) => [a] -> a</screen>
             For instance, the typeclass <emphasis>Num</emphasis> is a typeclass
             for numbers, which requires amongst others, functions that define
             addition or subtraction. Coming back to the type signature,
-            <emphasis>sum</emphasis> will sum a list of
+            <function>sum</function> will sum a list of
             <emphasis>a</emphasis>s, but not just any <emphasis>a</emphasis>s,
             only those that belong to the typeclass <emphasis>Num</emphasis>.
             And after all, this makes sense, doesn't it? We cannot sum strings
@@ -537,7 +535,7 @@ sum :: (Num a) => [a] -> a</screen>
         </para>
         <para>
             Anyway, the verdict of the typesignature of
-            <emphasis>(/)</emphasis> is clear, it requires two arguments that
+            <function>(/)</function> is clear, it requires two arguments that
             belong to the <emphasis>Fractional</emphasis> typeclass. The sum
             and length that we calculated clearly do not belong to this
             typeclass, since they are of the type <emphasis>Int</emphasis>:
@@ -552,8 +550,8 @@ length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
         </para>
         <para>
             Fortunately, Haskell provides the function
-            <emphasis>fromIntegral</emphasis> that converts an integer to any
-            kind of number. Add <emphasis>fromIntegral</emphasis>, and you
+            <function>fromIntegral</function> that converts an integer to any
+            kind of number. Add <function>fromIntegral</function>, and you
             surely do get the average token length of the corpus:
         </para>
         <para>
@@ -582,7 +580,7 @@ Prelude> averageLength ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
         <para>
             Congratulations, you just wrote your second function! But wait, you
             actually accomplished more than you may expect. Check the type
-            signature of <emphasis>averageLength</emphasis>.
+            signature of <function>averageLength</function>.
         </para>
         <para>
             <screen>Prelude> :type averageLength
@@ -591,7 +589,7 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
         <para>
             You made your first weird type signature. Show it off to your
             colleague, significant other, or dog.
-            <emphasis>averageLength</emphasis> is a function that takes a list
+            <function>averageLength</function> is a function that takes a list
             of a list of <emphasis>a</emphasis>, and returns a
             <emphasis>b</emphasis> that belongs to the
             <emphasis>Fractional</emphasis> typeclass. But wait,
@@ -691,7 +689,7 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
             newline. When writing down a string literally, you can insert a newline using <emphasis
                 role="italic">\n</emphasis>. </para>
         <para>
-            Haskell provides a <emphasis>lines</emphasis> function to split up
+            Haskell provides a <function>lines</function> function to split up
             a string by line. Not surprisingly, this function accepts a string
             as its first argument, and will return a list of strings:
         </para>
@@ -705,8 +703,8 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
             That was easy! Now to the actual tokenization. For all sentences,
             we have a string representing the sentence. We want to split this
             string on the space character. Haskell also has a function to do
-            this, named <emphasis>words</emphasis>. <emphasis>words</emphasis>
-            is nearly the same function as <emphasis>lines</emphasis>, except
+            this, named <function>words</function>. <function>words</function>
+            is nearly the same function as <function>lines</function>, except
             that it splits on spaces rather than newlines:
         </para>
         <para>
@@ -716,8 +714,8 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
         <para>
             That will do, but we have to apply this to every sentence in the
             list of sentences. Recall that we can use the
-            <emphasis>map</emphasis> function we have seen earlier to apply the
-            <emphasis>words</emphasis> function to each element of the list of
+            <function>map</function> function we have seen earlier to apply the
+            <function>words</function> function to each element of the list of
             (untokenized) sentences:
         </para>
         <para>
@@ -738,7 +736,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             simpler, we first need to get rid of the parentheses. We use the
             parentheses to tell Haskell that it should evaluate
             <emphasis>lines text</emphasis> first, or otherwise it will try to
-            map over the function <emphasis>lines</emphasis>, which will fail,
+            map over the function <function>lines</function>, which will fail,
             because it is not a list. Very often, you will encounter function
             applications of the form <emphasis>f(g(x))</emphasis>, or
             <emphasis>f(g(h(x)))</emphasis>, etc. Haskell provides the
@@ -762,14 +760,14 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             outcome <emphasis>lines text</emphasis>. This may not yet seem so
             interesting. However, it allows us to make yet another
             simplification step. Consider the type of the
-            <emphasis>map</emphasis> function:
+            <function>map</function> function:
         </para>
         <para>
             <screen>Prelude> :type map
 map :: (a -> b) -> [a] -> [b]</screen>
         </para>
         <para>
-            <emphasis>map</emphasis> takes a function, and a list, and returns
+            <function>map</function> takes a function, and a list, and returns
             a list. Now we will do something that may look weird, but is very
             common in functional programming.
         </para>
@@ -778,7 +776,7 @@ map :: (a -> b) -> [a] -> [b]</screen>
 map words :: [String] -> [[String]]</screen>
         </para>
         <para>
-            Applying <emphasis>map</emphasis> to just one argument will give...
+            Applying <function>map</function> to just one argument will give...
             another function! What we just did is to bind just one argument of
             the map function, and that gives another function that has
             implicitly bound that argument. This process is called
@@ -786,7 +784,7 @@ map words :: [String] -> [[String]]</screen>
             mathematician Haskell Curry) in functional programming slang.
         </para>
         <para>
-            If we look back at our <emphasis>splitTokenize</emphasis> function,
+            If we look back at our <function>splitTokenize</function> function,
             and look up the type of <emphasis>map words . lines</emphasis>, we
             see that it is a function that takes a <emphasis>String</emphasis>
             and returns a list of a list of strings:
@@ -800,7 +798,7 @@ map words . lines :: String -> [[String]]</screen>
             <emphasis>text</emphasis>. Of course, this is not really necessary,
             because <emphasis>map words . lines</emphasis> already defines our
             function (as we have shown above). We just need to bind this to the
-            name <emphasis>splitTokenize</emphasis>. Consequently the function
+            name <function>splitTokenize</function>. Consequently the function
             can once more be simplified:
         </para>
         <para>
@@ -846,11 +844,11 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
         <para>
             We like easy things first, so let's start with the first item:
             adding an element to a list. We have seen the
-            <emphasis>head</emphasis> function before that chops of the head of
+            <function>head</function> function before that chops of the head of
             the list and returns it. But we can also do the reverse: take a
             list and give it a new head. The old head then becomes the head of
             the tail (are you still following?). In Haskell, we can do this
-            using the <emphasis>(:)</emphasis> function:
+            using the <function>(:)</function> function:
         </para>
         <para>
             <screen>Prelude> 2 : [3,4,5]
@@ -874,7 +872,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
         <para>
             With that covered, the next thing we need to be able to do is
             checking whether some element belongs to a list. We can do this
-            using the <emphasis>elem</emphasis> function. It takes an element
+            using the <function>elem</function> function. It takes an element
             as its first argument, and a list as its second. It will return a
             Bool of the value <emphasis>True</emphasis> if the element was in
             the list, or <emphasis>False</emphasis> otherwise. For example:
@@ -886,8 +884,8 @@ Prelude> elem 6 [1,2,3,4,5]
 False </screen>
         </para>
         <para>
-            The function <emphasis>notElem</emphasis> is exactly the inverse of
-            <emphasis>elem</emphasis>, and returns <emphasis>True</emphasis> if
+            The function <function>notElem</function> is exactly the inverse of
+            <function>elem</function>, and returns <emphasis>True</emphasis> if
             an element is not in the list, and <emphasis>False</emphasis>
             otherwise:
         </para>
@@ -945,20 +943,20 @@ Prelude> elemOrAdd "pony" ["foo", "bar", "baz"]
             Now we need to apply this to all words in a text, starting with an
             empty list. Haskell provides a function to do this, but brace
             yourself, the first time it may look a bit 'difficult'. It is named
-            <emphasis>foldl</emphasis> (a so-called) left-fold. A left fold
+            <function>foldl</function> (a so-called) left-fold. A left fold
             traverses a list from head to tail, applying a function to each
-            element, just like <emphasis>map</emphasis>. However, the
+            element, just like <function>map</function>. However, the
             difference is that it can, but does not necessarily return a list.
-            As such, it is a generalization of the <emphasis>map</emphasis>
+            As such, it is a generalization of the <function>map</function>
             function. As usual, you can inspect the type signature to see the
-            arguments of <emphasis>foldl</emphasis>:
+            arguments of <function>foldl</function>:
         </para>
         <para>
             <screen>Prelude> :type foldl
 foldl :: (a -> b -> a) -> a -> [b] -> a</screen>
         </para>
         <para>
-            Now consider this example using <emphasis>foldl</emphasis>:
+            Now consider this example using <function>foldl</function>:
         </para>
         <para>
             <screen>Prelude> foldl (+) 0 [1,2,3,4,5]
@@ -987,10 +985,10 @@ foldl (+) ((((((0)+1)+2)+3)+4)+5)) []
             it accumulates results up till that point.
         </para>
         <para>
-            This could also work for our <emphasis>elemOrAdd</emphasis>
-            function. Unfortunately, <emphasis>elemOrAdd</emphasis> requires
+            This could also work for our <function>elemOrAdd</function>
+            function. Unfortunately, <function>elemOrAdd</function> requires
             the accumulator as the second argument, and the function passed to
-            <emphasis>foldl</emphasis> as the first argument. Compare the type
+            <function>foldl</function> as the first argument. Compare the type
             signatures:
         </para>
         <para>
@@ -1001,9 +999,9 @@ elemOrAdd :: (Eq a) => a -> [a] -> [a]</screen>
         </para>
         <para>
             In the function that is the first argument to
-            <emphasis>foldl</emphasis>, the return type is the same as the type
+            <function>foldl</function>, the return type is the same as the type
             of the first argument. In the case of
-            <emphasis>elemOrAdd</emphasis>, the type of the second argument
+            <function>elemOrAdd</function>, the type of the second argument
             corresponds to that of the first. Of course, an easy 'hack' to
             solve this, is to redefine elemOrAdd, switching its arguments, and
             plug it into foldl:
@@ -1046,7 +1044,7 @@ Prelude> wordList ["blue", "blue", "red", "blue", "red"]
             There is no other way of doing this than to traverse the list word
             by word. Or, on average, we compare a token to 100,000 / 2 = 50,000
             elements in the list. As a computer scientist would say:
-            <emphasis>elemOrAdd</emphasis> works in linear time, its processing
+            <function>elemOrAdd</function> works in linear time, its processing
             time is linear to the number of different tokens that were seen.
         </para>
         <para>
@@ -1076,8 +1074,8 @@ Prelude> wordList ["blue", "blue", "red", "blue", "red"]
             module that contains functions. The <emphasis>Prelude</emphasis>
             module is always loaded, so its functions are always available
             (unless you explicitly ask Haskell to hide them). The functions
-            <emphasis>map</emphasis>, <emphasis>head</emphasis>,
-            <emphasis>tail</emphasis>, and <emphasis>length</emphasis>, for
+            <function>map</function>, <function>head</function>,
+            <function>tail</function>, and <function>length</function>, for
             instance, are defined in the <emphasis>Prelude</emphasis>.
             Functions for set manipulation, on the other hand, are defined in a
             module named <emphasis>Data.Set</emphasis>. For the time being, we
@@ -1091,17 +1089,17 @@ fromList []</screen>
         <para>
             Like a list, a set can contain elements of various types. We see
             this when inspecting the type signature of the
-            <emphasis>empty</emphasis> function:
+            <function>empty</function> function:
         </para>
         <para>
             <screen>Prelude> :type Data.Set.empty
 Data.Set.empty :: Data.Set.Set a</screen>
         </para>
         <para>
-            <emphasis>empty</emphasis> returns a Set of some type
+            <function>empty</function> returns a Set of some type
             <emphasis>a</emphasis>. We can also construct a
             <emphasis>Set</emphasis> from a list using the
-            <emphasis>fromList</emphasis> function:
+            <function>fromList</function> function:
         </para>
         <para>
             <screen>Prelude> Data.Set.fromList [5,2,5,8,1,1,23]
@@ -1111,7 +1109,7 @@ fromList [1,2,5,8,23]</screen>
             As you can see here, the set does not contain duplicates. Another
             nice property of Haskell sets is that they are ordered. We can also
             do the inverse, convert a set to a list using
-            <emphasis>toList</emphasis>:
+            <function>toList</function>:
         </para>
         <para>
             <screen>Prelude> Data.Set.toList (Data.Set.fromList [5,2,5,8,1,1,23])
@@ -1119,8 +1117,8 @@ fromList [1,2,5,8,23]</screen>
         </para>
         <para>
             Elements can be added to or removed from a <emphasis>Set</emphasis>
-            using respectively the <emphasis>insert</emphasis> and
-            <emphasis>delete</emphasis> functions. Both functions return a set
+            using respectively the <function>insert</function> and
+            <function>delete</function> functions. Both functions return a set
             with that element inserted or removed:
         </para>
         <para>
@@ -1131,7 +1129,7 @@ fromList [1,2,8,23]</screen>
         </para>
         <para>
             Finally, we can check whether some value is a member of a set by
-            using the <emphasis>member</emphasis> function:
+            using the <function>member</function> function:
         </para>
         <para>
             <screen>Prelude> Data.Set.member 23 (Data.Set.fromList [5,2,5,8,1,1,23])
@@ -1154,7 +1152,7 @@ fromList [1,2,5,8,23,24]</screen>
             That was simple. But it feels a weird, right? The most vital
             characteristic of a set is that it never contains duplicate
             elements, why do we need to check for duplicates? We don't. So,
-            forget about <emphasis>elemOrAdd</emphasis>, we will only use
+            forget about <function>elemOrAdd</function>, we will only use
             <emphasis>Data.Set.insert</emphasis> from this point. Our objective
             now is to traverse a list of tokens, adding each token to a set,
             starting with the empty set. Our first take is this:
@@ -1164,7 +1162,7 @@ fromList [1,2,5,8,23,24]</screen>
         </para>
         <para>
             However, this will not work. Remember that in the function we give
-            to <emphasis>foldl</emphasis>, the accumulator has to be the first
+            to <function>foldl</function>, the accumulator has to be the first
             argument? We are accumulating a <emphasis>Set</emphasis>, but the
             set is the second argument to <emphasis>Data.Set.insert</emphasis>.
             We will pull a little trick out of our hat.
@@ -1198,7 +1196,7 @@ fromList [1,2,5,8,23,24]</screen>
 myFun s e = Data.Set.insert e ss </screen>
         </para>
         <para>
-            Back to our <emphasis>wordSet</emphasis> function. We used the
+            Back to our <function>wordSet</function> function. We used the
             lambda to swap the arguments of
             <emphasis>Data.Set.insert</emphasis>.
             <emphasis>Data.Set.insert</emphasis> takes a value and a set, our
@@ -1249,7 +1247,7 @@ fromList ["blue","red"]</screen>
             function definitions.
         </para>
         <para>
-            The <emphasis>palindrome</emphasis> function discussed earlier in
+            The <function>palindrome</function> function discussed earlier in
             this chapter can be written to a file like this:
         </para>
         <para>
@@ -1270,7 +1268,7 @@ True </programlisting>
         <para>
             For code fragments that use a module other than the prelude, add an
             import statement at the top of the file. For example, the
-            <emphasis>wordSet</emphasis> function from the previous section
+            <function>wordSet</function> function from the previous section
             should be saved to a text file in the following manner:
         </para>
         
@@ -1341,10 +1339,10 @@ Prelude> :type ("hello",1)
         </para>
         <para>
             However, this would be even less efficient than using lists for
-            constructing word lists. First, like <emphasis>elemOrAdd</emphasis>
+            constructing word lists. First, like <function>elemOrAdd</function>
             we would potentially have to search the complete list to locate a
             word. Second, we would have to reconstruct the list up to the point
-            of the element. In the <emphasis>elemOrAdd</emphasis> function we
+            of the element. In the <function>elemOrAdd</function> function we
             could just give the list a new head, but now we would have to
             replace the element to update the word frequency and add all
             preceding list items again. Since Haskell is a 'pure' language, we
@@ -1352,7 +1350,7 @@ Prelude> :type ("hello",1)
         </para>
         <para>
             A more appropriate data type for this task is a map (not to be
-            confused with the <emphasis>map</emphasis> function). A map maps a
+            confused with the <function>map</function> function). A map maps a
             key to a value. In Haskell, maps are provided in the
             <emphasis>Data.Map</emphasis> module. Like sets, we can make an
             empty map:
@@ -1389,7 +1387,7 @@ Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
             used (yet), because the numbers could be integers or fractionals.
         </para>
         <para>
-            The <emphasis>insert</emphasis> function is used to add a new
+            The <function>insert</function> function is used to add a new
             mapping to the <emphasis>Map</emphasis>. If a mapping with the
             given key already exists, the existing mapping is replaced:
         </para>
@@ -1401,7 +1399,7 @@ fromList [("be",1),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para>
             Looking up values is a bit peculiar. You can lookup a value with
-            the <emphasis>lookup</emphasis> function. However, if you inspect
+            the <function>lookup</function> function. However, if you inspect
             the type signature, you will see that the value is not returned as
             is:
         </para>
@@ -1446,7 +1444,7 @@ Nothing :: Maybe a </screen>
             of abominations as exceptions or null pointers (if you never heard
             of exceptions or pointers, do not worry, you have a life full of
             bliss). Since <emphasis>Maybe</emphasis> is so nice, the
-            <emphasis>lookup</emphasis> function uses it. It will return the
+            <function>lookup</function> function uses it. It will return the
             value packed with in a <emphasis>Just</emphasis> constructor if the
             key occurred in the map, or nothing otherwise:
         </para>
@@ -1459,7 +1457,7 @@ Nothing </screen>
         <para>
             As for handling these values - we will come to that later. Mappings
             are deleted from a <emphasis>Map</emphasis> by key with the
-            <emphasis>delete</emphasis> function. If a key did not occur in the
+            <function>delete</function> function. If a key did not occur in the
             <emphasis>Map</emphasis>, the original map is returned:
         </para>
         <para>
@@ -1469,7 +1467,7 @@ Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),
         </para>
         <para>
             Finally, a <emphasis>Map</emphasis> can be converted to a list
-            using the <emphasis>toList</emphasis> function:
+            using the <function>toList</function> function:
         </para>
         <para>
             <screen>Prelude> Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
@@ -1478,12 +1476,12 @@ Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),
         <para>
             Alright. Back to our task at hand: constructing a word frequency
             list. As with word lists, we want to traverse a list of words,
-            accumulating data. So, the use of <emphasis>foldl</emphasis> is a
+            accumulating data. So, the use of <function>foldl</function> is a
             appropriate for this task. During each folding step, we take the
             map created in a previous step. We then lookup the value for the
             current step in the map. If it does not exist, we add it to the map
             giving it a frequency of one. Otherwise, we want to increase the
-            frequency by one. The <emphasis>countElem</emphasis> function does
+            frequency by one. The <function>countElem</function> function does
             this:
         </para>
 
