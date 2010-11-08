@@ -5,7 +5,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     version="5.0" xml:id="chap-words">
     <title>Words</title>
-    <sect1>
+    <sect1 xml:id="sec-words-intro">
         <title>Introduction</title>
         <para>
             Words are the most fundamental building blocks of our language. Although they may look
@@ -68,7 +68,7 @@
             Now, with that out of the way, let's get some work done.
         </para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-words-playwords">
         <title>Playing with words</title>
         <para>
             Written words consist of characters. We can write down characters
@@ -293,7 +293,7 @@ palindrome "racecar" = True</screen>
             essence a small program!
         </para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-words-to-sentences">
         <title>From words to sentences</title>
         <para>
             So far, we have looked at words in isolation. However, in language,
@@ -613,7 +613,7 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
         </para>
     </sect1>
     
-    <sect1>
+    <sect1 xml:id="sec-words-tokenization">
         <title>A note on tokenization</title>
         
         <para>When dealing with real-world text, it is usually not neatly split in sentences and
@@ -808,7 +808,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
 {% endhighlight %}</screen>
         </para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-words-lists">
         <title>Word lists</title>
         <para>
             In the following two sections, we will introduce two prototypical
@@ -1231,7 +1231,7 @@ fromList ["blue","red"]</screen>
             </orderedlist>
         </sect2>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-words-source-file">
         <title>Storing functions in a file</title>
         <para>
             Now that we are writing longer and longer functions, it becomes
@@ -1282,7 +1282,7 @@ wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty </programlisting>
             example.
         </para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-words-freq-list">
         <title>Word frequency lists</title>
         <para>
             The word list function that we built in the previous section works
@@ -1514,7 +1514,8 @@ countElem m e = Data.Map.insertWith (\n o -> n + o) e 1 m</programlisting>
         <programlisting language="haskell">freqList :: (Ord k) => [k] -> Data.Map.Map k Int
 freqList = foldl countElem Data.Map.empty</programlisting>
     </sect1>
-    <sect1><title>Reading a text corpus</title>
+    <sect1 xml:id="sec-words-read-text-corpus">
+        <title>Reading a text corpus</title>
         <para> Stub: read files, apply freqList to a corpus, Zipfian distribution.</para>
     </sect1>
 </chapter>
