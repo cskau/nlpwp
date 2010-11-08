@@ -78,8 +78,8 @@
             <emphasis>ghci</emphasis>, it will simply echo back the character:
         </para>
         <para>
-            <programlisting>Prelude> 'h'
-'h'</programlisting>
+            <screen>Prelude> 'h'
+'h'</screen>
         </para>
         <para>
             This is all that <emphasis>ghci</emphasis> does, it evaluates
@@ -89,8 +89,8 @@
             <emphasis>:t</emphasis>:
         </para>
         <para>
-            <programlisting>Prelude> :t 'h'
-'h' :: Char    </programlisting>
+            <screen>Prelude> :t 'h'
+'h' :: Char    </screen>
         </para>
         <para>
             Great. Haskell indeed confirms that 'h' is a character, or in
@@ -108,15 +108,15 @@
             characters:
         </para>
         <para>
-            <programlisting>Prelude> ['h','e','l','l','o']
-"hello" </programlisting>
+            <screen>Prelude> ['h','e','l','l','o']
+"hello" </screen>
         </para>
         <para>
             Now we are getting somewhere! Let's look at the type of this list:
         </para>
         <para>
-            <programlisting>Prelude> :t ['h','e','l','l','o']
-['h','e','l','l','o'] :: [Char] </programlisting>
+            <screen>Prelude> :t ['h','e','l','l','o']
+['h','e','l','l','o'] :: [Char] </screen>
         </para>
         <para>Its type is <emphasis>[Char]</emphasis>, which should be read as 'list of characters'.
             Such a list of characters is known as <emphasis>a string</emphasis> Of course, writing
@@ -124,10 +124,10 @@
             example already suggests, there is a more convenient notation: wrap the characters in
             double quotes: </para>
         <para>
-            <programlisting>Prelude> "hello"
+            <screen>Prelude> "hello"
 "hello"
 Prelude> :type "hello"
-"hello" :: [Char] </programlisting>
+"hello" :: [Char] </screen>
         </para>
         <para>
             We will take this opportunity to seriously demolish some words, but
@@ -136,18 +136,18 @@ Prelude> :type "hello"
             returns the length of a list:
         </para>
         <para>
-            <programlisting>Prelude> length "hello"
+            <screen>Prelude> length "hello"
 5
 Prelude> length [1,2,3]
-3 </programlisting>
+3 </screen>
         </para>
         <para>
             To get a better impression of functions, it is often useful to look
             at its type:
         </para>
         <para>
-            <programlisting>Prelude> :type length
-length :: [a] -> Int </programlisting>
+            <screen>Prelude> :type length
+length :: [a] -> Int </screen>
         </para>
         <para>
             That's one heck of a type! Basically, it says 'give me a list of
@@ -168,18 +168,18 @@ length :: [a] -> Int </programlisting>
             the first element:
         </para>
         <para>
-            <programlisting>Prelude> head "hello"
+            <screen>Prelude> head "hello"
 'h'
 Prelude> tail "hello"
-"ello"</programlisting>
+"ello"</screen>
         </para>
         <para>
             The type of head is the following:
         </para>
         <para>
-            <programlisting>Prelude> :type head
+            <screen>Prelude> :type head
 head :: [a] -> a
-            </programlisting>
+            </screen>
         </para>
         <para>
             Hey, two <emphasis>a</emphasis>'s! Equipped with the knowledge we
@@ -196,8 +196,8 @@ head :: [a] -> a
             understand:
         </para>
         <para>
-            <programlisting>Prelude> :type tail
-tail :: [a] -> [a] </programlisting>
+            <screen>Prelude> :type tail
+tail :: [a] -> [a] </screen>
         </para>
         <para>
             We apply <emphasis>tail</emphasis> to a list of some type, and get
@@ -211,15 +211,15 @@ tail :: [a] -> [a] </programlisting>
             a list:
         </para>
         <para>
-            <programlisting>Prelude> reverse "hello"
-"olleh"</programlisting>
+            <screen>Prelude> reverse "hello"
+"olleh"</screen>
         </para>
         <para>
             Olé! And another one:
         </para>
         <para>
-            <programlisting>Prelude> reverse "level"
-"level"</programlisting>
+            <screen>Prelude> reverse "level"
+"level"</screen>
         </para>
         <para>We bumped into a <emphasis>palindrome</emphasis>, a word that can be read forward and
             backward. Now, suppose we would like to write our own function to determine wether a
@@ -227,10 +227,10 @@ tail :: [a] -> [a] </programlisting>
             palindrome: a word is a palindrome if it is equal to its reverse. In Haskell we can
             compare values using the <emphasis>==</emphasis> operator: </para>
         <para>
-            <programlisting>Prelude> "hello" == "hello"
+            <screen>Prelude> "hello" == "hello"
 True
 Prelude> "hello" == "olleh"
-False </programlisting>
+False </screen>
         </para>
         <para>Such a comparison evaluates to <emphasis>True</emphasis> if both values are equal, or
             to <emphasis>False</emphasis> in case they are not. <emphasis>True</emphasis> and
@@ -238,10 +238,10 @@ False </programlisting>
             type. Since <emphasis>reverse</emphasis> also returns a value, nothing holds us from
             using it in comparisons: </para>
         <para>
-            <programlisting>Prelude> "hello" == reverse "hello"
+            <screen>Prelude> "hello" == reverse "hello"
 False
 Prelude> "level" == reverse "level"
-True </programlisting>
+True </screen>
         </para>
         <para>
             The test that we devised for detecting palindromes seems to work.
@@ -251,12 +251,12 @@ True </programlisting>
             <emphasis role="bold">ghci</emphasis> yet, since it does not know
             this symbolic name):
         </para>
-        <programlisting>word == reverse word </programlisting>
+        <screen>word == reverse word </screen>
         <para>
             Let's do some magic:
         </para>
         <para>
-            <programlisting>Prelude> let palindrome word = word == reverse word </programlisting>
+            <screen>Prelude> let palindrome word = word == reverse word </screen>
         </para>
         <para>
             This defines the function <emphasis>palindrome</emphasis> taking
@@ -267,12 +267,12 @@ True </programlisting>
             examples:
         </para>
         <para>
-            <programlisting>Prelude> palindrome "hello"
+            <screen>Prelude> palindrome "hello"
 False
 Prelude> palindrome "level"
 True
 Prelude> palindrome "racecar"
-True </programlisting>
+True </screen>
         </para>
         <para>
             If this function is still a mystery to you, it may be useful two
@@ -306,8 +306,8 @@ palindrome "racecar" = True</screen>
             sentences in the exactly the same way we represented words:
         </para>
         <para>
-            <programlisting> Prelude&gt; &quot;The cat is on the
-                mat.&quot; &quot;The cat is on the mat.&quot; </programlisting>
+            <screen>Prelude> "The cat is on the mat."
+"The cat is on the mat." </screen>
         </para>
         <para>
             That's fine for a beginning, although not so convenient. Let us see
@@ -317,8 +317,8 @@ palindrome "racecar" = True</screen>
             here:
         </para>
         <para>
-            <programlisting> Prelude&gt; head &quot;The cat is on the
-                mat.&quot; 'T' </programlisting>
+            <screen>Prelude> head "The cat is on the mat."
+'T' </screen>
         </para>
         <para>
             As you probably expected, that didn't work. We represented a
@@ -327,15 +327,10 @@ palindrome "racecar" = True</screen>
             we represented a sentence as a list of words?
         </para>
         <para>
-            <programlisting> Prelude&gt; [&quot;The&quot;,
-                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
-                &quot;mat&quot;, &quot;.&quot;]
-                [&quot;The&quot;,&quot;cat&quot;,&quot;is&quot;,&quot;on&quot;,&quot;the&quot;,&quot;mat&quot;,&quot;.&quot;]
-                Prelude&gt; :type [&quot;The&quot;, &quot;cat&quot;,
-                &quot;is&quot;, &quot;on&quot;, &quot;the&quot;, &quot;mat&quot;,
-                &quot;.&quot;] [&quot;The&quot;, &quot;cat&quot;, &quot;is&quot;,
-                &quot;on&quot;, &quot;the&quot;, &quot;mat&quot;, &quot;.&quot;] ::
-                [[Char]] </programlisting>
+            <screen>Prelude> ["The", "cat", "is", "on", "the", "mat", "."]
+["The","cat","is","on","the","mat","."]
+Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
+["The", "cat", "is", "on", "the", "mat", "."] :: [[Char]]</screen>
         </para>
         <para>
             Nifty! We just constructed a list, of a list of characters. Though,
@@ -351,9 +346,8 @@ palindrome "racecar" = True</screen>
             Rinse and repeat:
         </para>
         <para>
-            <programlisting> Prelude&gt; head [&quot;The&quot;,
-                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
-                &quot;mat&quot;, &quot;.&quot;] &quot;The&quot; </programlisting>
+            <screen>Prelude> head ["The", "cat", "is", "on", "the", "mat", "."]
+"The"</screen>
         </para>
         <para>
             Since a word is also a list, we can apply a function to words as
@@ -362,9 +356,8 @@ palindrome "racecar" = True</screen>
             <emphasis>head</emphasis> of a sentence:
         </para>
         <para>
-            <programlisting> Prelude&gt; head (head [&quot;The&quot;,
-                &quot;cat&quot;, &quot;is&quot;, &quot;on&quot;, &quot;the&quot;,
-                &quot;mat&quot;, &quot;.&quot;]) 'T' </programlisting>
+            <screen>Prelude> head (head ["The", "cat", "is", "on", "the", "mat", "."])
+'T'</screen>
         </para>
         <para>
             Note that we need parenthesis to force Haskell to evaluate the part
@@ -406,8 +399,8 @@ palindrome "racecar" = True</screen>
             You know how to get the in characters length of a single token:
         </para>
         <para>
-            <programlisting> Prelude&gt; length &quot;flying&quot; 6
-            </programlisting>
+            <screen>Prelude> length "flying"
+6</screen>
         </para>
         <para>
             Since you are lazy (and if not, you should spend more time on your
@@ -422,8 +415,8 @@ palindrome "racecar" = True</screen>
             <emphasis>map</emphasis>:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type map map :: (a -&gt; b)
-                -&gt; [a] -&gt; [b] </programlisting>
+            <screen>Prelude> :type map
+map :: (a -> b) -> [a] -> [b]</screen>
         </para>
         <para>
             And we are in for another surprise. The most surprising element is
@@ -451,10 +444,8 @@ palindrome "racecar" = True</screen>
             like we have a winner!
         </para>
         <para>
-            <programlisting> Prelude&gt; map length [&quot;Oh&quot;,
-                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
-                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]
-                [2,1,2,1,6,1,4,6] </programlisting>
+            <screen>Prelude> map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+[2,1,2,1,6,1,4,6]</screen>
         </para>
         <para>
             We have now completed our first step: we have the length of each
@@ -463,8 +454,8 @@ palindrome "racecar" = True</screen>
             function:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type sum sum :: (Num a) =&gt;
-                [a] -&gt; a </programlisting>
+            <screen>Prelude> :type sum
+sum :: (Num a) => [a] -> a</screen>
         </para>
         <para>
             Ok, sum takes a list of <emphasis>a</emphasis>s, and returns an
@@ -490,10 +481,8 @@ palindrome "racecar" = True</screen>
             step two:
         </para>
         <para>
-            <programlisting> Prelude&gt; sum (map length
-                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
-                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
-                &quot;ponies&quot;]) 23 </programlisting>
+            <screen>Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+23</screen>
         </para>
         <para>
             By now, you will probably smell victory. The only step that remains
@@ -501,17 +490,19 @@ palindrome "racecar" = True</screen>
             division operator (<emphasis>/</emphasis>):
         </para>
         <para>
-            <programlisting> Prelude&gt; sum (map length
-                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
-                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
-                &quot;ponies&quot;]) / length [&quot;Oh&quot;, &quot;,&quot;,
-                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
-                &quot;pink&quot;, &quot;ponies&quot;]
-                :1:0: No instance for (Fractional Int) arising from a use of
-                <literal>/' at &lt;interactive&gt;:1:0-136     Possible fix: add an instance declaration for (Fractional Int)     In the expression:           sum (map length [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, ....])         / length [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, ....]     In the definition of</literal>it':
-                it = sum (map length [&quot;Oh&quot;, &quot;,&quot;,
-                &quot;no&quot;, ....]) / length [&quot;Oh&quot;, &quot;,&quot;,
-                &quot;no&quot;, ....] </programlisting>
+            <screen>Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]) /
+  length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+
+&lt;interactive>:1:0:
+    No instance for (Fractional Int)
+      arising from a use of `/' at &lt;interactive>:1:0-136
+    Possible fix: add an instance declaration for (Fractional Int)
+    In the expression:
+          sum (map length ["Oh", ",", "no", ",", ....])
+        / length ["Oh", ",", "no", ",", ....]
+    In the definition of `it':
+        it = sum (map length ["Oh", ",", "no", ....])
+           / length ["Oh", ",", "no", ....]</screen>
         </para>
         <para>
             I hope you poured yourself a cup of herb tea! (or alternatively:
@@ -528,8 +519,8 @@ palindrome "racecar" = True</screen>
             the breakdown:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type (/) (/) :: (Fractional a)
-                =&gt; a -&gt; a -&gt; a </programlisting>
+            <screen>Prelude> :type (/)
+(/) :: (Fractional a) => a -> a -> a</screen>
         </para>
         <para>
             First off, we put the division operator in parentheses. We have
@@ -541,7 +532,8 @@ palindrome "racecar" = True</screen>
             things like this:
         </para>
         <para>
-            <programlisting> Prelude&gt; (/) 1.0 2.0 0.5</programlisting>
+            <screen>Prelude> (/) 1.0 2.0
+0.5</screen>
         </para>
         <para>
             Anyway, the verdict of the typesignature of
@@ -551,17 +543,12 @@ palindrome "racecar" = True</screen>
             typeclass, since they are of the type <emphasis>Int</emphasis>:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type sum (map length
-                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
-                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
-                &quot;ponies&quot;]) sum (map length [&quot;Oh&quot;,
-                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
-                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]) :: Int
-                Prelude&gt; :type length [&quot;Oh&quot;, &quot;,&quot;,
-                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
-                &quot;pink&quot;, &quot;ponies&quot;] length [&quot;Oh&quot;,
-                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
-                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;] :: Int</programlisting>
+            <screen>Prelude> :type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+  :: Int
+Prelude> :type length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+  :: Int</screen>
         </para>
         <para>
             Fortunately, Haskell provides the function
@@ -570,12 +557,9 @@ palindrome "racecar" = True</screen>
             surely do get the average token length of the corpus:
         </para>
         <para>
-            <programlisting> Prelude&gt; fromIntegral (sum (map length
-                [&quot;Oh&quot;, &quot;,&quot;, &quot;no&quot;, &quot;,&quot;,
-                &quot;flying&quot;, &quot;,&quot;, &quot;pink&quot;,
-                &quot;ponies&quot;])) / fromIntegral (length [&quot;Oh&quot;,
-                &quot;,&quot;, &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;,
-                &quot;,&quot;, &quot;pink&quot;, &quot;ponies&quot;]) 2.875 </programlisting>
+            <screen>Prelude> fromIntegral (sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])) /
+  fromIntegral (length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+2.875</screen>
         </para>
         <para>
             Well, that was a bumpier ride than you may have expected. Don't
@@ -591,11 +575,9 @@ palindrome "racecar" = True</screen>
             into a function:
         </para>
         <para>
-            <programlisting> Prelude&gt; let averageLength l =
-                fromIntegral (sum (map length l)) / fromIntegral (length l)
-                Prelude&gt; averageLength [&quot;Oh&quot;, &quot;,&quot;,
-                &quot;no&quot;, &quot;,&quot;, &quot;flying&quot;, &quot;,&quot;,
-                &quot;pink&quot; ,&quot;ponies&quot;] 2.875 </programlisting>
+            <screen>Prelude> let averageLength l = fromIntegral (sum (map length l)) / fromIntegral (length l)
+Prelude> averageLength ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
+2.875</screen>
         </para>
         <para>
             Congratulations, you just wrote your second function! But wait, you
@@ -603,8 +585,8 @@ palindrome "racecar" = True</screen>
             signature of <emphasis>averageLength</emphasis>.
         </para>
         <para>
-            <programlisting> Prelude&gt; :type averageLength
-                averageLength :: (Fractional b) =&gt; [[a]] -&gt; b </programlisting>
+            <screen>Prelude> :type averageLength
+averageLength :: (Fractional b) => [[a]] -> b</screen>
         </para>
         <para>
             You made your first weird type signature. Show it off to your
@@ -617,12 +599,10 @@ palindrome "racecar" = True</screen>
             apply this function to a list of sentences?
         </para>
         <para>
-            <programlisting> Prelude&gt; averageLength [[&quot;I&quot;,
-                &quot;like&quot;, &quot;Haskell&quot;, &quot;.&quot;],
-                [&quot;Ruby&quot;, &quot;rocks&quot;, &quot;the&quot;,
-                &quot;too&quot;, &quot;.&quot;], [&quot;Who&quot;,
-                &quot;needs&quot;, &quot;Java&quot;, &quot;?&quot;]]
-                4.333333333333333 </programlisting>
+            <screen>Prelude> averageLength [["I", "like", "Haskell", "."],
+  ["Ruby", "rocks", "the", "too", "."],
+  ["Who", "needs", "Java", "?"]]
+4.333333333333333</screen>
         </para>
         <para>
             That's the average sentence length, expressed in number of words.
@@ -633,19 +613,16 @@ palindrome "racecar" = True</screen>
             very often when you write Haskell programs: lots of functions are
             generic and can be reused for other tasks.
         </para>
-        <para>
-            # A note on tokenization
-        </para>
-        <para>
-            When dealing with real-world text, it is usually not neatly split
-            in sentences and tokens. For example, consider this book -
-            punctuation is usually glued to words. These processes, sentence
-            splitting and tokenization may seem trivial, unfortunately they are
-            not. Consider the following sentence:
-        </para>
-        <para>
-            *E.g. Jack doesn't have 19.99 to spend.
-        </para>
+    </sect1>
+    
+    <sect1>
+        <title>A note on tokenization</title>
+        
+        <para>When dealing with real-world text, it is usually not neatly split in sentences and
+            tokens. For example, consider this book - punctuation is usually glued to words. These
+            processes, sentence splitting and tokenization may seem trivial, unfortunately they are
+            not. Consider the following sentence: </para>
+        <para><emphasis role="italic">E.g. Jack doesn't have 19.99 to spend. </emphasis></para>
         <para>
             If we simply perform sentence splitting on periods
             (<emphasis>.</emphasis>), we will find four sentences:
@@ -706,25 +683,23 @@ palindrome "racecar" = True</screen>
             splitting by space. Have a look at the following example:
         </para>
         <para>
-            <programlisting> Prelude&gt; &quot;This is Jack . is a
-                Haskeller .&quot; &quot;This is Jack . is a Haskeller .&quot; </programlisting>
+            <screen>Prelude> "This is Jack .\nHe is a Haskeller ."
+"This is Jack .\nHe is a Haskeller ."</screen>
         </para>
-        <para>
-            This is exactly the representation that we will be using for our
-            textual data. As you can see, the tokens are separated by spaces.
-            Both sentences are separated using a newline. When writing down a
-            string literally, you can insert a newline using *.
-        </para>
+        <para> This is exactly the representation that we will be using for our textual data. As you
+            can see, the tokens are separated by spaces. Both sentences are separated using a
+            newline. When writing down a string literally, you can insert a newline using <emphasis
+                role="italic">\n</emphasis>. </para>
         <para>
             Haskell provides a <emphasis>lines</emphasis> function to split up
             a string by line. Not surprisingly, this function accepts a string
             as its first argument, and will return a list of strings:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type lines lines :: String
-                -&gt; [String] Prelude&gt; lines &quot;This is Jack . is a
-                Haskeller .&quot; [&quot;This is Jack .&quot;,&quot;He is a
-                Haskeller .&quot;] </programlisting>
+            <screen>Prelude> :type lines
+lines :: String -> [String]
+Prelude> lines "This is Jack .\nHe is a Haskeller ."
+["This is Jack .","He is a Haskeller ."]</screen>
         </para>
         <para>
             That was easy! Now to the actual tokenization. For all sentences,
@@ -735,9 +710,8 @@ palindrome "racecar" = True</screen>
             that it splits on spaces rather than newlines:
         </para>
         <para>
-            <programlisting> Prelude&gt; words &quot;This is Jack
-                .&quot;
-                [&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;] </programlisting>
+            <screen>Prelude> words "This is Jack ."
+["This","is","Jack","."]</screen>
         </para>
         <para>
             That will do, but we have to apply this to every sentence in the
@@ -747,21 +721,17 @@ palindrome "racecar" = True</screen>
             (untokenized) sentences:
         </para>
         <para>
-            <programlisting> Prelude&gt; map words (lines &quot;This is
-                Jack . is a Haskeller .&quot;)
-                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
-            </programlisting>
+            <screen>Prelude> map words (lines "This is Jack .\nHe is a Haskeller .")
+[["This","is","Jack","."],["He","is","a","Haskeller","."]]</screen>
         </para>
         <para>
             Allright! That will do the job. We know how to turn this into a
             full-fledged function:
         </para>
         <para>
-            <programlisting> Prelude&gt; let splitTokenize text = map
-                words (lines text) Prelude&gt; splitTokenize &quot;This is Jack .
-                is a Haskeller .&quot;
-                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
-            </programlisting>
+            <screen>Prelude> let splitTokenize text = map words (lines text)
+Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
+[["This","is","Jack","."],["He","is","a","Haskeller","."]]</screen>
         </para>
         <para>
             This is a good moment to beautify this function a bit. To make it
@@ -785,8 +755,7 @@ palindrome "racecar" = True</screen>
             our tokenization function by using function composition:
         </para>
         <para>
-            <programlisting> Prelude&gt; let splitTokenize text = (map
-                words . lines) text </programlisting>
+            <screen>Prelude> let splitTokenize text = (map words . lines) text</screen>
         </para>
         <para>
             This states that we apply <emphasis>map words</emphasis> to the
@@ -796,8 +765,8 @@ palindrome "racecar" = True</screen>
             <emphasis>map</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type map map :: (a -&gt; b)
-                -&gt; [a] -&gt; [b] </programlisting>
+            <screen>Prelude> :type map
+map :: (a -> b) -> [a] -> [b]</screen>
         </para>
         <para>
             <emphasis>map</emphasis> takes a function, and a list, and returns
@@ -805,8 +774,8 @@ palindrome "racecar" = True</screen>
             common in functional programming.
         </para>
         <para>
-            <programlisting> Prelude&gt; :type map words map words ::
-                [String] -&gt; [[String]] </programlisting>
+            <screen>Prelude> :type map words
+map words :: [String] -> [[String]]</screen>
         </para>
         <para>
             Applying <emphasis>map</emphasis> to just one argument will give...
@@ -823,8 +792,8 @@ palindrome "racecar" = True</screen>
             and returns a list of a list of strings:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type map words . lines map
-                words . lines :: String -&gt; [[String]] </programlisting>
+            <screen>Prelude> :type map words . lines
+map words . lines :: String -> [[String]]</screen>
         </para>
         <para>
             In our function body, we apply this function to the argument
@@ -835,12 +804,10 @@ palindrome "racecar" = True</screen>
             can once more be simplified:
         </para>
         <para>
-            <programlisting> Prelude&gt; let splitTokenize = (map words
-                . lines) Prelude&gt; :type splitTokenize splitTokenize :: String
-                -&gt; [[String]] Prelude&gt; splitTokenize &quot;This is Jack . is
-                a Haskeller .&quot;
-                [[&quot;This&quot;,&quot;is&quot;,&quot;Jack&quot;,&quot;.&quot;],[&quot;He&quot;,&quot;is&quot;,&quot;a&quot;,&quot;Haskeller&quot;,&quot;.&quot;]]
-            </programlisting>
+            <screen>splitTokenize :: String -> [[String]]
+Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
+[["This","is","Jack","."],["He","is","a","Haskeller","."]]
+{% endhighlight %}</screen>
         </para>
     </sect1>
     <sect1>
@@ -886,21 +853,23 @@ palindrome "racecar" = True</screen>
             using the <emphasis>(:)</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; 2 : [3,4,5] [2,3,4,5] </programlisting>
+            <screen>Prelude> 2 : [3,4,5]
+[2,3,4,5] </screen>
         </para>
         <para>
             Ain't that great? We can also add a head, and yet another:
         </para>
         <para>
-            <programlisting> Prelude&gt; 1 : 2 : [3,4,5] [1,2,3,4,5] </programlisting>
+            <screen>Prelude> 1 : 2 : [3,4,5]
+[1,2,3,4,5] </screen>
         </para>
         <para>
             What if we do not have an element yet? Add the head to the empty
             list (<emphasis>[]</emphasis>):
         </para>
         <para>
-            <programlisting> Prelude&gt; &quot;Hi&quot; : []
-                [&quot;Hi&quot;] </programlisting>
+            <screen>Prelude> "Hi" : []
+["Hi"] </screen>
         </para>
         <para>
             With that covered, the next thing we need to be able to do is
@@ -911,8 +880,10 @@ palindrome "racecar" = True</screen>
             the list, or <emphasis>False</emphasis> otherwise. For example:
         </para>
         <para>
-            <programlisting> Prelude&gt; elem 2 [1,2,3,4,5] True
-                Prelude&gt; elem 6 [1,2,3,4,5] False </programlisting>
+            <screen>Prelude> elem 2 [1,2,3,4,5]
+True
+Prelude> elem 6 [1,2,3,4,5]
+False </screen>
         </para>
         <para>
             The function <emphasis>notElem</emphasis> is exactly the inverse of
@@ -921,10 +892,10 @@ palindrome "racecar" = True</screen>
             otherwise:
         </para>
         <para>
-            <programlisting> Prelude&gt; notElem &quot;foo&quot;
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] False Prelude&gt;
-                notElem &quot;pony&quot;
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] True</programlisting>
+            <screen>Prelude> notElem "foo" ["foo","bar","baz"]
+False
+Prelude> notElem "pony" ["foo","bar","baz"]
+True</screen>
         </para>
         <para>
             Ok, so we want to add an element to a list if, but only if, it is
@@ -933,7 +904,7 @@ palindrome "racecar" = True</screen>
             model conditionals, if..then..else. The structure is like this:
         </para>
         <para>
-            <programlisting> if expr then a else b </programlisting>
+            <screen>if expr then a else b </screen>
         </para>
         <para>
             This whole structure itself is an expression. This expression
@@ -943,41 +914,32 @@ palindrome "racecar" = True</screen>
             but useless example:
         </para>
         <para>
-            <programlisting> Prelude&gt; if 1 == 2 then
-                &quot;cuckoo&quot; else &quot;egg&quot; &quot;egg&quot; Prelude&gt;
-                if 1 == 1 then &quot;cuckoo&quot; else &quot;egg&quot;
-                &quot;cuckoo&quot; </programlisting>
+            <screen>Prelude> if 1 == 2 then "cuckoo" else "egg"
+"egg"
+Prelude> if 1 == 1 then "cuckoo" else "egg"
+"cuckoo"</screen>
         </para>
         <para>
             This looks exactly like what we need. Just fill in the blanks:
         </para>
         <para>
-            <programlisting> Prelude&gt; if elem &quot;foo&quot;
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] then
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] else
-                &quot;foo&quot; : [&quot;foo&quot;, &quot;bar&quot;,
-                &quot;baz&quot;] [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
-                Prelude&gt; if elem &quot;pony&quot;
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] then
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] else
-                &quot;pony&quot; : [&quot;foo&quot;, &quot;bar&quot;,
-                &quot;baz&quot;]
-                [&quot;pony&quot;,&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
-            </programlisting>
+            <screen>Prelude> if elem "foo" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "foo" : ["foo", "bar", "baz"]
+["foo","bar","baz"]
+Prelude> if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "pony" : ["foo", "bar", "baz"]
+["pony","foo","bar","baz"]</screen>
         </para>
         <para>
             That's a bit contrived, but (as you hopefully see) not if we
             rewrite it to a function:
         </para>
         <para>
-            <programlisting> Prelude&gt; let elemOrAdd e l = if elem e l
-                then l else e:l Prelude&gt; elemOrAdd &quot;foo&quot;
-                [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;]
-                [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;] Prelude&gt;
-                elemOrAdd &quot;pony&quot; [&quot;foo&quot;, &quot;bar&quot;,
-                &quot;baz&quot;]
-                [&quot;pony&quot;,&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]
-            </programlisting>
+            <screen>Prelude> let elemOrAdd e l = if elem e l then l else e:l
+Prelude> elemOrAdd "foo" ["foo", "bar", "baz"]
+["foo","bar","baz"]
+Prelude> elemOrAdd "pony" ["foo", "bar", "baz"]
+["pony","foo","bar","baz"]</screen>
         </para>
         <para>
             Now we need to apply this to all words in a text, starting with an
@@ -992,23 +954,27 @@ palindrome "racecar" = True</screen>
             arguments of <emphasis>foldl</emphasis>:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type foldl foldl :: (a -&gt; b
-                -&gt; a) -&gt; a -&gt; [b] -&gt; a </programlisting>
+            <screen>Prelude> :type foldl
+foldl :: (a -> b -> a) -> a -> [b] -> a</screen>
         </para>
         <para>
             Now consider this example using <emphasis>foldl</emphasis>:
         </para>
         <para>
-            <programlisting> Prelude&gt; foldl (+) 0 [1,2,3,4,5] 15</programlisting>
+            <screen>Prelude> foldl (+) 0 [1,2,3,4,5]
+15</screen>
         </para>
         <para>
             Stepwise, this fold is executed in the following manner:
         </para>
         <para>
-            <programlisting> foldl (+) 0 [1,2,3,4,5] foldl (+) ((0)+1)
-                [2,3,4,5] foldl (+) (((0)+1)+2) [3,4,5] foldl (+) ((((0)+1)+2)+3)
-                [4,5] foldl (+) (((((0)+1)+2)+3)+4) [5] foldl (+)
-                ((((((0)+1)+2)+3)+4)+5)) [] ((((((0)+1)+2)+3)+4)+5)) 15</programlisting>
+            <screen>foldl (+) 0 [1,2,3,4,5]
+foldl (+) ((0)+1) [2,3,4,5]
+foldl (+) (((0)+1)+2) [3,4,5]
+foldl (+) ((((0)+1)+2)+3) [4,5]
+foldl (+) (((((0)+1)+2)+3)+4) [5]
+foldl (+) ((((((0)+1)+2)+3)+4)+5)) []
+((((((0)+1)+2)+3)+4)+5))</screen>
         </para>
         <para>
             So, it works by applying a function to some initial argument
@@ -1028,9 +994,10 @@ palindrome "racecar" = True</screen>
             signatures:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type foldl foldl :: (a -&gt; b
-                -&gt; a) -&gt; a -&gt; [b] -&gt; a Prelude&gt; :type elemOrAdd
-                elemOrAdd :: (Eq a) =&gt; a -&gt; [a] -&gt; [a] </programlisting>
+            <screen>Prelude> :type foldl
+foldl :: (a -> b -> a) -> a -> [b] -> a
+Prelude> :type elemOrAdd
+elemOrAdd :: (Eq a) => a -> [a] -> [a]</screen>
         </para>
         <para>
             In the function that is the first argument to
@@ -1042,10 +1009,9 @@ palindrome "racecar" = True</screen>
             plug it into foldl:
         </para>
         <para>
-            <programlisting> Prelude&gt; let elemOrAdd l e = if elem e l
-                then l else e:l Prelude&gt; foldl elemOrAdd [] [&quot;blue&quot;,
-                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
-                &quot;red&quot;] [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+            <screen>Prelude> let elemOrAdd l e = if elem e l then l else e:l
+Prelude> foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]
+["red","blue"]</screen>
         </para>
         <para>
             Since we are building a list, we use the empty list
@@ -1053,31 +1019,24 @@ palindrome "racecar" = True</screen>
             Stepwise, the fold works like this:
         </para>
         <para>
-            <programlisting> foldl elemOrAdd [] [&quot;blue&quot;,
-                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
-                &quot;red&quot;] foldl elemOrAdd (&quot;blue&quot;:([]))
-                [&quot;blue&quot;, &quot;blue&quot;, &quot;red&quot;,
-                &quot;blue&quot;, &quot;red&quot;] foldl elemOrAdd
-                (&quot;blue&quot;:([])) [&quot;blue&quot;, &quot;red&quot;,
-                &quot;blue&quot;, &quot;red&quot;] foldl elemOrAdd
-                (&quot;blue&quot;:([])) [&quot;red&quot;, &quot;blue&quot;,
-                &quot;red&quot;] foldl elemOrAdd
-                (&quot;red&quot;:(&quot;blue&quot;:([]))) [&quot;blue&quot;,
-                &quot;red&quot;] foldl elemOrAdd
-                (&quot;red&quot;:(&quot;blue&quot;:([]))) [&quot;red&quot;] foldl
-                elemOrAdd (&quot;red&quot;:(&quot;blue&quot;:([]))) []
-                (&quot;red&quot;:(&quot;blue&quot;:([])))
-                [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+            <screen>foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["blue", "blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["blue", "red", "blue", "red"]
+foldl elemOrAdd ("blue":([])) ["red", "blue", "red"]
+foldl elemOrAdd ("red":("blue":([]))) ["blue", "red"]
+foldl elemOrAdd ("red":("blue":([]))) ["red"]
+foldl elemOrAdd ("red":("blue":([]))) []
+("red":("blue":([])))
+["red","blue"]</screen>
         </para>
         <para>
             Now we wrap it up in another function, and you have constructed two
             functions that, together, make word lists:
         </para>
         <para>
-            <programlisting> Prelude&gt; let wordList = foldl elemOrAdd
-                [] Prelude&gt; wordList [&quot;blue&quot;, &quot;blue&quot;,
-                &quot;red&quot;, &quot;blue&quot;, &quot;red&quot;]
-                [&quot;red&quot;,&quot;blue&quot;] </programlisting>
+            <screen>Prelude> let wordList = foldl elemOrAdd []
+Prelude> wordList ["blue", "blue", "red", "blue", "red"]
+["red","blue"]</screen>
         </para>
         <para>
             While our little word list function works fine on small texts, it
@@ -1126,7 +1085,8 @@ palindrome "racecar" = True</screen>
             module. For instance, this will give us the empty set:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Set.empty fromList [] </programlisting>
+            <screen>Prelude> Data.Set.empty
+fromList []</screen>
         </para>
         <para>
             Like a list, a set can contain elements of various types. We see
@@ -1134,8 +1094,8 @@ palindrome "racecar" = True</screen>
             <emphasis>empty</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type Data.Set.empty
-                Data.Set.empty :: Data.Set.Set a </programlisting>
+            <screen>Prelude> :type Data.Set.empty
+Data.Set.empty :: Data.Set.Set a</screen>
         </para>
         <para>
             <emphasis>empty</emphasis> returns a Set of some type
@@ -1144,8 +1104,8 @@ palindrome "racecar" = True</screen>
             <emphasis>fromList</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Set.fromList
-                [5,2,5,8,1,1,23] fromList [1,2,5,8,23] </programlisting>
+            <screen>Prelude> Data.Set.fromList [5,2,5,8,1,1,23]
+fromList [1,2,5,8,23]</screen>
         </para>
         <para>
             As you can see here, the set does not contain duplicates. Another
@@ -1154,8 +1114,8 @@ palindrome "racecar" = True</screen>
             <emphasis>toList</emphasis>:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Set.toList
-                (Data.Set.fromList [5,2,5,8,1,1,23]) [1,2,5,8,23] </programlisting>
+            <screen>Prelude> Data.Set.toList (Data.Set.fromList [5,2,5,8,1,1,23])
+[1,2,5,8,23]</screen>
         </para>
         <para>
             Elements can be added to or removed from a <emphasis>Set</emphasis>
@@ -1164,19 +1124,20 @@ palindrome "racecar" = True</screen>
             with that element inserted or removed:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Set.insert 42
-                (Data.Set.fromList [5,2,5,8,1,1,23]) fromList [1,2,5,8,23,42]
-                Prelude&gt; Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])
-                fromList [1,2,8,23] </programlisting>
+            <screen>Prelude> Data.Set.insert 42 (Data.Set.fromList [5,2,5,8,1,1,23])
+fromList [1,2,5,8,23,42]
+Prelude> Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])
+fromList [1,2,8,23]</screen>
         </para>
         <para>
             Finally, we can check whether some value is a member of a set by
             using the <emphasis>member</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Set.member 23
-                (Data.Set.fromList [5,2,5,8,1,1,23]) True Prelude&gt;
-                Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23]) False</programlisting>
+            <screen>Prelude> Data.Set.member 23 (Data.Set.fromList [5,2,5,8,1,1,23])
+True
+Prelude> Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23])
+False</screen>
         </para>
         <para>
             We have now seen enough to change our word list function. Rather
@@ -1185,10 +1146,9 @@ palindrome "racecar" = True</screen>
             is not:
         </para>
         <para>
-            <programlisting> Prelude&gt; let elemOrAdd s e = if
-                Data.Set.member e s then s else Data.Set.insert e s Prelude&gt;
-                elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24 fromList
-                [1,2,5,8,23,24] </programlisting>
+            <screen>Prelude> let elemOrAdd s e = if Data.Set.member e s then s else Data.Set.insert e s
+Prelude> elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24
+fromList [1,2,5,8,23,24]</screen>
         </para>
         <para>
             That was simple. But it feels a weird, right? The most vital
@@ -1200,8 +1160,7 @@ palindrome "racecar" = True</screen>
             starting with the empty set. Our first take is this:
         </para>
         <para>
-            <programlisting> Prelude&gt; let wordSet = foldl
-                Data.Set.insert Data.Set.empty </programlisting>
+            <screen>Prelude> let wordSet = foldl Data.Set.insert Data.Set.empty</screen>
         </para>
         <para>
             However, this will not work. Remember that in the function we give
@@ -1211,8 +1170,7 @@ palindrome "racecar" = True</screen>
             We will pull a little trick out of our hat.
         </para>
         <para>
-            <programlisting> Prelude&gt; let wordSet = foldl ( e -&gt;
-                Data.Set.insert e s) Data.Set.empty </programlisting>
+            <screen>Prelude> let wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty </screen>
         </para>
         <para>
             You might be thinking &quot;Oh, no, more syntax terror! Does it
@@ -1223,9 +1181,9 @@ palindrome "racecar" = True</screen>
             Check out the type signature of the lambda:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type ( e -&gt; Data.Set.insert
-                e s) ( e -&gt; Data.Set.insert e s) :: (Ord a) =&gt; Data.Set.Set a
-                -&gt; a -&gt; Data.Set.Set a </programlisting>
+            <screen>Prelude> :type (\s e -> Data.Set.insert e s)
+(\s e -> Data.Set.insert e s)
+  :: (Ord a) => Data.Set.Set a -> a -> Data.Set.Set a</screen>
         </para>
         <para>
             It is just a function, it takes a set of some type
@@ -1236,8 +1194,8 @@ palindrome "racecar" = True</screen>
             a function, the following functions are equivalent:
         </para>
         <para>
-            <programlisting> myFun = ( e -&gt; Data.Set.insert e s)
-                myFun s e = Data.Set.insert e s </programlisting>
+            <screen>myFun = (\s e -> Data.Set.insert e s)
+myFun s e = Data.Set.insert e ss </screen>
         </para>
         <para>
             Back to our <emphasis>wordSet</emphasis> function. We used the
@@ -1250,9 +1208,8 @@ palindrome "racecar" = True</screen>
             works as expected:
         </para>
         <para>
-            <programlisting> Prelude&gt; wordSet [&quot;blue&quot;,
-                &quot;blue&quot;, &quot;red&quot;, &quot;blue&quot;,
-                &quot;red&quot;] fromList [&quot;blue&quot;,&quot;red&quot;]</programlisting>
+            <screen>Prelude> wordSet ["blue", "blue", "red", "blue", "red"]
+fromList ["blue","red"]</screen>
         </para>
         <para>
             You have done it! You are now not only able to make a function that
@@ -1296,8 +1253,8 @@ palindrome "racecar" = True</screen>
             this chapter can be written to a file like this:
         </para>
         <para>
-            <programlisting> palindrome :: (Eq a) =&gt; [a] -&gt; Bool
-                palindrome word = word == reverse word </programlisting>
+            <screen>palindrome :: (Eq a) => [a] -> Bool
+palindrome word = word == reverse word </screen>
         </para>
         <para>
             If you saved this file as <emphasis>chapter2.hs</emphasis>, you can
@@ -1305,23 +1262,22 @@ palindrome "racecar" = True</screen>
             <emphasis>:l</emphasis> (shorthand for <emphasis>:load</emphasis>)
             command:
         </para>
-        <para>
-            <programlisting> Prelude&gt; :l chapter1 [1 of 1] Compiling
-                Main ( chapter1.hs, interpreted ) Ok, modules loaded: Main.
-                *Main&gt; palindrome &quot;racecar&quot; True </programlisting>
-        </para>
+            <programlisting>Prelude> :l chapter1
+[1 of 1] Compiling Main             ( chapter1.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> palindrome "racecar"
+True </programlisting>
         <para>
             For code fragments that use a module other than the prelude, add an
             import statement at the top of the file. For example, the
             <emphasis>wordSet</emphasis> function from the previous section
             should be saved to a text file in the following manner:
         </para>
-        <para>
-            <programlisting> import qualified Data.Set
-                
-                wordSet :: Ord a =&gt; [a] -&gt; Data.Set.Set a wordSet = foldl ( e
-                -&gt; Data.Set.insert e s) Data.Set.empty </programlisting>
-        </para>
+        
+        <programlisting>import qualified Data.Set
+
+wordSet :: Ord a => [a] -> Data.Set.Set a
+wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty </programlisting>
         <para>
             From now on, we assume that examples are written to a text file,
             except when the <emphasis>Prelude&gt;</emphasis> occurs in the
@@ -1368,12 +1324,12 @@ palindrome "racecar" = True</screen>
             for each position is fixed:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type (1,2,3) (1,2,3) :: (Num
-                t, Num t1, Num t2) =&gt; (t, t1, t2) Prelude&gt; :type
-                (&quot;hello&quot;,&quot;world&quot;)
-                (&quot;hello&quot;,&quot;world&quot;) :: ([Char], [Char])
-                Prelude&gt; :type (&quot;hello&quot;,1) (&quot;hello&quot;,1) ::
-                (Num t) =&gt; ([Char], t) </programlisting>
+            <screen>Prelude> :type (1,2,3)
+(1,2,3) :: (Num t, Num t1, Num t2) => (t, t1, t2)
+Prelude> :type ("hello","world")
+("hello","world") :: ([Char], [Char])
+Prelude> :type ("hello",1)
+("hello",1) :: (Num t) => ([Char], t) </screen>
         </para>
         <para>
             To store frequencies, we could use a list of tuples of the type
@@ -1381,9 +1337,7 @@ palindrome "racecar" = True</screen>
             to be&quot; could be stored as
         </para>
         <para>
-            <programlisting>
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
-            </programlisting>
+            <screen>[("to",2),("be",2),("or",1),("not",1)]</screen>
         </para>
         <para>
             However, this would be even less efficient than using lists for
@@ -1404,7 +1358,8 @@ palindrome "racecar" = True</screen>
             empty map:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.empty fromList []</programlisting>
+            <screen>Prelude> Data.Map.empty fromList
+[]</screen>
         </para>
         <para>
             When you inspect the type signature of the empty map, you can see
@@ -1412,8 +1367,8 @@ palindrome "racecar" = True</screen>
             for values:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type Data.Map.empty
-                Data.Map.empty :: Data.Map.Map k a </programlisting>
+            <screen>Prelude> :type Data.Map.empty
+Data.Map.empty :: Data.Map.Map k a </screen>
         </para>
         <para>
             We can construct a <emphasis>Map</emphasis> from a list of binary
@@ -1421,15 +1376,11 @@ palindrome "racecar" = True</screen>
             tuple becomes the key, and the second the value:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
-                fromList
-                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
-                Prelude&gt; :type Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
-                Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)]
-                :: (Num t) =&gt; Data.Map.Map [Char] t </programlisting>
+            <screen>Prelude> Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+fromList [("be",2),("not",1),("or",1),("to",2)]
+Prelude> :type Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+  :: (Num t) => Data.Map.Map [Char] t</screen>
         </para>
         <para>
             This also binds the types for the map: we are mapping from keys of
@@ -1443,15 +1394,10 @@ palindrome "racecar" = True</screen>
             given key already exists, the existing mapping is replaced:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.insert &quot;hello&quot; 1 (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                fromList
-                [(&quot;be&quot;,2),(&quot;hello&quot;,1),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
-                Prelude&gt; Data.Map.insert &quot;be&quot; 1 (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                fromList
-                [(&quot;be&quot;,1),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
-            </programlisting>
+            <screen>Prelude> Data.Map.insert "hello" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",2),("hello",1),("not",1),("or",1),("to",2)]
+Prelude> Data.Map.insert "be" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",1),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para>
             Looking up values is a bit peculiar. You can lookup a value with
@@ -1460,9 +1406,8 @@ palindrome "racecar" = True</screen>
             is:
         </para>
         <para>
-            <programlisting> Prelude&gt; :type Data.Map.lookup
-                Data.Map.lookup :: (Ord k) =&gt; k -&gt; Data.Map.Map k a -&gt;
-                Maybe a </programlisting>
+            <screen>Prelude> :type Data.Map.lookup
+Data.Map.lookup :: (Ord k) => k -> Data.Map.Map k a -> Maybe a</screen>
         </para>
         <para>
             Rather than returning a value, it returns the value packed in some
@@ -1474,19 +1419,26 @@ palindrome "racecar" = True</screen>
             <emphasis>Just a</emphasis> constructor:
         </para>
         <para>
-            <programlisting> Prelude&gt; Just 22 Just 22 Prelude&gt;
-                :type Just 22 Just 22 :: (Num t) =&gt; Maybe t Prelude&gt; Just
-                [1,2,3,4,5] Just [1,2,3,4,5] Prelude&gt; Just &quot;stay calm&quot;
-                Just &quot;stay calm&quot; Prelude&gt; :type Just &quot;stay
-                calm&quot; Just &quot;stay calm&quot; :: Maybe [Char]</programlisting>
+            <screen>Prelude> Just 22
+Just 22
+Prelude> :type Just 22
+Just 22 :: (Num t) => Maybe t
+Prelude> Just [1,2,3,4,5]
+Just [1,2,3,4,5]
+Prelude> Just "stay calm"
+Just "stay calm"
+Prelude> :type Just "stay calm"
+Just "stay calm" :: Maybe [Char]</screen>
         </para>
         <para>
             You can also make a box that contains vast emptiness with the
             <emphasis>Nothing</emphasis> constructor:
         </para>
         <para>
-            <programlisting> Prelude&gt; Nothing Nothing Prelude&gt;
-                :type Nothing Nothing :: Maybe a </programlisting>
+            <screen>Prelude> Nothing
+Nothing
+Prelude> :type Nothing
+Nothing :: Maybe a </screen>
         </para>
         <para>
             These boxes turn out to be pretty cool: you can use them to return
@@ -1499,13 +1451,10 @@ palindrome "racecar" = True</screen>
             key occurred in the map, or nothing otherwise:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.lookup &quot;to&quot;
-                (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                Just 2 Prelude&gt; Data.Map.lookup &quot;wrong&quot;
-                (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                Nothing </programlisting>
+            <screen>Prelude> Data.Map.lookup "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Just 2
+Prelude> Data.Map.lookup "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Nothing </screen>
         </para>
         <para>
             As for handling these values - we will come to that later. Mappings
@@ -1514,25 +1463,17 @@ palindrome "racecar" = True</screen>
             <emphasis>Map</emphasis>, the original map is returned:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.delete &quot;to&quot;
-                (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                fromList
-                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1)]
-                Prelude&gt; Data.Map.delete &quot;wrong&quot; (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-            </programlisting>
+            <screen>Prelude> Data.Map.delete "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+fromList [("be",2),("not",1),("or",1)]
+Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</screen>
         </para>
         <para>
             Finally, a <emphasis>Map</emphasis> can be converted to a list
             using the <emphasis>toList</emphasis> function:
         </para>
         <para>
-            <programlisting> Prelude&gt; Data.Map.toList
-                (Data.Map.fromList
-                [(&quot;to&quot;,2),(&quot;be&quot;,2),(&quot;or&quot;,1),(&quot;not&quot;,1)])
-                [(&quot;be&quot;,2),(&quot;not&quot;,1),(&quot;or&quot;,1),(&quot;to&quot;,2)]
-            </programlisting>
+            <screen>Prelude> Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+[("be",2),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para>
             Alright. Back to our task at hand: constructing a word frequency
@@ -1545,12 +1486,12 @@ palindrome "racecar" = True</screen>
             frequency by one. The <emphasis>countElem</emphasis> function does
             this:
         </para>
-        <para>
-            <programlisting> countElem :: (Ord k) =&gt; Data.Map.Map k
-                Int -&gt; k -&gt; Data.Map.Map k Int countElem m e = case
-                (Data.Map.lookup e m) of Just v -&gt; Data.Map.insert e (v + 1) m
-                Nothing -&gt; Data.Map.insert e 1 m </programlisting>
-        </para>
+
+            <programlisting>countElem :: (Ord k) => Data.Map.Map k Int -> k -> Data.Map.Map k Int
+countElem m e = case (Data.Map.lookup e m) of
+                  Just v  -> Data.Map.insert e (v + 1) m
+                  Nothing -> Data.Map.insert e 1 m</programlisting>
+        
         <para>
             <emphasis>* Not done here yet!</emphasis>*
         </para>
