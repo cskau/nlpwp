@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbookxi.rng" type="xml"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="chap-ngrams">
+    <title>N-grams</title>
+    <sect1>
+        <title>Introduction</title>
+        <para>In the previous chapter, we have looked at words, and the combination of words into a
+            higher level of meaning representation: a sentence. As you might recall being told by
+            your high school grammar teacher, not every random combination of words forms an
+            grammatically acceptable sentence:</para>
+        <itemizedlist>
+            <listitem>
+                <para>Colorless green ideas sleep furiously</para>
+            </listitem>
+            <listitem>
+                <para>Furiously sleep ideas green colorless</para>
+            </listitem>
+            <listitem>
+                <para>Ideas furiously colorless sleep green</para>
+            </listitem>
+        </itemizedlist>
+        <para>The sentence <emphasis role="italic">Colorless green ideas sleep furiously</emphasis>
+            (made famous by the linguist Noam Chomsky), for instance, is grammatically perfectly
+            acceptable, but of course entirely non-sensical (unless you ate wrong/weird mushrooms,
+            that is). If you compare this sentence to the other two sentences, this grammaticality
+            becomes evident. The sentence <emphasis role="italic">Furiously sleep ideas green
+                colorless</emphasis> is grammatically unacceptable, and so is <emphasis
+                role="italic">Ideas furiously colorless sleep green</emphasis>: these sentences do
+            not play by the rules of the english language. In other words, the fact that languages
+            have rules constraints the way in which words can be combined into an acceptable
+            sentences.</para>
+        <para>Hey! That sounds good for us NLP programmers (we can almost here you think), language
+            plays by rules, computers work with rules, well, we’re done, aren’t we? We’ll infer a
+            set of rules, and there! we have ourselves <emphasis role="italic">language
+                model</emphasis>. A model that describes how a language, say English, works and
+            behaves. Well, not so fast buster! Although we will certainly discuss our share of such
+            rule-based language models later on (in the chapter about parsing), the fact is that
+            nature is simply not so simple. The rules by which a language plays are very complex,
+            and no full set of rules to describe a language has ever been proposed. Bummer, isn’t
+            it? Lucky for us, there are simpler ways to obtain a language model, namely by
+            exploiting the observation that words do not combine in a random order. That is, we can
+            learn a lot from a word and its neighbors. Language models that exploit the ordering of
+            words, are called <emphasis role="italic">n-gram language models</emphasis>, in which
+            the <emphasis role="italic">n</emphasis> represents any integer greater than
+            zero.</para>
+        <para>N-gram models can be imagined as placing a small window over a sentence or a text, in
+            which only <emphasis role="italic">n</emphasis> words are visible at the same time. The
+            simplest n-gram model is therefore a so-called <emphasis role="italic"
+                >unigram</emphasis> model. This is a model in which we only look at one word at a
+            time. The sentence <emphasis role="italic">Colorless green ideas sleep
+                furiously</emphasis>, for instance, contains five unigrams: “colorless”, “green”,
+            “ideas”, “sleep”, and “furiously”. Of course, this is not very informative, as these are
+            just the words that form the sentence. In fact, N-grams start to become interesting when
+                <emphasis role="italic">n</emphasis> is two (a <emphasis role="italic"
+                >bigram</emphasis>) or greater. Let us start with bigrams.</para>
+    </sect1>
+    <sect1>
+        <title>Bigrams</title>
+        <para>An unigram can be thought of as a window placed over a text, such that we only look at
+            one word at a time. In similar fashion, a bigram can be thought of as a window that
+            shows two words at a time. The sentence <emphasis role="italic">Colorless green ideas
+                sleep furiously</emphasis> contains four bigrams:<itemizedlist>
+                <listitem>
+                    <para>Colorless, green</para>
+                </listitem>
+                <listitem>
+                    <para>green, ideas</para>
+                </listitem>
+                <listitem>
+                    <para>ideas, sleep</para>
+                </listitem>
+                <listitem>
+                    <para>sleep, furiously</para>
+                </listitem>
+            </itemizedlist></para>
+        <para>To stick to our ‘window’ analogy, we could say that all bigrams of a sentence can be
+            found by placing a window on its first two words, and by moving this window to the right
+            one word at a time in a stepwise manner. We then repeat this procedure, until the window
+            covers the last two words of a sentence. In fact, the same holds for unigrams and
+            N-grams with <emphasis role="italic">n</emphasis> greater than two. So, say we we have a
+            body of text represented as a list of words or tokens (whatever you prefer). For the
+            sake of legacy, we will stick to a list of tokens representing the sentence <emphasis
+                role="italic">Colorless green ideas sleep furiously</emphasis>:</para>
+        <screen>Prelude> <command>["Colorless", "green", "ideas", "sleep", "furiously"]</command>
+["Colorless","green","ideas","sleep","furiously"]</screen>
+        <para>Hey! That looks like… indeed, that looks like a list of unigrams! Well, that was
+            convenient. Unfortunately, things do not remain so simple if we move from unigrams to
+            bigrams or <emphasis role="italic">some-very-large-n-grams</emphasis>.</para>
+        <screen>Prelude> <command>take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]</command>
+["Colorless","green"]</screen>
+    </sect1>
+    <sect1>
+        <title>From bigrams to n-grams</title>
+        <para>Stub</para>
+    </sect1>
+    <sect1>
+        <title>Collocations</title>
+        <para>Stub</para>
+    </sect1>
+</chapter>
