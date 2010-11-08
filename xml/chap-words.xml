@@ -1516,6 +1516,33 @@ freqList = foldl countElem Data.Map.empty</programlisting>
     </sect1>
     <sect1 xml:id="sec-words-read-text-corpus">
         <title>Reading a text corpus</title>
-        <para> Stub: read files, apply freqList to a corpus, Zipfian distribution.</para>
+        <para>Up to this point we have been using very artificial text corpora. At most a few
+            sentences. But you are in it for the real deal, right? Lucky you, we will use a real
+            (like really real) corpus starting from this very moment. Of course, just to test
+            functions we will start with small examples. But you will be able to apply your
+            functions to real data.</para>
+        <para>So-called <emphasis role="italic">I/O</emphasis> (input/output) is a delicate matter
+            in Haskell. The reason being that, as a pure functional language, it is not possible to
+            modify expressions or values once they exist. This leads to an admirable quality of
+            Haskell: given the same input, a function will always return the same output. Or in
+            other words, a function does not have <emphasis role="italic">side-effects</emphasis>.
+            Unlike most other languages, there is no state in a function that can change, so the
+            output can also not change. If a function always evaluates to the same value given the
+            same input, how can you have I/O? For example, suppose that we open a file, and use a
+            function read a byte. And then we read yet another byte. The second byte may be a
+            different one. The reading function has a side-effect: it increases the position within
+            the file.</para>
+        <para>The Haskell developers have, clever as they are, found a solution to get Pandora's box
+            into Haskell. I/O in Haskell is performed in the so-called <emphasis role="italic"
+                >IO</emphasis> monad. Monads by themselves are yet another interesting topic, but
+            for the time being you can imagine it to be a room where all I/O takes place. However,
+            it is a very special room: once you get into the room, you can never get out. For
+            example, if you read a file as a list of <emphasis role="italic">Char</emphasis> it
+            resides in the <emphasis role="italic">IO</emphasis> monad. You can apply any list
+            function to this list, however, the result of the function that is applied to a list
+            will also reside in the IO monad. It cannot get out. The <emphasis role="italic"
+                >IO</emphasis> monad is a room of impurity in a pure world. While this may sound
+            like esoteric mumbo-jumbo, it actually does the job very well.</para>
+        <para>Todo: read files, apply freqList to a corpus, Zipfian distribution.</para>
     </sect1>
 </chapter>
