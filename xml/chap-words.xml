@@ -1438,16 +1438,13 @@ Nothing
 Prelude> :type Nothing
 Nothing :: Maybe a </screen>
         </para>
-        <para>
-            These boxes turn out to be pretty cool: you can use them to return
-            something or nothing from functions, without resorting to all kinds
-            of abominations as exceptions or null pointers (if you never heard
-            of exceptions or pointers, do not worry, you have a life full of
-            bliss). Since <emphasis>Maybe</emphasis> is so nice, the
-            <function>lookup</function> function uses it. It will return the
-            value packed with in a <emphasis>Just</emphasis> constructor if the
-            key occurred in the map, or nothing otherwise:
-        </para>
+        <para> These boxes turn out to be pretty cool: you can use them to return something or
+            nothing from functions, without resorting to all kinds of abominations as exceptions or
+            null pointers (if you never heard of exceptions or pointers, do not worry, you have a
+            life full of bliss). Since <emphasis>Maybe</emphasis> is so nice, the
+                <function>lookup</function> function uses it. It will return the value packed with
+            in a <emphasis>Just</emphasis> constructor if the key occurred in the map, or <emphasis
+                role="italic">Nothing</emphasis> otherwise: </para>
         <para>
             <screen>Prelude> Data.Map.lookup "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
 Just 2
@@ -1473,30 +1470,51 @@ Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),
             <screen>Prelude> Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
 [("be",2),("not",1),("or",1),("to",2)]</screen>
         </para>
-        <para>
-            Alright. Back to our task at hand: constructing a word frequency
-            list. As with word lists, we want to traverse a list of words,
-            accumulating data. So, the use of <function>foldl</function> is a
-            appropriate for this task. During each folding step, we take the
-            map created in a previous step. We then lookup the value for the
-            current step in the map. If it does not exist, we add it to the map
-            giving it a frequency of one. Otherwise, we want to increase the
-            frequency by one. The <function>countElem</function> function does
-            this:
-        </para>
+        <para> Alright. Back to our task at hand: constructing a word frequency list. As with word
+            lists, we want to traverse a list of words, accumulating data. So, the use of
+                <function>foldl</function> is a appropriate for this task. During each folding step,
+            we take the <emphasis role="italic">Map</emphasis> created in a previous step. We then
+            lookup the value for the current step in the <emphasis role="italic">Map</emphasis>. If
+            it does not exist, we add it to the <emphasis role="italic">Map</emphasis> giving it a
+            frequency of one. Otherwise, we want to increase the frequency by one. The
+                <function>countElem</function> function does this: </para>
 
-            <programlisting>countElem :: (Ord k) => Data.Map.Map k Int -> k -> Data.Map.Map k Int
+            <programlisting>import qualified Data.Map
+
+countElem :: (Ord k) => Data.Map.Map k Int -> k -> Data.Map.Map k Int
 countElem m e = case (Data.Map.lookup e m) of
                   Just v  -> Data.Map.insert e (v + 1) m
                   Nothing -> Data.Map.insert e 1 m</programlisting>
-        
-        <para>
-            <emphasis>* Not done here yet!</emphasis>*
-        </para>
+        <para>This function introduces the <emphasis role="italic">case</emphasis> construct.
+            Remember that <function>lookup</function> uses the nify <emphasis role="italic"
+                >Maybe</emphasis> data type? The <emphasis role="italic">case</emphasis> construct
+            allows us to select an expression based on a constructor. If <function>lookup</function>
+            returned a value using the <emphasis role="italic">Just</emphasis> constructor, the key
+            was in the <emphasis role="italic">Map</emphasis>. In this case, we bind the value to
+            the name <emphasis role="italic">v</emphasis> and add a new value for this key. This
+            value is the old value for this key incremented by one. If a value with the <emphasis
+                role="italic">Nothing</emphasis> constructor was returned, the key was not in the
+                <emphasis role="italic">Map</emphasis>. So, we will add it, and give it a
+            (frequency) value of 1.</para>
+        <para>The <function>countElem</function> function works as intended:</para>
+        <screen>*Main> foldl countElem Data.Map.empty ["to","be","or","not","to","be"]
+fromList [("be",2),("not",1),("or",1),("to",2)]</screen>
+        <para>While this was a nice exercise, the <emphasis role="italic"
+                >Data.Map.insertWith</emphasis> function can drastically shorten our function. This
+            function uses an update function to update a value, or a specified value if the key is
+            not present in the <emphasis role="italic">Map</emphasis>. The update function gets the
+            specified value as its first argument, and the old value as its second argument. Using
+                <function>insertWith</function>, we can shorten our function to:</para>
+        <programlisting language="haskell">countElem :: (Ord k) => Data.Map.Map k Int -> k -> Data.Map.Map k Int
+countElem m e = Data.Map.insertWith (\n o -> n + o) e 1 m</programlisting>
+        <para>If an element was not seen in the <emphasis role="italic">Map</emphasis> yet, a
+            frequency of 1 will be inserted. If the element does occur as a key in the map, the
+            lambda adds one to the old frequency. With <function>countElem</function> in our reach,
+            we can define the <function>freqList</function> function:</para>
+        <programlisting language="haskell">freqList :: (Ord k) => [k] -> Data.Map.Map k Int
+freqList = foldl countElem Data.Map.empty</programlisting>
     </sect1>
     <sect1><title>Reading a text corpus</title>
-        <para>
-            Stub
-        </para>
+        <para> Stub: read files, apply freqList to a corpus, Zipfian distribution.</para>
     </sect1>
 </chapter>
