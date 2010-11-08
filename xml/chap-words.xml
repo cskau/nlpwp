@@ -1543,6 +1543,80 @@ freqList = foldl countElem Data.Map.empty</programlisting>
             will also reside in the IO monad. It cannot get out. The <emphasis role="italic"
                 >IO</emphasis> monad is a room of impurity in a pure world. While this may sound
             like esoteric mumbo-jumbo, it actually does the job very well.</para>
-        <para>Todo: read files, apply freqList to a corpus, Zipfian distribution.</para>
+        <para>Functions that do IO return a value wrapped in IO. For instance, the
+                <function>putStrLn</function> function returns an empty tuple packed in the
+                <emphasis role="italic">IO</emphasis>
+            monad:<screen>putStrLn "hello world!" :: IO ()
+Prelude> putStrLn "hello world!" :: IO ()</screen></para>
+        <para>This is just a normal value, you can bind it to a name in
+            <command>ghci</command>:<screen>Prelude> let v = putStrLn "hello world!"
+v :: IO ()</screen></para>
+        <para>However, if we evaluate the value in <command>ghci</command>, it will execute this
+            so-called I/O action:<screen>Prelude> v
+hello world!</screen></para>
+        <para>Of course, the same thing happens if we evaluate <function>putStrLn</function>
+            directly:<screen>Prelude> putStrLn "hello world!"
+hello world!</screen></para>
+        <para>Now, let's get to the interesting part: reading a file. In the files distributed with
+            this book, you will find the file <filename>brown.txt</filename>. This file contains the
+            Brown corpus, a corpus of written text of various kinds. The Brown corpus is already
+            tokenized, which makes our life a bit easier. Ok, first we need to open the file using
+            the <function>IO.openFile</function> function. <function>openFile</function> requires a
+            filename and an I/O mode as its arguments, and it returns a handle packed in the
+                <emphasis role="italic"
+            >IO</emphasis>monad:<screen>Prelude> :type IO.openFile
+IO.openFile
+  :: FilePath
+     -> GHC.IO.IOMode.IOMode
+     -> IO GHC.IO.Handle.Types.Handle
+</screen></para>
+        <para>We use <emphasis role="italic">IO.ReadMode</emphasis> to open
+                <filename>brown.txt</filename> for reading:</para>
+        <screen>Prelude> let h = IO.openFile "brown.txt" IO.ReadMode
+Prelude> :type h
+h :: IO GHC.IO.Handle.Types.Handle</screen>
+        <para>The handle is bound to <emphasis role="italic">h</emphasis>, but still in the
+                <emphasis role="italic">IO</emphasis> monad. It would be nicer if we can access that
+            handle directly, but we told you that a value can never escape its monad. Surprisingly,
+            we can extract the value from the <emphasis role="italic">IO</emphasis> monad in
+                <command>ghci</command>. The reason that you can is that <command>ghci</command>
+            lives in the <emphasis role="italic">IO</emphasis> monad itself. So, the value will
+            still never leave <emphasis role="italic">IO</emphasis>. We can bind the value to a name
+            (or pattern) using <emphasis role="italic"
+            >&lt;-</emphasis>:<screen>Prelude> h &lt;- IO.openFile "brown.txt" IO.ReadMode
+Prelude> :type h
+h :: GHC.IO.Handle.Types.Handle</screen></para>
+        <para>That gives us the handle, bound to <emphasis role="italic">h</emphasis>. The next
+            function that we will use is <emphasis role="italic">IO.hGetContents</emphasis>, which
+            returns unread data as a <emphasis role="italic">String</emphasis> packed in the
+                <emphasis role="italic">IO</emphasis>
+            monad:<screen>Prelude> :type IO.hGetContents
+IO.hGetContents :: GHC.IO.Handle.Types.Handle -> IO String</screen></para>
+        <para>As we mentioned earlier, Haskell is a lazy language: expressions are only evaluated
+            when necessary. The same thing applies to I/O: the relevant contents of a file are only
+            read once you start extracting characters from the <emphasis role="italic"
+                >String</emphasis>. With some smart programming, it is not necessary for your
+            program to read the whole file into memory, it will allocate and deallocate chunks of
+            the file as they are used. Now, get the contents of the
+            file:<screen>Prelude> c &lt;- IO.hGetContents h
+Prelude> :type c
+c :: String</screen></para>
+        <para>We can apply the usual list functions to this <emphasis role="italic"
+                >String</emphasis>:<screen>Prelude> head c
+'T'
+Prelude> length c
+6157180</screen></para>
+        <para>Since the file is sentence-splitted using newlines and tokenized using spaces, you can
+            use the <function>lines</function> and <function>words</function> functions to apply
+            sentence splitting and tokenization. For instance, the first word of the corpus
+            is:<screen>Prelude> head (words (head (lines c)))
+"The"</screen></para>
+        <para>The frequency of the word <emphasis role="italic">the</emphasis> is (nicely packed in
+            a <emphasis role="italic">Just</emphasis>
+            constructor:<screen>Data.Map.lookup "the" (freqList (words c))
+Just 62713</screen></para>
+        <para>Congratulations! This was your first venture into the world of corpus
+            statistics!</para>
+        <para>Todo: Zipfian distribution.</para>
     </sect1>
 </chapter>
