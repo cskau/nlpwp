@@ -3,9 +3,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:html="http://www.w3.org/1999/xhtml"
     version="1.0">
-    <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl" />
+    <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl" />
     
-    <xsl:output method="html" encoding="UTF-8" indent="yes" />
+    <xsl:output method="xml"
+        encoding="UTF-8"
+        indent="yes"/>
     
     <!-- Chunking -->
     <xsl:param name="chunker.output.indent" select="'yes'" />
@@ -15,6 +17,8 @@
     
     <!-- Default CSS stylesheet -->
     <xsl:param name="html.stylesheet">screen.css</xsl:param>
+    
+    <xsl:param name="html.ext">.xhtml</xsl:param>
     
     <xsl:param name="toc.section.depth" select="1" />
     

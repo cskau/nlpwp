@@ -11,13 +11,46 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="name">
-                                    <String xml:space="preserve">NLPWP HTML</String>
+                                    <String xml:space="preserve">NLPWP XHTML</String>
                                 </field>
                                 <field name="type">
                                     <String xml:space="preserve">XSL</String>
                                 </field>
                                 <field name="url">
                                     <String xml:space="preserve">xml/chap-words.xml</String>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="name">
+                                    <String xml:space="preserve">NLPWP XHTML</String>
+                                </field>
+                                <field name="type">
+                                    <String xml:space="preserve">XSL</String>
+                                </field>
+                                <field name="url">
+                                    <String xml:space="preserve">xml/nlpwp.xml</String>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="name">
+                                    <String xml:space="preserve">NLPWP XHTML</String>
+                                </field>
+                                <field name="type">
+                                    <String xml:space="preserve">XSL</String>
+                                </field>
+                                <field name="url">
+                                    <String xml:space="preserve">xsl/html-chunk.xsl</String>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="name">
+                                    <String xml:space="preserve">docbook/docbook5.framework/DocBook 5/Docbook XHTML</String>
+                                </field>
+                                <field name="type">
+                                    <String xml:space="preserve">XSL</String>
+                                </field>
+                                <field name="url">
+                                    <String xml:space="preserve">xsl/untitled.xml</String>
                                 </field>
                             </scenarioAssociation>
                             <scenarioAssociation>
@@ -31,28 +64,6 @@
                                     <String xml:space="preserve">chap-words.xml</String>
                                 </field>
                             </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="name">
-                                    <String xml:space="preserve">NLPWP HTML</String>
-                                </field>
-                                <field name="type">
-                                    <String xml:space="preserve">XSL</String>
-                                </field>
-                                <field name="url">
-                                    <String xml:space="preserve">xml/nlpwp.xml</String>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="name">
-                                    <String xml:space="preserve">NLPWP HTML</String>
-                                </field>
-                                <field name="type">
-                                    <String xml:space="preserve">XSL</String>
-                                </field>
-                                <field name="url">
-                                    <String xml:space="preserve">xsl/html-chunk.xsl</String>
-                                </field>
-                            </scenarioAssociation>
                         </scenarioAssociation-array>
                     </entry>
                     <entry>
@@ -63,7 +74,7 @@
                                     <null/>
                                 </field>
                                 <field name="name">
-                                    <String xml:space="preserve">NLPWP HTML</String>
+                                    <String xml:space="preserve">NLPWP XHTML</String>
                                 </field>
                                 <field name="baseURL">
                                     <String xml:space="preserve"></String>
@@ -105,7 +116,7 @@
                                     <null/>
                                 </field>
                                 <field name="openOtherLocationInBrowser">
-                                    <Boolean xml:space="preserve">false</Boolean>
+                                    <Boolean xml:space="preserve">true</Boolean>
                                 </field>
                                 <field name="locationToOpenInBrowserURL">
                                     <null/>
@@ -148,6 +159,42 @@
                                     <String xml:space="preserve">${cfd}/../html/</String>
                                     </field>
                                     </transformationParameter>
+                                    <transformationParameter>
+                                    <field name="paramDescription">
+                                    <paramDescriptor>
+                                    <field name="localName">
+                                    <String xml:space="preserve">highlight.source</String>
+                                    </field>
+                                    <field name="prefix">
+                                    <null/>
+                                    </field>
+                                    <field name="namespace">
+                                    <null/>
+                                    </field>
+                                    </paramDescriptor>
+                                    </field>
+                                    <field name="value">
+                                    <String xml:space="preserve">1</String>
+                                    </field>
+                                    </transformationParameter>
+                                    <transformationParameter>
+                                    <field name="paramDescription">
+                                    <paramDescriptor>
+                                    <field name="localName">
+                                    <String xml:space="preserve">highlight.xslthl.config</String>
+                                    </field>
+                                    <field name="prefix">
+                                    <null/>
+                                    </field>
+                                    <field name="namespace">
+                                    <null/>
+                                    </field>
+                                    </paramDescriptor>
+                                    </field>
+                                    <field name="value">
+                                    <String xml:space="preserve">${frameworks}/docbook/xsl/highlighting/xslthl-config.xml</String>
+                                    </field>
+                                    </transformationParameter>
                                     </list>
                                 </field>
                                 <field name="cascadingStylesheets">
@@ -157,7 +204,10 @@
                                     <String xml:space="preserve">Saxon6.5.5</String>
                                 </field>
                                 <field name="extensionURLs">
-                                    <String-array/>
+                                    <String-array>
+                                    <String xml:space="preserve">${frameworks}/docbook/xsl/extensions/xslthl-2.0.1.jar</String>
+                                    <String xml:space="preserve">${frameworks}/docbook/xsl/extensions/saxon65.jar</String>
+                                    </String-array>
                                 </field>
                             </scenario>
                             <scenario>
