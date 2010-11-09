@@ -802,7 +802,8 @@ map words . lines :: String -> [[String]]</screen>
             can once more be simplified:
         </para>
         <para>
-            <screen>splitTokenize :: String -> [[String]]
+            <screen>Prelude> let splitTokenize = map words . lines
+splitTokenize :: String -> [[String]]
 Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
 [["This","is","Jack","."],["He","is","a","Haskeller","."]]
 {% endhighlight %}</screen>
