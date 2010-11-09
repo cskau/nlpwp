@@ -84,9 +84,9 @@ data TrainingInstance = TrainingInstance Token Tag
                         <command>ghci</command> to print the value of a <emphasis role="italic"
                         >TrainingInstance</emphasis>.</para>
             </footnote>. We can use this constructor to create training
-            instances:<screen>*Main> <userinput>TrainingInstance "the" "AT"</userinput>
+            instances:<screen>*Main> TrainingInstance "the" "AT"
 TrainingInstance "the" "AT"
-*Main> <userinput>TrainingInstance "pony" "NN"</userinput>
+*Main> TrainingInstance "pony" "NN"
 TrainingInstance "pony" "NN"</screen></para>
         <para>Since our first POS tagger is trained purely on tokens and tags, and requires no
             sentencial information, the corpus will be represented as a list of <emphasis
@@ -138,9 +138,9 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
             </itemizedlist><function>rsplit</function> is just a tiny wrapper around
                 <function>rsplit_</function> that returns a binary tuple with just the prefix and
             suffix lists. The <function>rsplit</function> function works as
-            intended:<screen>*Main> <userinput>rsplit '/' "the/AT"</userinput>
+            intended:<screen>*Main> rsplit '/' "the/AT"
 ("the","AT")
-*Main> <userinput>rsplit '/' "a/b/TEST"</userinput>
+*Main> rsplit '/' "a/b/TEST"
 ("a/b","TEST")</screen></para>
     </sect1>
 </chapter>
