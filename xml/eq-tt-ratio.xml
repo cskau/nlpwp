@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" display="block">
+    <mml:mrow>
+        <mml:mo>tt-ratio</mml:mo>
+        <mml:mo>=</mml:mo>
+        <mml:mfrac>
+            <mml:mrow>
+                <mml:mo>types</mml:mo>
+            </mml:mrow>
+            <mml:mrow>
+                <mml:mo>tokens</mml:mo>
+            </mml:mrow>
+        </mml:mfrac>
+    </mml:mrow>    
+</mml:math>

@@ -1217,12 +1217,18 @@ fromList ["blue","red"]</screen>
             <title>Exercises</title>
             <orderedlist numeration="arabic">
                 <listitem>
-                    <para> To measure the vocabulary of a writer, a so-called type-token ratio can
+                    <para>To measure the vocabulary of a writer, a so-called type-token ratio can
                         be calculated. This is the number of different tokens occurring in a text
-                        (so-called 'types') divided by the number of tokens in that text. For
-                        instance the phrase &quot;to be or not to be&quot; contains six tokens and
-                        four types (<emphasis>to</emphasis>, <emphasis>be</emphasis>,
-                        <emphasis>or</emphasis>, <emphasis>not</emphasis>). The type-token ratio
+                        (so-called 'types') divided by the number of tokens in that text.</para>
+                    <para>
+                        <equation>
+                            <title>Type-token ratio</title>
+                            <xi:include href="eq-tt-ratio.xml"/>
+                        </equation>
+                    </para>
+                    <para>For instance the phrase &quot;to be or not to be&quot; contains six
+                        tokens and four types (<emphasis>to</emphasis>, <emphasis>be</emphasis>,
+                            <emphasis>or</emphasis>, <emphasis>not</emphasis>). The type-token ratio
                         of this phrase is <emphasis>4 / 6 = 2 / 3</emphasis>.</para>
                     <para>Write a function that calculates the type-token ratio of a list of tokens.
                         You can use the <emphasis>Data.Set.size</emphasis> function to get the
