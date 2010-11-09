@@ -86,9 +86,43 @@
 ["Colorless","green","ideas","sleep","furiously"]</screen>
         <para>Hey! That looks like… indeed, that looks like a list of unigrams! Well, that was
             convenient. Unfortunately, things do not remain so simple if we move from unigrams to
-            bigrams or <emphasis role="italic">some-very-large-n-grams</emphasis>.</para>
+            bigrams or <emphasis role="italic">some-very-large-n-grams</emphasis>. Bigrams and n-gram require
+				us to construct 'windows' that cover more than one word at a time. In case of bigrams, for instance,
+				this means that we would like to obtain a list of lists of two words (bigrams).
+				Represented in such a way, the list of bigrams in the sentence <emphasis role="italic">Colorless green ideas sleep
+                furiously</emphasis> would look like this:</para>
+	<screen><command>[["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"]]</command></screen>
+		<para>To arrive at such a list, we could start out with a list of words (yes indeed, the unigrams),
+			and complete the following sequence of steps:
+			<orderedlist>
+				<listitem>
+		 			<para>Place a window on the first bigram, and add it to our bigram list</para>
+				</listitem>
+				<listitem>
+					<para>Move the window one word to the right</para>
+				</listitem>
+				<listitem>
+					<para>Repeat from the first step, until the last bigram is stored</para>
+				</listitem>
+			</orderedlist>
+			Provided these steps, we first need a way to place a window on the first bigram, that is, we need to
+			isolate the first two items of the list of words. In the prelude, Haskell defines
+			a function named <emphasis role="italic">take</emphasis> that seems to suit our needs:
+		</para> 
+		<screen>Prelude> <command>:type take</command> 
+take :: Int -> [a] -> [a]</screen>
+		<para>
+		This function takes an <emphasis role="italic">Integer</emphasis> denoting <emphasis role="italic">n</emphasis> number of elements, 
+		and a list of some type <emphasis role="italic">a</emphasis>. Given these arguments, it returns the first
+		<emphasis role="italic">n</emphasis> elements of a list of <emphasis role="italic">a</emphasis>s.
+		Thus, passing it the number two and a list of words should give us... our first bigram:</para>
         <screen>Prelude> <command>take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]</command>
 ["Colorless","green"]</screen>
+		<para>Great! That worked out nice! Now from here on off, the idea is to add this bigram to a list,
+			and to move the window one word to the right, so that we obtain the second bigram. Let us first
+			turn to the latter (as we will get the list part for free later on). How do we move the window
+			one word to the right?
+		</para>
     </sect1>
     <sect1>
         <title>From bigrams to n-grams</title>
