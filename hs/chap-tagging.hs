@@ -2,8 +2,11 @@ type Token = String
 type Tag = String
 
 data TrainingInstance = TrainingInstance Token Tag
-                        deriving (Show)
+                        deriving Show
 
+toTrainingInstance :: String -> TrainingInstance
+toTrainingInstance s = let (token, tag) = rsplit '/' s in
+                       TrainingInstance token tag
 
 rsplit :: Eq a => a -> [a] -> ([a], [a])
 rsplit sep l = let (ps, xs, _) = rsplit_ sep l in

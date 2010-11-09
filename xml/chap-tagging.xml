@@ -142,5 +142,67 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
 ("the","AT")
 *Main> rsplit '/' "a/b/TEST"
 ("a/b","TEST")</screen></para>
+        <para>We are now able to get the necessary data out of a <emphasis role="italic"
+                >String</emphasis> containing a token and a tag. We can simply construct a training
+            instance by converting the
+            tuple:<programlisting>toTrainingInstance :: String -> TrainingInstance
+toTrainingInstance s = let (token, tag) = rsplit '/' s in
+                       TrainingInstance token tag</programlisting></para>
+        <para>Why not see how we are doing, and get the ten first training instances of the Brown
+            corpus?<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
+*Main> c &lt;- IO.hGetContents h
+*Main> take 10 $ map toTrainingInstance $ words c
+[TrainingInstance "The" "AT",TrainingInstance "Fulton" "NP",
+  TrainingInstance "County" "NN",TrainingInstance "Grand" "JJ",
+  TrainingInstance "Jury" "NN",TrainingInstance "said" "VBD",
+  TrainingInstance "Friday" "NR",TrainingInstance "an" "AT",
+  TrainingInstance "investigation" "NN",TrainingInstance "of" "IN"]</screen></para>
+        <para>Allright! That's indeed our corpus in beautified format. The next step is to traverse
+            this corpus, registering for each word with which tag it occured (and how often).</para>
+<!-- XXX - Read/Show is not really appropriate here, keep for later...
+<para>Rember that we let <emphasis
+                role="italic">TrainingInstance</emphasis> derive from <emphasis role="italic"
+                >Show</emphasis>? The typeclass <emphasis role="italic">Read</emphasis> is the
+            converse of <emphasis role="italic">Show</emphasis> - data types implementing <emphasis
+                role="italic">Read</emphasis> provide a <function>read</function>function that
+            constructs an value from a <emphasis role="italic"
+            >String</emphasis>:<screen>*Main> :type read
+read :: (Read a) => String -> a</screen></para>
+        <para>To give an example, you can use <function>read</function> to read an <emphasis
+                role="italic">Int</emphasis> or a <emphasis role="italic">Float</emphasis> from a
+                <emphasis role="italic"
+            >String</emphasis>:<screen>*Main> read "2" :: Int
+2
+*Main> read "2" :: Float
+2.0
+*Main> read "2.3" :: Float
+2.3</screen></para>
+        <para>Wouldn't it be nice if we can convert <emphasis role="italic"
+                >TrainingInstances</emphasis> from and to the corpus <emphasis role="italic"
+                >String</emphasis> representation by implementing the <emphasis role="italic"
+                >Show</emphasis> and <emphasis role="italic">Read</emphasis> typeclasses? With the
+            functions that we have now, this turns out to be
+            doable:<programlisting>data TrainingInstance = TrainingInstance Token Tag
+
+instance Show TrainingInstance where
+    show i = let (TrainingInstance token tag) = i in
+             token ++ "/" ++ tag
+
+instance Read TrainingInstance where
+    readsPrec _ s = let (word, tag) = rsplit '/' s in
+                    [(TrainingInstance word tag, "")]</programlisting></para>
+        <para>First, we removed the <emphasis role="italic">deriving</emphasis> clause from the
+            definition of <emphasis role="italic">TrainingInstance</emphasis>, since we want to
+            define what it means for <emphasis role="italic">TrainingInstance</emphasis> to be of
+            the <emphasis role="italic">Show</emphasis> typeclass ourselves. To do this, we use the
+                <emphasis role="italic">instance</emphasis> keyword to add <emphasis role="italic"
+                >TrainingInstance</emphasis> as an instance of the <emphasis role="italic"
+                >Show</emphasis> typeclass. We provide our own <function>show</function> function
+            that simply concatenates the token and the tag, separated by a forward slash. The
+                <emphasis role="italic">instance</emphasis> definition of <emphasis role="italic"
+                >Read</emphasis> is a bit more complicated. It gives the opportunity to handle
+            operator precedence (the first argument to <function>readsPrec</function>), and we are
+            supposed to parse only the necessary part of the input.</para>
+            -->
     </sect1>
 </chapter>
