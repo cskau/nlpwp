@@ -158,7 +158,24 @@ toTrainingInstance s = let (token, tag) = rsplit '/' s in
   TrainingInstance "Friday" "NR",TrainingInstance "an" "AT",
   TrainingInstance "investigation" "NN",TrainingInstance "of" "IN"]</screen></para>
         <para>Allright! That's indeed our corpus in beautified format. The next step is to traverse
-            this corpus, registering for each word with which tag it occured (and how often).</para>
+            this corpus, registering for each word with which tag it occured (and how often). For
+            this we write the <function>tokenTagFreq</function>
+            function:<programlisting>import qualified Data.List as L
+import qualified Data.Map as M
+
+tokenTagFreqs :: [TrainingInstance] -> M.Map Token (M.Map Tag Int)
+tokenTagFreqs = L.foldl' countWord M.empty
+    where
+      countWord m (TrainingInstance token tag) = 
+          M.insertWith (countTag tag) token (M.singleton tag 1) m
+      countTag tag old _ = M.insertWith
+          (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old</programlisting></para>
+        <para>This function is very comparable to the <function>countElem</function> function we saw
+            earlier, the primary difference being that we have to handle two levels of maps. Every
+                <emphasis role="italic">Token</emphasis> in the first <emphasis role="italic"
+                >Map</emphasis> is associated with a value that is itself a <emphasis role="italic"
+                >Map</emphasis> that maps <emphasis role="italic">Tag</emphasis>s to frequencies
+                (<emphasis role="italic">Int</emphasis>). </para>
 <!-- XXX - Read/Show is not really appropriate here, keep for later...
 <para>Rember that we let <emphasis
                 role="italic">TrainingInstance</emphasis> derive from <emphasis role="italic"

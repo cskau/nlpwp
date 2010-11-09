@@ -1,3 +1,6 @@
+import qualified Data.List as L
+import qualified Data.Map as M
+
 type Token = String
 type Tag = String
 
@@ -18,3 +21,11 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
           splitFun sep e (px, xs, False)
                    | e == sep = (px, xs, True)
                    | otherwise = (px, e:xs, False)
+
+tokenTagFreqs :: [TrainingInstance] -> M.Map Token (M.Map Tag Int)
+tokenTagFreqs = L.foldl' countWord M.empty
+    where
+      countWord m (TrainingInstance token tag) = 
+          M.insertWith (countTag tag) token (M.singleton tag 1) m
+      countTag tag old _ = M.insertWith
+          (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old
