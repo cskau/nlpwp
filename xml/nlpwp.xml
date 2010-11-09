@@ -18,4 +18,5 @@
     </info>
     <xi:include href="chap-words.xml"/>
     <xi:include href="chap-ngrams.xml"/>
+    <xi:include href="chap-tagging.xml"/>
 </book>

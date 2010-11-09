@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbookxi.rng" type="xml"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="chap-tagging">
+    <title>Part of speech tagging</title>
+    <sect1>
+        <title>Introduction</title>
+        <para>In the last episode, you have seen how n-gram language models can be used to model
+            structure of language, purely based on words. In this chapter, we will make a further
+            abstraction and will try to find proper <emphasis role="italic">part of speech
+                tags</emphasis> (also named <emphasis role="italic">morphosyntactic tags</emphasis>)
+            for words. Part of speech tags give relevant information about the role of a word in its
+            narrow context. It may also provide information about the inflection of a word. POS tags
+            are a valuable part of a language processing pipeline, they provide useful information
+            to other components such as a parser or a named-entity recognizer.</para>
+        <para>There is no such thing as a standard set of part of speech tags (let's call them 'POS
+            tags' from now on). Just like programming languages, text editors, and operating
+            systems, the tag set that people use depends on the task at hand and taste. For our
+            purposes, we will use the Brown tag set<footnote>
+                <para>A full description of the Brown tag set can be found at: <link
+                        xlink:href="http://www.scs.leeds.ac.uk/ccalas/tagsets/brown.html"
+                        >http://www.scs.leeds.ac.uk/ccalas/tagsets/brown.html</link></para>
+            </footnote>.</para>
+        <para>This is a sentence from the Brown corpus that is annotated with tags:</para>
+        <para><emphasis role="italic">A/AT similar/JJ resolution/NN passed/VBD in/IN the/AT
+                Senate/NN by/IN a/AT vote/NN of/IN 29-5/CD ./.</emphasis></para>
+        <para>The notation here is very simple: as our previous fragments of the Brown corpus the
+            sentence is pre-tokenized. However, each word is amended by a POS tag that indicate the
+            role of the world. For instance, the word 'a' is an <emphasis role="italic"
+                >article</emphasis>, 'similar' an <emphasis role="italic">adjective</emphasis>, and
+            'resolution' a <emphasis role="italic">singular common noun</emphasis>.</para>
+        <para>Corpora, such as the Brown corpus only provide POS tags for a small amount of
+            sentences that occur in corpus. Being a working programmer, you will deal with new data
+            that does not occur in the Brown corpus. Now, wouldn't it be nice to have a set of
+            functions that could add POS tags to untagged data? Software that performs this task is
+            called a POS tagger or morphosyntactic tagger, and this is exactly the thing we will
+            build in this chapter.</para>
+        <sect2>
+            <title>Exercises</title>
+            <itemizedlist>
+                <listitem>
+                    <para>In the data provided with this book, you will find the file
+                            <filename>brown-pos-train.txt</filename>. Open this file with a text
+                        file viewer or text editor, and look at the five first sentences. Try to
+                        find out what the tags mean using the description of the Brown tag
+                        set.</para>
+                </listitem>
+            </itemizedlist>
+        </sect2>
+    </sect1>
+    <sect1>
+        <title>Frequency-based tagging</title>
+        <para>In one of the simplest forms of tagging, we just assign the most frequent POS tag for
+            a token in the training data to a token in untagged data. That's right, the most
+            frequent tag, because a token can have more than one tag. Consider the following two
+            sentences:</para>
+        <itemizedlist>
+            <listitem>
+                <para>I wouldn't <emphasis role="bold">trust</emphasis> him.</para>
+            </listitem>
+            <listitem>
+                <para>He put money in the family <emphasis role="bold">trust</emphasis>.</para>
+            </listitem>
+        </itemizedlist>
+        <para>Both sentences contain the word 'trust'. However, 'trust' has different roles in
+            different roles in both sentences. In the first sentence 'trust' is a verb, in the
+            second sentence it is a noun. So, for many tokens we will have the choice of multiple
+            tags. If we tag the token with the most frequent tag, we will frequently tag tokens
+            incorrectly, but it is a first step.</para>
+        <para>To ease handling of tokens and tags, we will make type aliases for tokens and tags and
+            define a new datatype for training instances, aptly named <emphasis role="italic"
+                >TrainingInstance</emphasis>:<programlisting>type Token = String
+type Tag = String
+
+data TrainingInstance = TrainingInstance Token Tag
+                        deriving Show</programlisting></para>
+        <para>The <emphasis role="italic">Token</emphasis> and <emphasis role="italic"
+                >Tag</emphasis> aliases will allow us to write clean function signatures. The
+                <emphasis role="italic">TrainingInstance</emphasis> data type has only one
+            constructor, <emphasis role="italic">TrainingInstance</emphasis>. The data type derives
+            from the <emphasis role="italic">Show</emphasis> typeclass, which allows us to get a
+                <emphasis role="italic">String</emphasis> representation of an instance<footnote>
+                <para>This <emphasis role="italic">String</emphasis> representation is also used by
+                        <command>ghci</command> to print the value of a <emphasis role="italic"
+                        >TrainingInstance</emphasis>.</para>
+            </footnote>. We can use this constructor to create training
+            instances:<screen>*Main> <userinput>TrainingInstance "the" "AT"</userinput>
+TrainingInstance "the" "AT"
+*Main> <userinput>TrainingInstance "pony" "NN"</userinput>
+TrainingInstance "pony" "NN"</screen></para>
+        <para>Since our first POS tagger is trained purely on tokens and tags, and requires no
+            sentencial information, the corpus will be represented as a list of <emphasis
+                role="italic">TrainingInstance</emphasis>. Since we can use the <emphasis
+                role="italic">words</emphasis> function to tokenize the corpus, the task at hand is
+            to convert a list of strings of the format "token/tag" to a list of <emphasis
+                role="italic">TrainingInstance</emphasis>. This is done by splitting the <emphasis
+                role="italic">String</emphasis> on the forward slash character (/). We can use the
+                <function>break</function> function to break the string on the first element for
+            which the supplied function is true. For
+            instance:<screen>Prelude> break (== '/') "the/AT"
+("the","/AT")</screen></para>
+        <para>This is a good start, we would only have to chop off the first character of the second
+            element in the tuple. However, there is another problem: although a tag can never
+            contain a slash, a token can. Consequently, we should break the string on the last
+            slash, rather than the first. A cheap solution to this problem could be to reverse the
+            string, applying <function>break</function>, and then reversing the results again. We
+            will take a more sophisticated route, and write our own
+            function:<programlisting>rsplit :: Eq a => a -> [a] -> ([a], [a])
+rsplit sep l = let (ps, xs, _) = rsplit_ sep l in
+               (ps, xs)
+
+rsplit_ :: Eq a => a -> [a] -> ([a], [a], Bool)
+rsplit_ sep = foldr (splitFun sep) ([], [], False)
+    where splitFun sep e (px, xs, True) = (e:px, xs, True)
+          splitFun sep e (px, xs, False)
+                   | e == sep = (px, xs, True)
+                   | otherwise = (px, e:xs, False)</programlisting></para>
+        <para>The core business happens in the <function>rsplit_</function> function, it splits a
+            list in the part before the last instance of <emphasis role="italic">sep</emphasis> (the
+            prefix) and the part after (the suffix). It does this by folding over the input list
+            from right to left. The accumulator is a tuple that holds the prefix list, the suffix
+            list, and a <emphasis role="italic">Bool</emphasis> indicating whether the separator was
+            encountered. The function provided to the fold acts upon this <emphasis role="italic"
+                >Bool</emphasis>:<itemizedlist>
+                <listitem>
+                    <para>If the <emphasis role="italic">Bool</emphasis> is <emphasis role="italic"
+                            >True</emphasis>, the separator was seen, and the current element is
+                        added to the prefix list.</para>
+                </listitem>
+                <listitem>
+                    <para>If the <emphasis role="italic">Bool</emphasis> is <emphasis role="italic"
+                            >False</emphasis>, the separator was not seen yet. If the current
+                        element is equal to the separator, the <emphasis role="italic"
+                            >Bool</emphasis> is changed to <emphasis role="italic">True</emphasis>
+                        to indicate that all remaining elements should be added to the prefix list.
+                        Otherwise, the element is added to the suffix list.</para>
+                </listitem>
+            </itemizedlist><function>rsplit</function> is just a tiny wrapper around
+                <function>rsplit_</function> that returns a binary tuple with just the prefix and
+            suffix lists. The <function>rsplit</function> function works as
+            intended:<screen>*Main> <userinput>rsplit '/' "the/AT"</userinput>
+("the","AT")
+*Main> <userinput>rsplit '/' "a/b/TEST"</userinput>
+("a/b","TEST")</screen></para>
+    </sect1>
+</chapter>
