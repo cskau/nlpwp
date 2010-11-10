@@ -1267,11 +1267,11 @@ palindrome word = word == reverse word </screen>
             <emphasis>:l</emphasis> (shorthand for <emphasis>:load</emphasis>)
             command:
         </para>
-            <programlisting>Prelude> :l chapter1
+            <screen>Prelude> :l chapter1
 [1 of 1] Compiling Main             ( chapter1.hs, interpreted )
 Ok, modules loaded: Main.
 *Main> palindrome "racecar"
-True </programlisting>
+True </screen>
         <para>
             For code fragments that use a module other than the prelude, add an
             import statement at the top of the file. For example, the
