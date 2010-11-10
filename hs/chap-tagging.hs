@@ -29,3 +29,11 @@ tokenTagFreqs = L.foldl' countWord M.empty
           M.insertWith (countTag tag) token (M.singleton tag 1) m
       countTag tag old _ = M.insertWith
           (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old
+
+tokenMostFreqTag :: M.Map Token (M.Map Tag Int) -> M.Map Token Tag
+tokenMostFreqTag = M.map mostFreqTag
+    where
+      mostFreqTag = fst . M.foldWithKey maxTag ("NIL", 0)
+      maxTag tag freq acc@(maxTag, maxFreq)
+                 | freq > maxFreq = (tag, freq)
+                 | otherwise = acc
