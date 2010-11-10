@@ -256,20 +256,20 @@ Data.Map.map :: (a -> b) -> M.Map k a -> M.Map k b</screen></para>
                 <emphasis role="italic">Map</emphasis> to a new value. For getting the most frequent
                 <emphasis role="italic">Tag</emphasis>, we have to fold over the inner map, storing
             the most frequent tag and its frequency in the accumulator. The <emphasis role="italic"
-                >Data.Map</emphasis> module provides the <function>foldWithKey</function> to fold
+                >Data.Map</emphasis> module provides the <function>foldlWithKey</function> to fold
             over keys and
-            values:<screen>*Main> :type Data.Map.foldWithKey
-Data.Map.foldWithKey :: (k -> a -> b -> b) -> b -> M.Map k a -> b</screen></para>
+            values:<screen>*Main> :type Data.Map.foldlWithKey
+Data.Map.foldlWithKey :: (b -> k -> a -> b) -> b -> M.Map k a -> b</screen></para>
         <para>This looks like the usual suspect, however, the folding function takes an additional
-            parameter. In the folding function has the current key, the associated value, and the
-            current accumulator as its arguments. Using these building blocks, we can construct the
+            parameter. The folding function has the current accumulator, the current key, and the
+            associated value as its arguments. Using these building blocks, we can construct the
                 <function>tokenMostFreqTag</function>
             function:<programlisting>tokenMostFreqTag :: M.Map Token (M.Map Tag Int) -> M.Map Token Tag
 tokenMostFreqTag = M.map mostFreqTag
     where
-      mostFreqTag = fst . M.foldWithKey maxTag ("NIL", 0)
-      maxTag tag freq acc@(maxTag, maxFreq)
-                 | freq > MaxFreq = (tag, freq)
+      mostFreqTag = fst . M.foldlWithKey maxTag ("NIL", 0)
+      maxTag acc@(maxTag, maxFreq) tag freq
+                 | freq > maxFreq = (tag, freq)
                  | otherwise = acc</programlisting></para>
         <para>The main function body uses <function>mostFreqTag</function> to get the most frequent
             tag for each token. <function>mostFreqTag</function> folds over all tokens and
