@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.oasis-open.org/docbook/xml/5.0/rng/docbookxi.rng" type="xml"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="chap-intro">
+    <title>Introduction</title>
+    <sect1 xml:id="sec-intro-welcome">
+        <title>Welcome</title>
+        <para>Stub</para>
+    </sect1>
+    <sect1 xml:id="sec-intro-whats-nlp">
+        <title>What is natural language processing?</title>
+        <para>Stub</para>
+    </sect1>
+    <sect1 xml:id="sec-intro-whats-haskell">
+        <title>What is Haskell?</title>
+        <para>Haskell is a static, pure, lazy, functional language. Gee, that sounds an awful lot
+            like buzzword lingo! They may well be, but the make Haskell a very disarable language
+            most of the time, and a painful language sometimes. These properties are also opposite
+            to most mainstream language. For instance, Java is static, impure, eager, and not
+            functional, Ruby is dynamic, impure, eager, and only functional at times. While it is
+            hard to give an accurate definition of every characteristic, we will try anyway.</para>
+        <para><emphasis role="bold">Functional:</emphasis> Haskell puts an emphasis on functions and
+            treats computation as the evaluation of functions. This in contrast to so-called
+            imperative languages, that specify an order of instructions. As such, Haskell functions
+            very often resemble mathematical functions closely. Being functional also has practical
+            implications. For instance, iteration is accomplished by means of recursion, and
+            functions are also values and can be passed to other functions.</para>
+        <para><emphasis role="bold">Pure:</emphasis> Haskell is a pure language, in that functions
+            do not have side-effects. This means that existing values cannot be changed, since
+            changing data would be a side-effect of a function. It also guarantees that the
+            evaluation of a function will always result in the same value given the same function
+            arguments.</para>
+        <para><emphasis role="bold">Lazy:</emphasis> As a lazy language, Haskell only evaluates
+            expressions when needed. Say you just implemented a function that gives a list of all
+            prime numbers. In a strict language, the function that makes the list will never
+            terminate (since there are always more prime numbers). Haskell, on the contrary, will
+            only evaluate this function when and as much as necessary. As long as you take a finite
+            number of primes from the list, the program will happily terminate.</para>
+        <para><emphasis role="bold">Static:</emphasis> Haskell programs are compiled before they can
+            run. This means that the Haskell compiler will catch many errors for you at
+            compile-time, rather than finding them when your program is used in production.
+            Additionally, Haskell does <emphasis role="italic">type-inference</emphasis>. This means
+            that the Haskell compiler can find out the types of values most of the times, and you do
+            not need to type-annotate every value.</para>
+        <para>If you have prior programming experience in an imperative or eager language, Haskell
+            can feel a bit odd in the beginning. Don't worry, you will feel warm and fuzzy
+            eventually!</para>
+        <para>You may ask why we chose Haskell as the main programming language for this book,
+            rather than a more mainstream language. During our own experiences developing natural
+            language processing tools, we noticed that very many natural language processing tasks
+            are relatively straighforward data transformations. Haskell is a language that is
+            exceptionally good at data transformations. First of all, because it has <emphasis
+                role="italic">higher order functions</emphasis> (functions that take functions as an
+            argument) that traverse lists, sets, mappings, etc. Second, Haskell makes it easy to
+            construct more complex transformations out of simple transformations.</para>
+        <para>Although this book does not provide a full introduction to the Haskell programming
+            language, we try to cover Haskell concepts extensively when required. If you require
+            more background on certain concepts, we recommend you to consult the book <emphasis
+                role="italic" xlink:href="http://learnyouahaskell.com/">Learn Haskell for Great
+                Good!</emphasis></para>
+    </sect1>
+    <sect1 xml:id="sec-intro-needs">
+        <title>What you need</title>
+        <para>Stub</para>
+    </sect1>
+</chapter>
