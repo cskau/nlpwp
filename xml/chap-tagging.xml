@@ -313,4 +313,69 @@ freqTagWord m w = M.lookup w m</programlisting></para>
             you built your own first POS tagger in just a few lines of Haskell code. In the next
             section we will be a bit more scientific, and focus on evaluation of taggers.</para>
     </sect1>
+    <sect1>
+        <title>Evaluation</title>
+        <para>Now that you wrote your first tagger, the question is how well it work. Not only to
+            show it off to your colleague (it will do relatively well), but also to be able to see
+            how future changes impact the performance of the tagger. To check the performance of the
+            tagger, we will use an evaluation corpus. You should never evaluate a natural language
+            processing component on the training data, because it is easy to perform well on seen
+            data. Suppose that you wrote a tagger that just remembered the training corpus exactly.
+            This tagger would tag every word correctly, but it will behave badly on unseen
+            data.</para>
+        <para>For evaluating our taggers, we will use another set of sentences from the Brown
+            corpus. These annotated sentences are provided in
+                <filename>brown-pos-test.txt</filename>. Since file has the same format as
+                <filename>brown-pos-train.txt</filename>, it can also be read as a list of <emphasis
+                role="italic">TrainingInstance</emphasis>.</para>
+        <para>To evaluate a POS tagger, we will write a function that takes a tagging function
+                (<emphasis role="italic">word -> Maybe Tag</emphasis>) as its first argument and a
+            training corpus as its second argument. It should then return a tuple with the total
+            number of tokens in the corpus, the number of tokens that were tagged correctly, and the
+            number of tokens for which the tagger did not provide an analysis (returned <emphasis
+                role="italic">Nothing</emphasis>). This is the <function>evalTagger</function>
+            function:</para>
+        <programlisting>evalTagger tagFun = L.foldl' eval (0, 0, 0)
+    where
+      eval (n, c, u) (TrainingInstance token correctTag) =
+          case tagFun token of
+            Just tag -> if tag == correctTag then
+                             (n+1, c+1, u)
+                         else
+                             (n+1, c, u)
+            Nothing  -> (n+1, c, u+1)</programlisting>
+        <para>The function is pretty simple, it folds over all instances in the evaluation data. The
+            counts are incremented in the following manner:<itemizedlist>
+                <listitem>
+                    <para>If the tagger returned a tag for the current token, we have two options:<itemizedlist>
+                            <listitem>
+                                <para>The tagger picked the correct tag. We increment the number of
+                                    tokens and the number of correct tags by one.</para>
+                            </listitem>
+                            <listitem>
+                                <para>The tagger picked an incorrect tag. We only increment the
+                                    number of tokens by one.</para>
+                            </listitem>
+                        </itemizedlist></para>
+                </listitem>
+                <listitem>
+                    <para>The tagger returned no tag for the current token. We increment the number
+                        of tokens and the number of untagged tokens by one.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para>Time to evaluate your first tagger!</para>
+        <screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
+*Main> c &lt;- IO.hGetContents h
+*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
+*Main> i &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode
+*Main> d &lt;- IO.hGetContents i
+*Main> evalTagger (freqTagWord model) $ map toTrainingInstance $ words d
+(272901,235402,11536)</screen>
+        <para>Those are quite impressive numbers for a first try, <emphasis role="italic">235402 /
+                272901 * 100% = 86.26%</emphasis> of the tokens were tagged and tagged correctly. Of
+            the remaining 13.74% of the tokens, <emphasis role="italic">11536 / 272901 * 100% =
+                4.23%</emphasis> of the words were not known. This means that we tagged <emphasis
+                role="italic">235402 / (272901 - 11536) * 100% = 90.07%</emphasis> of the words
+            known to our model correctly. </para>
+    </sect1>
 </chapter>

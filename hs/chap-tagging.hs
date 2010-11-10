@@ -43,3 +43,14 @@ trainFreqTagger = tokenMostFreqTag . tokenTagFreqs
 
 freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
 freqTagWord m w = M.lookup w m
+
+evalTagger :: (Token -> Maybe Tag) -> [TrainingInstance] -> (Int, Int, Int)
+evalTagger tagFun = L.foldl' eval (0, 0, 0)
+    where
+      eval (n, c, u) (TrainingInstance token correctTag) =
+          case tagFun token of
+            Just tag -> if tag == correctTag then
+                             (n+1, c+1, u)
+                         else
+                             (n+1, c, u)
+            Nothing  -> (n+1, c, u+1)
