@@ -272,10 +272,10 @@ tokenMostFreqTag = M.map mostFreqTag
                  | freq > MaxFreq = (tag, freq)
                  | otherwise = acc</programlisting></para>
         <para>The main function body uses <function>mostFreqTag</function> to get the most frequent
-            tag for each word. <function>mostFreqTag</function> folds over all tokens and
-            frequencies of a map associated with a word. The initial value of the accumulator is the
-            dummy tag 'NIL'. The <function>maxTag</function> function that is used in the fold will
-            replace the accumulator with the current tag and its frequency if its frequency is
+            tag for each token. <function>mostFreqTag</function> folds over all tokens and
+            frequencies of a map associated with a token. The initial value of the accumulator is
+            the dummy tag 'NIL'. The <function>maxTag</function> function that is used in the fold
+            will replace the accumulator with the current tag and its frequency if its frequency is
             higher than the frequency of the tag in the accumulator. Otherwise, the tag in the
             accumulator is more frequent, and the accumulator is retained. After folding, we have
             the pair of the most frequent tag, and its frequency. We use the
@@ -285,6 +285,33 @@ tokenMostFreqTag = M.map mostFreqTag
             example:<screen>*Main> tokenMostFreqTag $ tokenTagFreqs [TrainingInstance "a" "A",
   TrainingInstance "a" "B", TrainingInstance "a" "A"]
 fromList [("a","A")]</screen></para>
+        <para>Combining <function>tokenTagFreqs</function> and <function>tokenMostFreqTag</function>
+            we can make a simple function to train our first tagging model from a list of <emphasis
+                role="italic"
+            >TrainingInstance</emphasis>:<programlisting>trainFreqTagger :: [TrainingInstance] -> M.Map Token Tag
+trainFreqTagger = tokenMostFreqTag . tokenTagFreqs</programlisting></para>
+        <para>Next up is the actual tagger: it simply looks up a token, returning the most frequent
+            tag of a token. Since not all tags may be known, you may want to decide how to handle
+            unknown tags. For now, we will just return the <emphasis role="italic">Maybe
+                Tag</emphasis> type, allowing us to return <emphasis role="italic"
+                >Nothing</emphasis> in the case we do not know how to tag a word. We will define the
+            function <function>freqTagWord</function> as a simple wrapper around
+                <function>Data.Map.lookup</function>:<programlisting>freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
+freqTagWord m w = M.lookup w m</programlisting></para>
+        <para>We can now train our model from the Brown corpus, and tag some
+            sentences:<screen>*Main> h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode
+*Main> c &lt;- IO.hGetContents h
+*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
+*Main> map (freqTagWord model) ["The","cat","is","on","the","mat","."]
+[Just "AT",Just "NN",Just "BEZ",Just "IN",Just "AT",Just "NN",Just "."]
+*Main> map (freqTagWord model) ["That's","right",",","the","mascara",
+  "snake",".","Fast","and","bulbous",".","Also","a","tinned","teardrop","."]
+[Just "DT+BEZ",Just "QL",Just ",",Just "AT",Just "NN",Just "NN",Just ".",
+  Nothing,Just "CC",Nothing,Just ".",Just "RB",Just "AT",Nothing,
+  Just "NN",Just "."]</screen></para>
+        <para>Isn't that NLP for the working programmer? Not only did you learn about POS tagging,
+            you built your own first POS tagger in just a few lines of Haskell code. In the next
+            section we will be a bit more scientific, and focus on evaluation of taggers.</para>
 
     </sect1>
 </chapter>

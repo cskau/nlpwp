@@ -33,7 +33,13 @@ tokenTagFreqs = L.foldl' countWord M.empty
 tokenMostFreqTag :: M.Map Token (M.Map Tag Int) -> M.Map Token Tag
 tokenMostFreqTag = M.map mostFreqTag
     where
-      mostFreqTag = fst . M.foldWithKey maxTag ("NIL", 0)
-      maxTag tag freq acc@(maxTag, maxFreq)
+      mostFreqTag = fst . M.foldlWithKey maxTag ("NIL", 0)
+      maxTag acc@(maxTag, maxFreq) tag freq
                  | freq > maxFreq = (tag, freq)
                  | otherwise = acc
+
+trainFreqTagger :: [TrainingInstance] -> M.Map Token Tag
+trainFreqTagger = tokenMostFreqTag . tokenTagFreqs
+
+freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
+freqTagWord m w = M.lookup w m
