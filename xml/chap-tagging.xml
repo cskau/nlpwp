@@ -84,9 +84,9 @@ data TrainingInstance = TrainingInstance Token Tag
                         <command>ghci</command> to print the value of a <emphasis role="italic"
                         >TrainingInstance</emphasis>.</para>
             </footnote>. We can use this constructor to create training
-            instances:<screen>*Main> TrainingInstance "the" "AT"
+            instances:<screen>*Main> <userinput>TrainingInstance "the" "AT"</userinput>
 TrainingInstance "the" "AT"
-*Main> TrainingInstance "pony" "NN"
+*Main> <userinput>TrainingInstance "pony" "NN"</userinput>
 TrainingInstance "pony" "NN"</screen></para>
         <para>Since our first POS tagger is trained purely on tokens and tags, and requires no
             sentencial information, the corpus will be represented as a list of <emphasis
@@ -97,7 +97,7 @@ TrainingInstance "pony" "NN"</screen></para>
                 role="italic">String</emphasis> on the forward slash character (/). We can use the
                 <function>break</function> function to break the string on the first element for
             which the supplied function is true. For
-            instance:<screen>Prelude> break (== '/') "the/AT"
+            instance:<screen>Prelude> <userinput>break (== '/') "the/AT"</userinput>
 ("the","/AT")</screen></para>
         <para>This is a good start, we would only have to chop off the first character of the second
             element in the tuple. However, there is another problem: although a tag can never
@@ -138,9 +138,9 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
             </itemizedlist><function>rsplit</function> is just a tiny wrapper around
                 <function>rsplit_</function> that returns a binary tuple with just the prefix and
             suffix lists. The <function>rsplit</function> function works as
-            intended:<screen>*Main> rsplit '/' "the/AT"
+            intended:<screen>*Main> <userinput>rsplit '/' "the/AT"</userinput>
 ("the","AT")
-*Main> rsplit '/' "a/b/TEST"
+*Main> <userinput>rsplit '/' "a/b/TEST"</userinput>
 ("a/b","TEST")</screen></para>
         <para>We are now able to get the necessary data out of a <emphasis role="italic"
                 >String</emphasis> containing a token and a tag. We can simply construct a training
@@ -194,9 +194,9 @@ TrainingInstance token tag</programlisting></para>
             supposed to parse only the necessary part of the input.</para>
         -->
         <para>Why not see how we are doing, and get the ten first training instances of the Brown
-            corpus?<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
-*Main> c &lt;- IO.hGetContents h
-*Main> take 10 $ map toTrainingInstance $ words c
+            corpus?<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>take 10 $ map toTrainingInstance $ words c</userinput>
 [TrainingInstance "The" "AT",TrainingInstance "Fulton" "NP",
   TrainingInstance "County" "NN",TrainingInstance "Grand" "JJ",
   TrainingInstance "Jury" "NN",TrainingInstance "said" "VBD",
@@ -230,9 +230,9 @@ tokenTagFreqs = L.foldl' countWord M.empty
             with this token.</para>
         <para>Let us test <emphasis role="italic">tokenTagFreqs</emphasis> on the first ten training
             instances as
-            well:<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
-*Main> c &lt;- IO.hGetContents h
-*Main> tokenTagFreqs $ take 10 $ map toTrainingInstance $ words c
+            well:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>tokenTagFreqs $ take 10 $ map toTrainingInstance $ words c</userinput>
 fromList [("County",fromList [("NN",1)]),("Friday",fromList [("NR",1)]),
   ("Fulton",fromList [("NP",1)]),("Grand",fromList [("JJ",1)]),
   ("Jury",fromList [("NN",1)]),("The",fromList [("AT",1)]),
@@ -250,7 +250,7 @@ fromList [("County",fromList [("NN",1)]),("Friday",fromList [("NR",1)]),
                 role="italic">Tag</emphasis>, namely the most frequent <emphasis role="italic"
                 >Tag</emphasis>. There is also a <function>map</function> functions for <emphasis
                 role="italic"
-            >Map</emphasis>:<screen>*Main> :type Data.Map.map
+            >Map</emphasis>:<screen>*Main> <userinput>:type Data.Map.map</userinput>
 Data.Map.map :: (a -> b) -> M.Map k a -> M.Map k b</screen></para>
         <para><function>Data.Map.map</function> accepts some function to map every value in a
                 <emphasis role="italic">Map</emphasis> to a new value. For getting the most frequent
@@ -258,7 +258,7 @@ Data.Map.map :: (a -> b) -> M.Map k a -> M.Map k b</screen></para>
             the most frequent tag and its frequency in the accumulator. The <emphasis role="italic"
                 >Data.Map</emphasis> module provides the <function>foldlWithKey</function> to fold
             over keys and
-            values:<screen>*Main> :type Data.Map.foldlWithKey
+            values:<screen>*Main> <userinput>:type Data.Map.foldlWithKey</userinput>
 Data.Map.foldlWithKey :: (b -> k -> a -> b) -> b -> M.Map k a -> b</screen></para>
         <para>This looks like the usual suspect, however, the folding function takes an additional
             parameter. The folding function has the current accumulator, the current key, and the
@@ -282,8 +282,8 @@ tokenMostFreqTag = M.map mostFreqTag
                 <function>fst</function> function to get the first element of this pair.</para>
         <para>You can craft some examples to check whether <function>tokenMostFreqTag</function>
             works as intended. For
-            example:<screen>*Main> tokenMostFreqTag $ tokenTagFreqs [TrainingInstance "a" "A",
-  TrainingInstance "a" "B", TrainingInstance "a" "A"]
+            example:<screen>*Main> <userinput>tokenMostFreqTag $ tokenTagFreqs [TrainingInstance "a" "A",
+  TrainingInstance "a" "B", TrainingInstance "a" "A"]</userinput>
 fromList [("a","A")]</screen></para>
         <para>Combining <function>tokenTagFreqs</function> and <function>tokenMostFreqTag</function>
             we can make a simple function to train our first tagging model from a list of <emphasis
@@ -299,13 +299,13 @@ trainFreqTagger = tokenMostFreqTag . tokenTagFreqs</programlisting></para>
                 <function>Data.Map.lookup</function>:<programlisting>freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
 freqTagWord m w = M.lookup w m</programlisting></para>
         <para>We can now train our model from the Brown corpus, and tag some
-            sentences:<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
-*Main> c &lt;- IO.hGetContents h
-*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
-*Main> map (freqTagWord model) ["The","cat","is","on","the","mat","."]
+            sentences:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let model = trainFreqTagger $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>map (freqTagWord model) ["The","cat","is","on","the","mat","."]</userinput>
 [Just "AT",Just "NN",Just "BEZ",Just "IN",Just "AT",Just "NN",Just "."]
-*Main> map (freqTagWord model) ["That's","right",",","the","mascara",
-  "snake",".","Fast","and","bulbous",".","Also","a","tinned","teardrop","."]
+*Main> <userinput>map (freqTagWord model) ["That's","right",",","the","mascara",
+  "snake",".","Fast","and","bulbous",".","Also","a","tinned","teardrop","."]</userinput>
 [Just "DT+BEZ",Just "QL",Just ",",Just "AT",Just "NN",Just "NN",Just ".",
   Nothing,Just "CC",Nothing,Just ".",Just "RB",Just "AT",Nothing,
   Just "NN",Just "."]</screen></para>
@@ -364,12 +364,12 @@ freqTagWord m w = M.lookup w m</programlisting></para>
                 </listitem>
             </itemizedlist></para>
         <para>Time to evaluate your first tagger!</para>
-        <screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
-*Main> c &lt;- IO.hGetContents h
-*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
-*Main> i &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode
-*Main> d &lt;- IO.hGetContents i
-*Main> evalTagger (freqTagWord model) $ map toTrainingInstance $ words d
+        <screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let model = trainFreqTagger $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>i &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode</userinput>
+*Main> <userinput>d &lt;- IO.hGetContents i</userinput>
+*Main> <userinput>evalTagger (freqTagWord model) $ map toTrainingInstance $ words d</userinput>
 (272901,235402,11536)</screen>
         <para>Those are quite impressive numbers for a first try, <emphasis role="italic">235402 /
                 272901 * 100% = 86.26%</emphasis> of the tokens were tagged and tagged correctly. Of
