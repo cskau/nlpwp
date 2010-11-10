@@ -313,7 +313,7 @@ freqTagWord m w = M.lookup w m</programlisting></para>
             you built your own first POS tagger in just a few lines of Haskell code. In the next
             section we will be a bit more scientific, and focus on evaluation of taggers.</para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-tagging-evaluation">
         <title>Evaluation</title>
         <para>Now that you wrote your first tagger, the question is how well it work. Not only to
             show it off to your colleague (it will do relatively well), but also to be able to see
