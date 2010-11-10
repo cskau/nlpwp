@@ -3,7 +3,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="chap-tagging">
     <title>Part of speech tagging</title>
-    <sect1>
+    <sect1 xml:id="sec-tagging-intro">
         <title>Introduction</title>
         <para>In the last episode, you have seen how n-gram language models can be used to model
             structure of language, purely based on words. In this chapter, we will make a further
@@ -48,7 +48,7 @@
             </itemizedlist>
         </sect2>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-tagging-frequency">
         <title>Frequency-based tagging</title>
         <para>In one of the simplest forms of tagging, we just assign the most frequent POS tag for
             a token in the training data to a token in untagged data. That's right, the most
@@ -312,6 +312,5 @@ freqTagWord m w = M.lookup w m</programlisting></para>
         <para>Isn't that NLP for the working programmer? Not only did you learn about POS tagging,
             you built your own first POS tagger in just a few lines of Haskell code. In the next
             section we will be a bit more scientific, and focus on evaluation of taggers.</para>
-
     </sect1>
 </chapter>
