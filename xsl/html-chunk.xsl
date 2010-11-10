@@ -10,7 +10,7 @@
         indent="yes"/>
     
     <!-- Chunking -->
-    <xsl:param name="chunker.output.indent" select="'yes'" />
+    <xsl:param name="chunker.output.indent" select="'no'" />
     <xsl:param name="use.id.as.filename" select="1" />
     <xsl:param name="chunk.section.depth" select="0" />
     <xsl:param name="chunker.output.encoding">UTF-8</xsl:param>
