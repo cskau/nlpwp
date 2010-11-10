@@ -230,7 +230,7 @@ tokenTagFreqs = L.foldl' countWord M.empty
             with this token.</para>
         <para>Let us test <emphasis role="italic">tokenTagFreqs</emphasis> on the first ten training
             instances as
-            well:<screen>*Main> h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode
+            well:<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
 *Main> c &lt;- IO.hGetContents h
 *Main> tokenTagFreqs $ take 10 $ map toTrainingInstance $ words c
 fromList [("County",fromList [("NN",1)]),("Friday",fromList [("NR",1)]),
@@ -299,7 +299,7 @@ trainFreqTagger = tokenMostFreqTag . tokenTagFreqs</programlisting></para>
                 <function>Data.Map.lookup</function>:<programlisting>freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
 freqTagWord m w = M.lookup w m</programlisting></para>
         <para>We can now train our model from the Brown corpus, and tag some
-            sentences:<screen>*Main> h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode
+            sentences:<screen>*Main> h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode
 *Main> c &lt;- IO.hGetContents h
 *Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
 *Main> map (freqTagWord model) ["The","cat","is","on","the","mat","."]
