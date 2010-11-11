@@ -4,6 +4,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     
     <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl" />
+
+    <xsl:param name="nlpwpWebsite" select="0"/>
     
     <xsl:output method="xml"
         encoding="UTF-8"
@@ -27,12 +29,15 @@
     
     <!-- Add 'head' elements. -->
     <xsl:template name="user.head.content">
-        <script type="text/javascript" src="/MathJax/MathJax.js"/>
+        <xsl:if test="$nlpwpWebsite = 1">
+            <script type="text/javascript" src="/MathJax/MathJax.js"/>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template name="user.footer.navigation">
-        <script type="text/javascript">
-  var _gaq = _gaq || [];
+        <xsl:if test="$nlpwpWebsite = 1">
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-19427006-2']);
   _gaq.push(['_trackPageview']);
 
@@ -41,6 +46,7 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();  
-        </script>
+            </script>
+        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
