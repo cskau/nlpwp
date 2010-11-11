@@ -121,7 +121,9 @@ take :: Int -> [a] -> [a]</screen>
 		<para>Great! That worked out nice! Now from here on off, the idea is to add this bigram to a list,
 			and to move the window one word to the right, so that we obtain the second bigram. Let us first
 			turn to the latter (as we will get the list part for free later on). How do we move the window
-			one word to the right?
+			one word to the right? That is, how do we extract the second and third word in the list, instead
+			of the first and second? A possible answer to this question would be to use the <emphasis role="italic">!!</emphasis>
+			operator:
 		</para>
     </sect1>
     <sect1>
