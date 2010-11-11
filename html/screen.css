@@ -43,3 +43,7 @@ pre.programlisting {
   padding: 0.5em;
   margin-bottom: 0.5em;
 }
+
+.type {
+    font-family: monospace;
+}
