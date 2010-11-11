@@ -68,33 +68,28 @@
             tags. If we tag the token with the most frequent tag, we will frequently tag tokens
             incorrectly, but it is a first step.</para>
         <para>To ease handling of tokens and tags, we will make type aliases for tokens and tags and
-            define a new datatype for training instances, aptly named <emphasis role="italic"
-                >TrainingInstance</emphasis>:<programlisting>type Token = String
+            define a new datatype for training instances, aptly named <type>TrainingInstance</type>:<programlisting>type Token = String
 type Tag = String
 
 data TrainingInstance = TrainingInstance Token Tag
                         deriving Show</programlisting></para>
-        <para>The <emphasis role="italic">Token</emphasis> and <emphasis role="italic"
-                >Tag</emphasis> aliases will allow us to write clean function signatures. The
-                <emphasis role="italic">TrainingInstance</emphasis> data type has only one
-            constructor, <emphasis role="italic">TrainingInstance</emphasis>. The data type derives
-            from the <emphasis role="italic">Show</emphasis> typeclass, which allows us to get a
-                <emphasis role="italic">String</emphasis> representation of an instance<footnote>
-                <para>This <emphasis role="italic">String</emphasis> representation is also used by
-                        <command>ghci</command> to print the value of a <emphasis role="italic"
-                        >TrainingInstance</emphasis>.</para>
+        <para>The <type>Token</type> and <type
+                >Tag</type> aliases will allow us to write clean function signatures. The
+                <type>TrainingInstance</type> data type has only one
+            constructor, <type>TrainingInstance</type>. The data type derives
+            from the <type>Show</type> typeclass, which allows us to get a
+                <type>String</type> representation of an instance<footnote>
+                <para>This <type>String</type> representation is also used by
+                        <command>ghci</command> to print the value of a <type>TrainingInstance</type>.</para>
             </footnote>. We can use this constructor to create training
             instances:<screen>*Main> <userinput>TrainingInstance "the" "AT"</userinput>
 TrainingInstance "the" "AT"
 *Main> <userinput>TrainingInstance "pony" "NN"</userinput>
 TrainingInstance "pony" "NN"</screen></para>
         <para>Since our first POS tagger is trained purely on tokens and tags, and requires no
-            sentencial information, the corpus will be represented as a list of <emphasis
-                role="italic">TrainingInstance</emphasis>. Since we can use the <emphasis
-                role="italic">words</emphasis> function to tokenize the corpus, the task at hand is
-            to convert a list of strings of the format "token/tag" to a list of <emphasis
-                role="italic">TrainingInstance</emphasis>. This is done by splitting the <emphasis
-                role="italic">String</emphasis> on the forward slash character (/). We can use the
+            sentencial information, the corpus will be represented as a list of <type>TrainingInstance</type>. Since we can use the <function>words</function> function to tokenize the corpus, the task at hand is
+            to convert a list of strings of the format "token/tag" to a list of <type>TrainingInstance</type>. This is done by splitting the <type
+                >String</type> on the forward slash character (/). We can use the
                 <function>break</function> function to break the string on the first element for
             which the supplied function is true. For
             instance:<screen>Prelude> <userinput>break (== '/') "the/AT"</userinput>
@@ -116,22 +111,22 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
                    | e == sep = (px, xs, True)
                    | otherwise = (px, e:xs, False)</programlisting></para>
         <para>The core business happens in the <function>rsplit_</function> function, it splits a
-            list in the part before the last instance of <emphasis role="italic">sep</emphasis> (the
+            list in the part before the last instance of <varname>sep</varname> (the
             prefix) and the part after (the suffix). It does this by folding over the input list
             from right to left. The accumulator is a tuple that holds the prefix list, the suffix
-            list, and a <emphasis role="italic">Bool</emphasis> indicating whether the separator was
-            encountered. The function provided to the fold acts upon this <emphasis role="italic"
-                >Bool</emphasis>:<itemizedlist>
+            list, and a <type>Bool</type> indicating whether the separator was
+            encountered. The function provided to the fold acts upon this <type
+                >Bool</type>:<itemizedlist>
                 <listitem>
-                    <para>If the <emphasis role="italic">Bool</emphasis> is <emphasis role="italic"
-                            >True</emphasis>, the separator was seen, and the current element is
+                    <para>If the <type>Bool</type> is <type
+                            >True</type>, the separator was seen, and the current element is
                         added to the prefix list.</para>
                 </listitem>
                 <listitem>
-                    <para>If the <emphasis role="italic">Bool</emphasis> is <emphasis role="italic"
-                            >False</emphasis>, the separator was not seen yet. If the current
-                        element is equal to the separator, the <emphasis role="italic"
-                            >Bool</emphasis> is changed to <emphasis role="italic">True</emphasis>
+                    <para>If the <type>Bool</type> is <type
+                            >False</type>, the separator was not seen yet. If the current
+                        element is equal to the separator, the <type
+                            >Bool</type> is changed to <type>True</type>
                         to indicate that all remaining elements should be added to the prefix list.
                         Otherwise, the element is added to the suffix list.</para>
                 </listitem>
@@ -142,8 +137,8 @@ rsplit_ sep = foldr (splitFun sep) ([], [], False)
 ("the","AT")
 *Main> <userinput>rsplit '/' "a/b/TEST"</userinput>
 ("a/b","TEST")</screen></para>
-        <para>We are now able to get the necessary data out of a <emphasis role="italic"
-                >String</emphasis> containing a token and a tag. We can simply construct a training
+        <para>We are now able to get the necessary data out of a <type
+                >String</type> containing a token and a tag. We can simply construct a training
             instance by converting the
             tuple:<programlisting>toTrainingInstance :: String -> TrainingInstance
 toTrainingInstance s = let (token, tag) = rsplit '/' s in
@@ -181,8 +176,8 @@ TrainingInstance token tag</programlisting></para>
             readsPrec _ s = let (word, tag) = rsplit '/' s in
             [(TrainingInstance word tag, "")]</programlisting></para>
             <para>First, we removed the <emphasis role="italic">deriving</emphasis> clause from the
-            definition of <emphasis role="italic">TrainingInstance</emphasis>, since we want to
-            define what it means for <emphasis role="italic">TrainingInstance</emphasis> to be of
+            definition of <type>TrainingInstance</type>, since we want to
+            define what it means for <type>TrainingInstance</type> to be of
             the <emphasis role="italic">Show</emphasis> typeclass ourselves. To do this, we use the
             <emphasis role="italic">instance</emphasis> keyword to add <emphasis role="italic"
             >TrainingInstance</emphasis> as an instance of the <emphasis role="italic"
@@ -217,18 +212,16 @@ tokenTagFreqs = L.foldl' countWord M.empty
           (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old</programlisting></para>
         <para>This function is very comparable to the <function>countElem</function> function we saw
             earlier, the primary difference being that we have to handle two levels of maps. Every
-                <emphasis role="italic">Token</emphasis> in the first <emphasis role="italic"
-                >Map</emphasis> is associated with a value that is itself a <emphasis role="italic"
-                >Map</emphasis> that maps <emphasis role="italic">Tag</emphasis>s to frequencies
-                (<emphasis role="italic">Int</emphasis>). If we have not seen a particular <emphasis
-                role="italic">Token</emphasis> yet, we will insert it to the map with the <emphasis
-                role="italic">Token</emphasis> as the key, the value is a map with just one
-            key/value: the <emphasis role="italic">Tag</emphasis> associated with the token and a
-            frequency of one. If the <emphasis role="italic">Token</emphasis> was seen before, we
-            will update the frequency of the associated <emphasis role="italic">Tag</emphasis>,
-            setting it to one, if the <emphasis role="italic">Tag</emphasis> was never seen before
+                <type>Token</type> in the first <type
+                >Map</type> is associated with a value that is itself a <type
+                >Map</type> that maps <type>Tag</type>s to frequencies
+                (<type>Int</type>). If we have not seen a particular <type>Token</type> yet, we will insert it to the map with the <type>Token</type> as the key, the value is a map with just one
+            key/value: the <type>Tag</type> associated with the token and a
+            frequency of one. If the <type>Token</type> was seen before, we
+            will update the frequency of the associated <type>Tag</type>,
+            setting it to one, if the <type>Tag</type> was never seen before
             with this token.</para>
-        <para>Let us test <emphasis role="italic">tokenTagFreqs</emphasis> on the first ten training
+        <para>Let us test <function>tokenTagFreqs</function> on the first ten training
             instances as
             well:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
@@ -243,20 +236,18 @@ fromList [("County",fromList [("NN",1)]),("Friday",fromList [("NR",1)]),
             data to confirm that <function>tokenTagFreqs</function> works as intended.</para>
         <para>The next thing we need for our first part of speech tagger is use the map defined by
                 <function>tokenTagFreqs</function> to find the most frequent tag for a word. This is
-            a typical mapping situation: for each key/value pair in the <emphasis role="italic"
-                >Map</emphasis>, we want to transform its value. The value was a <emphasis
-                role="italic">Map</emphasis>, mapping <emphasis role="italic">Tag</emphasis> to
-                <emphasis role="italic">Int</emphasis>, and we want the value to be a <emphasis
-                role="italic">Tag</emphasis>, namely the most frequent <emphasis role="italic"
-                >Tag</emphasis>. There is also a <function>map</function> functions for <emphasis
-                role="italic"
-            >Map</emphasis>:<screen>*Main> <userinput>:type Data.Map.map</userinput>
+            a typical mapping situation: for each key/value pair in the <type
+                >Map</type>, we want to transform its value. The value was a <type>Map</type>, mapping <type>Tag</type> to
+                <type>Int</type>, and we want the value to be a <type
+                >Tag</type>, namely the most frequent <type
+                >Tag</type>. There is also a <function>map</function> functions for <type
+            >Map</type>:<screen>*Main> <userinput>:type Data.Map.map</userinput>
 Data.Map.map :: (a -> b) -> M.Map k a -> M.Map k b</screen></para>
         <para><function>Data.Map.map</function> accepts some function to map every value in a
-                <emphasis role="italic">Map</emphasis> to a new value. For getting the most frequent
-                <emphasis role="italic">Tag</emphasis>, we have to fold over the inner map, storing
-            the most frequent tag and its frequency in the accumulator. The <emphasis role="italic"
-                >Data.Map</emphasis> module provides the <function>foldlWithKey</function> to fold
+                <type>Map</type> to a new value. For getting the most frequent
+                <type>Tag</type>, we have to fold over the inner map, storing
+            the most frequent tag and its frequency in the accumulator. The <type
+                >Data.Map</type> module provides the <function>foldlWithKey</function> to fold
             over keys and
             values:<screen>*Main> <userinput>:type Data.Map.foldlWithKey</userinput>
 Data.Map.foldlWithKey :: (b -> k -> a -> b) -> b -> M.Map k a -> b</screen></para>
@@ -286,15 +277,14 @@ tokenMostFreqTag = M.map mostFreqTag
   TrainingInstance "a" "B", TrainingInstance "a" "A"]</userinput>
 fromList [("a","A")]</screen></para>
         <para>Combining <function>tokenTagFreqs</function> and <function>tokenMostFreqTag</function>
-            we can make a simple function to train our first tagging model from a list of <emphasis
-                role="italic"
-            >TrainingInstance</emphasis>:<programlisting>trainFreqTagger :: [TrainingInstance] -> M.Map Token Tag
+            we can make a simple function to train our first tagging model from a list of <type
+            >TrainingInstance</type>:<programlisting>trainFreqTagger :: [TrainingInstance] -> M.Map Token Tag
 trainFreqTagger = tokenMostFreqTag . tokenTagFreqs</programlisting></para>
         <para>Next up is the actual tagger: it simply looks up a token, returning the most frequent
             tag of a token. Since not all tags may be known, you may want to decide how to handle
-            unknown tags. For now, we will just return the <emphasis role="italic">Maybe
-                Tag</emphasis> type, allowing us to return <emphasis role="italic"
-                >Nothing</emphasis> in the case we do not know how to tag a word. We will define the
+            unknown tags. For now, we will just return the <function>Maybe
+                Tag</function> type, allowing us to return <function
+                >Nothing</function> in the case we do not know how to tag a word. We will define the
             function <function>freqTagWord</function> as a simple wrapper around
                 <function>Data.Map.lookup</function>:<programlisting>freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
 freqTagWord m t = M.lookup w t</programlisting></para>
@@ -326,14 +316,13 @@ freqTagWord m t = M.lookup w t</programlisting></para>
         <para>For evaluating our taggers, we will use another set of sentences from the Brown
             corpus. These annotated sentences are provided in
                 <filename>brown-pos-test.txt</filename>. Since file has the same format as
-                <filename>brown-pos-train.txt</filename>, it can also be read as a list of <emphasis
-                role="italic">TrainingInstance</emphasis>.</para>
+                <filename>brown-pos-train.txt</filename>, it can also be read as a list of <type>TrainingInstance</type>.</para>
         <para>To evaluate a POS tagger, we will write a function that takes a tagging function
-                (<emphasis role="italic">word -> Maybe Tag</emphasis>) as its first argument and a
+                (<type>Word -> Maybe Tag</type>) as its first argument and a
             training corpus as its second argument. It should then return a tuple with the total
             number of tokens in the corpus, the number of tokens that were tagged correctly, and the
-            number of tokens for which the tagger did not provide an analysis (returned <emphasis
-                role="italic">Nothing</emphasis>). This is the <function>evalTagger</function>
+            number of tokens for which the tagger did not provide an analysis (returned <type
+                >Nothing</type>). This is the <function>evalTagger</function>
             function:</para>
         <programlisting>evalTagger tagFun = L.foldl' eval (0, 0, 0)
     where
@@ -570,7 +559,7 @@ zip :: [a] -> [b] -> [(a, b)]
             our own function that keeps track of previous elements, but a package with such
             functionality, called <package>ListZipper</package>, is already available. After using
                 <command>cabal</command> to install the <package>ListZipper</package> package, you
-            will have access to the <emphasis role="italic">Data.List.Zipper</emphasis> module. A
+            will have access to the <type>Data.List.Zipper</type> module. A
                 <type>Zipper</type> can be seen as a list that can be traversed in two directions.
             We can construct a <type>Zipper</type> from a
             list:<screen>*Main> <userinput>let taggingState = Data.List.Zipper.fromList $
@@ -605,7 +594,7 @@ Zip [] [("AT","AT"),("NN","VB"),("TO","TO")]
             through the instantiation functions one by one, starting with
                 <function>instNextTagRule0</function> (we add the '0' suffix, since we will prettify
             these functions
-            later):<screen>import qualified Data.List.Zipper as Z
+            later):<programlisting>import qualified Data.List.Zipper as Z
 
 instNextTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
 instNextTagRule0 z
@@ -613,7 +602,7 @@ instNextTagRule0 z
     | Z.endp $ Z.right z = Nothing
     | otherwise = Just $ NextTagRule (Replacement incorrectTag correctTag) nextTag
     where (correctTag, incorrectTag) = Z.cursor z
-          nextTag = snd $ Z.cursor $ Z.right z</screen></para>
+          nextTag = snd $ Z.cursor $ Z.right z</programlisting></para>
         <para>When instantiating a rule from the current element in the <type>Zipper</type>, we have
             two problematic conditions to check for. The first is that the <type>Zipper</type> does
             not point to an element. This happens when we would traverse to the right when are
@@ -669,11 +658,12 @@ leftCursor z = if Z.beginp z then
                    Nothing
                else
                    Z.safeCursor $ Z.left z</programlisting></para>
-        <para>The <function>rightCursor</function> is trivial. The <function>leftCursor</function>
-            is a bit more complicated, since calling <function>left</function> on a
-                <type>Zipper</type> with a cursor pointing at the first element, will return an
-            equivalent <type>Zipper</type>. So, we return <type>Nothing</type> when we are pointing
-            at the first element (and cannot move left).</para>
+        <para>The <function>rightCursor</function> function is trivial. The
+                <function>leftCursor</function> is a bit more complicated, since calling
+                <function>left</function> on a <type>Zipper</type> with a cursor pointing at the
+            first element, will return an equivalent <type>Zipper</type>. So, we return
+                <type>Nothing</type> when we are pointing at the first element (and cannot move
+            left).</para>
         <para>In our previous implementations of the instantiation functions, we checked all failure
             conditions using guards. However, once we work with expressions evaluating to
                 <type>Maybe</type>, we can use the <type>Maybe</type> monad instead. The
@@ -708,9 +698,7 @@ instSurroundTagRule z = do
             <author>
                 <personname>E. Brill</personname>
             </author>
-            <copyright>
-                <year>1992</year>
-            </copyright>
+            <date>1992</date>
             <publisher>
                 <publishername>Association for Computational Linguistics</publishername>
             </publisher>
