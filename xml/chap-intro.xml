@@ -61,6 +61,48 @@
     </sect1>
     <sect1 xml:id="sec-intro-needs">
         <title>What you need</title>
-        <para>Stub</para>
+        <para>To work with this book, you need the Haskell Platform and a text editor. The Haskell
+            Platform is available for Mac OS X, Windows, and Linux at: <link
+                xlink:href="http://hackage.haskell.org/platform/"
+                >http://hackage.haskell.org/platform/</link> Download the package for your platform,
+            and install it.</para>
+        <para>If you do not use one of these platforms, not all is lost. First of all, you should
+            download the <package>ghc</package> Haskell compiler. If you operating system provides a
+            ports system or package manager, use it to locate and install a <package>ghc</package>
+            package. If your operating system does not provide a port or package for
+                <package>ghc</package>, you can still try to download a binary distribution from
+                <link xlink:href="http://www.haskell.org/ghc/">the GHC website</link>. Once you have
+            installed and set up <package>ghc</package>, install the packages of the Haskell
+            Platform.</para>
+        <para>For the text editor, pick any editor you find comfortable, as long as it saves files
+            as plain text. Programming Haskell becomes more comfortable if you have an editor with
+            syntax highlighting and interpreter integration. Your authors prefer the Emacs editor
+            with haskell-mode. haskell-mode provides good support for highlighting, and Haskell code
+            formatting. Besides that, Emacs allows you to run the <command>ghci</command> Haskell
+            interpreter within the editor.</para>
+        <para>Some examples in the book use corpora. These corpora are available at: <link
+                xlink:href="http://nlpwp.org/">http://nlpwp.org/</link></para>
+    </sect1>
+    <sect1>
+        <title>Ready, set, go!</title>
+        <para>You will probably want to get aquainted with the <command>ghci</command> Haskell
+            interpreter. It allows you to try Haskell expressions and get immediate feedback. On
+            UNIX systems, type <command>ghci -XNoMonomorphismRestriction</command> in a terminal to
+            launch the interpreter. You will be greeted with a prompt that resembles the
+            following:<screen>$ ghci
+GHCi, version 6.12.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Loading package ffi-1.0 ... linking ... done.
+Prelude></screen>
+            On Windows, choose <emphasis role="italic">Start -> All Programs -> Haskell Platform ->
+                WinGHCi</emphasis>. The first time, you should set the <emphasis role="italic"
+                >NoMonomorphismRestriction</emphasis> option that is required for some examples. Do
+            this by going to the following item: <emphasis role="italic">File > Options > GHCi
+                Startup</emphasis>. Then append <emphasis role="italic"
+                >-XNoMonomorphismRestriction</emphasis> in the field (make sure that there is a
+            space before this addition). Click <emphasis role="italic">OK</emphasis>, and restart
+            WinGHCi.</para>
     </sect1>
 </chapter>
