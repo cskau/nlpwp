@@ -669,7 +669,8 @@ leftCursor z = if Z.beginp z then
                 <type>Maybe</type>, we can use the <type>Maybe</type> monad instead. The
                 <type>Maybe</type> monad represents computations that could fail (return
                 <type>Nothing</type>), and a failure will be propagated (the monad will end in
-                <type>Nothing</type>).</para>
+                <type>Nothing</type>). The <function>return</function> function is used to pack the
+            value of the final expression in a <type>Maybe</type>.</para>
         <para>Using the <type>Maybe</type> monad, we can simplify the instantiation
             functions:</para>
         <programlisting>instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
