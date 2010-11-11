@@ -403,13 +403,13 @@ backoffTagger f bt t = let pick = f t in
                          Nothing  -> Just bt</programlisting></para>
         <para>See how we can nicely cascade taggers by writing higher-order functions? We proceed to
             evaluate this
-            tagger:<screen>*Main> h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode
-*Main> c &lt;- IO.hGetContents h
-*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
-*Main> i &lt;- IO.openFile "/Users/daniel/book/brown-pos-test.txt" IO.ReadMode
-*Main> d &lt;- IO.hGetContents i
-*Main> evalTagger (backoffTagger (freqTagWord model) "NN") $
-  map toTrainingInstance $ words d
+            tagger:<screen>*Main> <userinput>h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let model = trainFreqTagger $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>i &lt;- IO.openFile "/Users/daniel/book/brown-pos-test.txt" IO.ReadMode</userinput>
+*Main> <userinput>d &lt;- IO.hGetContents i</userinput>
+*Main> <userinput>evalTagger (backoffTagger (freqTagWord model) "NN") $
+  map toTrainingInstance $ words d</userinput>
 (272901,237762,0)</screen></para>
         <para>That did improve performance some. Of the 11536 tokens that we did not tag in the
             frequency-based tagger, we now tagged 2360 tokens correctly. This means that we tagged
@@ -459,6 +459,111 @@ backoffTagger f bt t = let pick = f t in
         <title>Transformation-based tagging</title>
         <para>While the frequency-tagger that you developed over the last two sections was a good
             first attempt at POS tagging, the performance of taggers can be improved by taking
-            context intro account.</para>
+            context into account. To give an example, the token 'saving' is used as a verb most
+            frequently. However, when the word is used as a noun, this can often be derived from the
+            context, as in the following two sentences:<orderedlist>
+                <listitem>
+                    <para><emphasis role="italic">The/AT weight/NN advantage/NN ,/, plus/CC
+                            greater/JJR durability/NN of/IN the/AT plastic/NN unit/NN ,/, yields/VBZ
+                            a/AT <emphasis role="bold">saving/NN</emphasis> of/IN about/RB
+                            one-fifth/NN in/IN shipping/VBG ./.</emphasis></para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="italic">Its/PP$ elimination/NN would/MD result/VB in/IN
+                            the/AT <emphasis role="bold">saving/NN</emphasis> of/IN interest/ NN
+                            costs/NNS ,/, heavy/JJ when/WRB short-term/NN money/NN rates/NNS are/BER
+                            high /JJ ,/, and/CC in/IN freedom/NN from/IN dependence/NN on/IN
+                            credit/NN which/WDT is/BEZ not/* always/RB available/JJ when/WRB
+                            needed/VBN most/RBT ./.</emphasis></para>
+                </listitem>
+            </orderedlist></para>
+        <para>In both cases, saving is preceded by an article and succeeded by a preposition. The
+            context disambiguates what specific reading of the token 'saving' should be used.</para>
+        <para>We could manually inspect all errors in the training corpus after tagging it with the
+            frequency-based tagger, and write rules that correct mistaggings. This has been done in
+            the past, and can give a tremendous boost in performance. Unfortunately, finding such
+            rules is very tedious work, and specific to one language and tag set. Fortunately, <xref
+                linkend="bib-brill1992"/> has shown that such rules can be learnt automatically
+            using so-called <emphasis role="italic">transformation-based learning</emphasis>. The
+            learning produre is straightforward:<orderedlist>
+                <listitem>
+                    <para>Tag every token in the training corpus using the most frequent tag for a
+                        word.</para>
+                </listitem>
+                <listitem>
+                    <para>Create rules from rule templates that correct incorrectly tagged
+                        words.</para>
+                </listitem>
+                <listitem>
+                    <para>Count how many corrections were made and errors were introduced when each
+                        rule is applied to the corpus.</para>
+                </listitem>
+                <listitem>
+                    <para>Select the a rule according to the following equation:<equation>
+                            <xi:include href="eq-tbl-rule-score.mml"/>
+                        </equation></para>
+                </listitem>
+                <listitem>
+                    <para>Go to step 2, unless a threshold has been reached (e.g. rules do not give
+                        a net improvement).</para>
+                </listitem>
+            </orderedlist></para>
+        <para>The rule templates follow a very simple format. These are two examples from Brill's paper:<orderedlist>
+                <listitem>
+                    <para><emphasis role="italic">old_tag new_tag NEXT-TAG tag</emphasis></para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="italic">old_tag new_tag PREV-TAG to</emphasis></para>
+                </listitem>
+            </orderedlist></para>
+        <para>Two possible rules derived from these rule templates are:<orderedlist>
+                <listitem>
+                    <para>TO IN NEXT-TAG AT</para>
+                </listitem>
+                <listitem>
+                    <para>NN VB PREV-TAG TO</para>
+                </listitem>
+            </orderedlist></para>
+        <para>The first rule replaces the tag 'TO' (infinitival 'to') by 'IN' (preposition) if the
+            next tag is 'AT' (article). The second rule, replaces the tag 'NN' (singular common
+            noun) to 'VB' (verb, base) if the previous tag was 'TO' (infinitival 'to'). As you can
+            immediately see, these are two very effective rules.</para>
+        <para>Since you already have a frequency-based tagger, you can already perform the first
+            step of the learning procedure for transformation-based tagging. What we still need are
+            rule templates, rule extractors, and a scoring function. For brevity, we will only focus
+            on three tag-based templates, but after implementing the learning procedure, it should
+            be fairly obvious how to had other contexts and integrating words in templates. The
+            templates that we will create, will take be all variations on directly surrounding tags
+            (previous tag, next tag, both surrounding tags). Thanks to Haskell's algabraic data
+            types, we can easily model these
+            templates:<programlisting>data Replacement = Replacement Tag Tag
+                   deriving Show
+
+data TransformationRule = 
+      NextTagRule     Replacement Tag
+    | PrevTagRule     Replacement Tag
+    | SurroundTagRule Replacement Tag Tag
+      deriving Show</programlisting></para>
+        <para>To confirm that these templates are indeed working as expected, we can recreate the
+            rules that were mentioned earlier:</para>
+        <screen>*Main> <userinput>NextTagRule (Replacement "TO" "IN") "AT"</userinput>
+NextTagRule (Replacement "TO" "IN") "AT"
+*Main> <userinput>PrevTagRule (Replacement "NN" "VB") "TO"</userinput>
+PrevTagRule (Replacement "NN" "VB") "TO"</screen>
+        <para>Awesome!</para>
     </sect1>
+    <bibliography>
+        <biblioentry xml:id="bib-brill1992">
+            <title>A simple rule-based part of speech tagger</title>
+            <author>
+                <personname>E. Brill</personname>
+            </author>
+            <copyright>
+                <year>1992</year>
+            </copyright>
+            <publisher>
+                <publishername>Association for Computational Linguistics</publishername>
+            </publisher>
+        </biblioentry>
+    </bibliography>
 </chapter>

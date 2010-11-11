@@ -49,6 +49,9 @@ backoffTagger f bt t = let pick = f t in
                        case pick of
                          Just tag -> Just tag
                          Nothing  -> Just bt
+----------------
+-- Evaluation --
+----------------
 
 baselineTagger :: Tag -> Token -> Maybe Tag
 baselineTagger tag _ = Just tag
@@ -64,4 +67,15 @@ evalTagger tagFun = L.foldl' eval (0, 0, 0)
                              (n+1, c, u)
             Nothing  -> (n+1, c, u+1)
 
+-----------------------------------
+-- Transformation-based learning --
+-----------------------------------
 
+data Replacement = Replacement Tag Tag
+                   deriving Show
+
+data TransformationRule = 
+      NextTagRule     Replacement Tag
+    | PrevTagRule     Replacement Tag
+    | SurroundTagRule Replacement Tag Tag
+      deriving Show
