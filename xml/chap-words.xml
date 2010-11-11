@@ -76,7 +76,7 @@
             <emphasis>ghci</emphasis>, it will simply echo back the character:
         </para>
         <para>
-            <screen>Prelude> 'h'
+            <screen>Prelude> <userinput>'h'</userinput>
 'h'</screen>
         </para>
         <para>
@@ -87,7 +87,7 @@
             <emphasis>:t</emphasis>:
         </para>
         <para>
-            <screen>Prelude> :t 'h'
+            <screen>Prelude> <userinput>:t 'h'</userinput>
 'h' :: Char    </screen>
         </para>
         <para>
@@ -106,14 +106,14 @@
             characters:
         </para>
         <para>
-            <screen>Prelude> ['h','e','l','l','o']
+            <screen>Prelude> <userinput>['h','e','l','l','o']</userinput>
 "hello" </screen>
         </para>
         <para>
             Now we are getting somewhere! Let's look at the type of this list:
         </para>
         <para>
-            <screen>Prelude> :t ['h','e','l','l','o']
+            <screen>Prelude> <userinput>:t ['h','e','l','l','o']</userinput>
 ['h','e','l','l','o'] :: [Char] </screen>
         </para>
         <para>Its type is <emphasis>[Char]</emphasis>, which should be read as 'list of characters'.
@@ -122,9 +122,9 @@
             example already suggests, there is a more convenient notation: wrap the characters in
             double quotes: </para>
         <para>
-            <screen>Prelude> "hello"
+            <screen>Prelude> <userinput>"hello"</userinput>
 "hello"
-Prelude> :type "hello"
+Prelude> <userinput>:type "hello"</userinput>
 "hello" :: [Char] </screen>
         </para>
         <para>
@@ -134,9 +134,9 @@ Prelude> :type "hello"
             returns the length of a list:
         </para>
         <para>
-            <screen>Prelude> length "hello"
+            <screen>Prelude> <userinput>length "hello"</userinput>
 5
-Prelude> length [1,2,3]
+Prelude> <userinput>length [1,2,3]</userinput>
 3 </screen>
         </para>
         <para>
@@ -144,7 +144,7 @@ Prelude> length [1,2,3]
             at its type:
         </para>
         <para>
-            <screen>Prelude> :type length
+            <screen>Prelude> <userinput>:type length</userinput>
 length :: [a] -> Int </screen>
         </para>
         <para>
@@ -166,16 +166,16 @@ length :: [a] -> Int </screen>
             the first element:
         </para>
         <para>
-            <screen>Prelude> head "hello"
+            <screen>Prelude> <userinput>head "hello"</userinput>
 'h'
-Prelude> tail "hello"
+Prelude> <userinput>tail "hello"</userinput>
 "ello"</screen>
         </para>
         <para>
             The type of head is the following:
         </para>
         <para>
-            <screen>Prelude> :type head
+            <screen>Prelude> <userinput>:type head</userinput>
 head :: [a] -> a
             </screen>
         </para>
@@ -194,7 +194,7 @@ head :: [a] -> a
             understand:
         </para>
         <para>
-            <screen>Prelude> :type tail
+            <screen>Prelude> <userinput>:type tail</userinput>
 tail :: [a] -> [a] </screen>
         </para>
         <para>
@@ -209,14 +209,14 @@ tail :: [a] -> [a] </screen>
             a list:
         </para>
         <para>
-            <screen>Prelude> reverse "hello"
+            <screen>Prelude> <userinput>reverse "hello"</userinput>
 "olleh"</screen>
         </para>
         <para>
             Olé! And another one:
         </para>
         <para>
-            <screen>Prelude> reverse "level"
+            <screen>Prelude> <userinput>reverse "level"</userinput>
 "level"</screen>
         </para>
         <para>We bumped into a <function>palindrome</function>, a word that can be read forward and
@@ -225,9 +225,9 @@ tail :: [a] -> [a] </screen>
             palindrome: a word is a palindrome if it is equal to its reverse. In Haskell we can
             compare values using the <function>==</function> operator: </para>
         <para>
-            <screen>Prelude> "hello" == "hello"
+            <screen>Prelude> <userinput>"hello" == "hello"</userinput>
 True
-Prelude> "hello" == "olleh"
+Prelude> <userinput>"hello" == "olleh"</userinput>
 False </screen>
         </para>
         <para>Such a comparison evaluates to <emphasis>True</emphasis> if both values are equal, or
@@ -236,9 +236,9 @@ False </screen>
             type. Since <function>reverse</function> also returns a value, nothing holds us from
             using it in comparisons: </para>
         <para>
-            <screen>Prelude> "hello" == reverse "hello"
+            <screen>Prelude> <userinput>"hello" == reverse "hello"</userinput>
 False
-Prelude> "level" == reverse "level"
+Prelude> <userinput>"level" == reverse "level"</userinput>
 True </screen>
         </para>
         <para>
@@ -254,7 +254,7 @@ True </screen>
             Let's do some magic:
         </para>
         <para>
-            <screen>Prelude> let palindrome word = word == reverse word </screen>
+            <screen>Prelude> <userinput>let palindrome word = word == reverse word</userinput> </screen>
         </para>
         <para>
             This defines the function <function>palindrome</function> taking
@@ -265,11 +265,11 @@ True </screen>
             examples:
         </para>
         <para>
-            <screen>Prelude> palindrome "hello"
+            <screen>Prelude> <userinput>palindrome "hello"</userinput>
 False
-Prelude> palindrome "level"
+Prelude> <userinput>palindrome "level"</userinput>
 True
-Prelude> palindrome "racecar"
+Prelude> <userinput>palindrome "racecar"</userinput>
 True </screen>
         </para>
         <para>
@@ -304,7 +304,7 @@ palindrome "racecar" = True</screen>
             sentences in the exactly the same way we represented words:
         </para>
         <para>
-            <screen>Prelude> "The cat is on the mat."
+            <screen>Prelude> <userinput>"The cat is on the mat."</userinput>
 "The cat is on the mat." </screen>
         </para>
         <para>
@@ -315,7 +315,7 @@ palindrome "racecar" = True</screen>
             here:
         </para>
         <para>
-            <screen>Prelude> head "The cat is on the mat."
+            <screen>Prelude> <userinput>head "The cat is on the mat."</userinput>
 'T' </screen>
         </para>
         <para>
@@ -325,9 +325,9 @@ palindrome "racecar" = True</screen>
             we represented a sentence as a list of words?
         </para>
         <para>
-            <screen>Prelude> ["The", "cat", "is", "on", "the", "mat", "."]
+            <screen>Prelude> <userinput>["The", "cat", "is", "on", "the", "mat", "."]</userinput>
 ["The","cat","is","on","the","mat","."]
-Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
+Prelude> <userinput>:type ["The", "cat", "is", "on", "the", "mat", "."]</userinput>
 ["The", "cat", "is", "on", "the", "mat", "."] :: [[Char]]</screen>
         </para>
         <para>
@@ -344,7 +344,7 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
             Rinse and repeat:
         </para>
         <para>
-            <screen>Prelude> head ["The", "cat", "is", "on", "the", "mat", "."]
+            <screen>Prelude> <userinput>head ["The", "cat", "is", "on", "the", "mat", "."]</userinput>
 "The"</screen>
         </para>
         <para>
@@ -354,7 +354,7 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
             <function>head</function> of a sentence:
         </para>
         <para>
-            <screen>Prelude> head (head ["The", "cat", "is", "on", "the", "mat", "."])
+            <screen>Prelude> <userinput>head (head ["The", "cat", "is", "on", "the", "mat", "."])</userinput>
 'T'</screen>
         </para>
         <para>
@@ -397,7 +397,7 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
             You know how to get the in characters length of a single token:
         </para>
         <para>
-            <screen>Prelude> length "flying"
+            <screen>Prelude> <userinput>length "flying"</userinput>
 6</screen>
         </para>
         <para>
@@ -413,7 +413,7 @@ Prelude> :type ["The", "cat", "is", "on", "the", "mat", "."]
             <function>map</function>:
         </para>
         <para>
-            <screen>Prelude> :type map
+            <screen>Prelude> <userinput>:type map</userinput>
 map :: (a -> b) -> [a] -> [b]</screen>
         </para>
         <para>
@@ -442,7 +442,7 @@ map :: (a -> b) -> [a] -> [b]</screen>
             like we have a winner!
         </para>
         <para>
-            <screen>Prelude> map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+            <screen>Prelude> <userinput>map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]</userinput>
 [2,1,2,1,6,1,4,6]</screen>
         </para>
         <para>
@@ -452,7 +452,7 @@ map :: (a -> b) -> [a] -> [b]</screen>
             function:
         </para>
         <para>
-            <screen>Prelude> :type sum
+            <screen>Prelude> <userinput>:type sum</userinput>
 sum :: (Num a) => [a] -> a</screen>
         </para>
         <para>
@@ -479,7 +479,7 @@ sum :: (Num a) => [a] -> a</screen>
             step two:
         </para>
         <para>
-            <screen>Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+            <screen>Prelude> <userinput>sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])</userinput>
 23</screen>
         </para>
         <para>
@@ -488,8 +488,8 @@ sum :: (Num a) => [a] -> a</screen>
             division operator (<emphasis>/</emphasis>):
         </para>
         <para>
-            <screen>Prelude> sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]) /
-  length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+            <screen>Prelude> <userinput>sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]) /
+  length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]</userinput>
 
 &lt;interactive>:1:0:
     No instance for (Fractional Int)
@@ -517,7 +517,7 @@ sum :: (Num a) => [a] -> a</screen>
             the breakdown:
         </para>
         <para>
-            <screen>Prelude> :type (/)
+            <screen>Prelude> <userinput>:type (/)</userinput>
 (/) :: (Fractional a) => a -> a -> a</screen>
         </para>
         <para>
@@ -530,7 +530,7 @@ sum :: (Num a) => [a] -> a</screen>
             things like this:
         </para>
         <para>
-            <screen>Prelude> (/) 1.0 2.0
+            <screen>Prelude> <userinput>(/) 1.0 2.0</userinput>
 0.5</screen>
         </para>
         <para>
@@ -541,10 +541,10 @@ sum :: (Num a) => [a] -> a</screen>
             typeclass, since they are of the type <emphasis>Int</emphasis>:
         </para>
         <para>
-            <screen>Prelude> :type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+            <screen>Prelude> <userinput>:type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])</userinput>
 sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
   :: Int
-Prelude> :type length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
+Prelude> <userinput>:type length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]</userinput>
 length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
   :: Int</screen>
         </para>
@@ -555,8 +555,8 @@ length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
             surely do get the average token length of the corpus:
         </para>
         <para>
-            <screen>Prelude> fromIntegral (sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])) /
-  fromIntegral (length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
+            <screen>Prelude> <userinput>fromIntegral (sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])) /
+  fromIntegral (length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])</userinput>
 2.875</screen>
         </para>
         <para>
@@ -573,8 +573,8 @@ length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"]
             into a function:
         </para>
         <para>
-            <screen>Prelude> let averageLength l = fromIntegral (sum (map length l)) / fromIntegral (length l)
-Prelude> averageLength ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
+            <screen>Prelude> <userinput>let averageLength l = fromIntegral (sum (map length l)) / fromIntegral (length l)</userinput>
+Prelude> <userinput>averageLength ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]</userinput>
 2.875</screen>
         </para>
         <para>
@@ -583,7 +583,7 @@ Prelude> averageLength ["Oh", ",", "no", ",", "flying", ",", "pink" ,"ponies"]
             signature of <function>averageLength</function>.
         </para>
         <para>
-            <screen>Prelude> :type averageLength
+            <screen>Prelude> <userinput>:type averageLength</userinput>
 averageLength :: (Fractional b) => [[a]] -> b</screen>
         </para>
         <para>
@@ -597,9 +597,9 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
             apply this function to a list of sentences?
         </para>
         <para>
-            <screen>Prelude> averageLength [["I", "like", "Haskell", "."],
+            <screen>Prelude> <userinput>averageLength [["I", "like", "Haskell", "."],
   ["Ruby", "rocks", "the", "too", "."],
-  ["Who", "needs", "Java", "?"]]
+  ["Who", "needs", "Java", "?"]]</userinput>
 4.333333333333333</screen>
         </para>
         <para>
@@ -681,7 +681,7 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
             splitting by space. Have a look at the following example:
         </para>
         <para>
-            <screen>Prelude> "This is Jack .\nHe is a Haskeller ."
+            <screen>Prelude> <userinput>"This is Jack .\nHe is a Haskeller ."</userinput>
 "This is Jack .\nHe is a Haskeller ."</screen>
         </para>
         <para> This is exactly the representation that we will be using for our textual data. As you
@@ -694,9 +694,9 @@ averageLength :: (Fractional b) => [[a]] -> b</screen>
             as its first argument, and will return a list of strings:
         </para>
         <para>
-            <screen>Prelude> :type lines
+            <screen>Prelude> <userinput>:type lines</userinput>
 lines :: String -> [String]
-Prelude> lines "This is Jack .\nHe is a Haskeller ."
+Prelude> <userinput>lines "This is Jack .\nHe is a Haskeller ."</userinput>
 ["This is Jack .","He is a Haskeller ."]</screen>
         </para>
         <para>
@@ -708,7 +708,7 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
             that it splits on spaces rather than newlines:
         </para>
         <para>
-            <screen>Prelude> words "This is Jack ."
+            <screen>Prelude> <userinput>words "This is Jack ."</userinput>
 ["This","is","Jack","."]</screen>
         </para>
         <para>
@@ -719,7 +719,7 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
             (untokenized) sentences:
         </para>
         <para>
-            <screen>Prelude> map words (lines "This is Jack .\nHe is a Haskeller .")
+            <screen>Prelude> <userinput>map words (lines "This is Jack .\nHe is a Haskeller .")</userinput>
 [["This","is","Jack","."],["He","is","a","Haskeller","."]]</screen>
         </para>
         <para>
@@ -727,8 +727,8 @@ Prelude> lines "This is Jack .\nHe is a Haskeller ."
             full-fledged function:
         </para>
         <para>
-            <screen>Prelude> let splitTokenize text = map words (lines text)
-Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
+            <screen>Prelude> <userinput>let splitTokenize text = map words (lines text)</userinput>
+Prelude> <userinput>splitTokenize "This is Jack .\nHe is a Haskeller ."</userinput>
 [["This","is","Jack","."],["He","is","a","Haskeller","."]]</screen>
         </para>
         <para>
@@ -753,7 +753,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             our tokenization function by using function composition:
         </para>
         <para>
-            <screen>Prelude> let splitTokenize text = (map words . lines) text</screen>
+            <screen>Prelude> <userinput>let splitTokenize text = (map words . lines) text</userinput></screen>
         </para>
         <para>
             This states that we apply <emphasis>map words</emphasis> to the
@@ -763,7 +763,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             <function>map</function> function:
         </para>
         <para>
-            <screen>Prelude> :type map
+            <screen>Prelude> <userinput>:type map</userinput>
 map :: (a -> b) -> [a] -> [b]</screen>
         </para>
         <para>
@@ -772,7 +772,7 @@ map :: (a -> b) -> [a] -> [b]</screen>
             common in functional programming.
         </para>
         <para>
-            <screen>Prelude> :type map words
+            <screen>Prelude> <userinput>:type map words</userinput>
 map words :: [String] -> [[String]]</screen>
         </para>
         <para>
@@ -790,7 +790,7 @@ map words :: [String] -> [[String]]</screen>
             and returns a list of a list of strings:
         </para>
         <para>
-            <screen>Prelude> :type map words . lines
+            <screen>Prelude> <userinput>:type map words . lines</userinput>
 map words . lines :: String -> [[String]]</screen>
         </para>
         <para>
@@ -802,9 +802,9 @@ map words . lines :: String -> [[String]]</screen>
             can once more be simplified:
         </para>
         <para>
-            <screen>Prelude> let splitTokenize = map words . lines
+            <screen>Prelude> <userinput>let splitTokenize = map words . lines</userinput>
 splitTokenize :: String -> [[String]]
-Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
+Prelude> <userinput>splitTokenize "This is Jack .\nHe is a Haskeller ."</userinput>
 [["This","is","Jack","."],["He","is","a","Haskeller","."]]
 {% endhighlight %}</screen>
         </para>
@@ -852,14 +852,14 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             using the <function>(:)</function> function:
         </para>
         <para>
-            <screen>Prelude> 2 : [3,4,5]
+            <screen>Prelude> <userinput>2 : [3,4,5]</userinput>
 [2,3,4,5] </screen>
         </para>
         <para>
             Ain't that great? We can also add a head, and yet another:
         </para>
         <para>
-            <screen>Prelude> 1 : 2 : [3,4,5]
+            <screen>Prelude> <userinput>1 : 2 : [3,4,5]</userinput>
 [1,2,3,4,5] </screen>
         </para>
         <para>
@@ -867,7 +867,7 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             list (<emphasis>[]</emphasis>):
         </para>
         <para>
-            <screen>Prelude> "Hi" : []
+            <screen>Prelude> <userinput>"Hi" : []</userinput>
 ["Hi"] </screen>
         </para>
         <para>
@@ -879,9 +879,9 @@ Prelude> splitTokenize "This is Jack .\nHe is a Haskeller ."
             the list, or <emphasis>False</emphasis> otherwise. For example:
         </para>
         <para>
-            <screen>Prelude> elem 2 [1,2,3,4,5]
+            <screen>Prelude> <userinput>elem 2 [1,2,3,4,5]</userinput>
 True
-Prelude> elem 6 [1,2,3,4,5]
+Prelude> <userinput>elem 6 [1,2,3,4,5]</userinput>
 False </screen>
         </para>
         <para>
@@ -891,9 +891,9 @@ False </screen>
             otherwise:
         </para>
         <para>
-            <screen>Prelude> notElem "foo" ["foo","bar","baz"]
+            <screen>Prelude> <userinput>notElem "foo" ["foo","bar","baz"]</userinput>
 False
-Prelude> notElem "pony" ["foo","bar","baz"]
+Prelude> <userinput>notElem "pony" ["foo","bar","baz"]</userinput>
 True</screen>
         </para>
         <para>
@@ -913,20 +913,20 @@ True</screen>
             but useless example:
         </para>
         <para>
-            <screen>Prelude> if 1 == 2 then "cuckoo" else "egg"
+            <screen>Prelude> <userinput>if 1 == 2 then "cuckoo" else "egg"</userinput>
 "egg"
-Prelude> if 1 == 1 then "cuckoo" else "egg"
+Prelude> <userinput>if 1 == 1 then "cuckoo" else "egg"</userinput>
 "cuckoo"</screen>
         </para>
         <para>
             This looks exactly like what we need. Just fill in the blanks:
         </para>
         <para>
-            <screen>Prelude> if elem "foo" ["foo","bar","baz"] then ["foo","bar","baz"]
-  else "foo" : ["foo", "bar", "baz"]
+            <screen>Prelude> <userinput>if elem "foo" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "foo" : ["foo", "bar", "baz"]</userinput>
 ["foo","bar","baz"]
-Prelude> if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
-  else "pony" : ["foo", "bar", "baz"]
+Prelude> <userinput>if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
+  else "pony" : ["foo", "bar", "baz"]</userinput>
 ["pony","foo","bar","baz"]</screen>
         </para>
         <para>
@@ -934,10 +934,10 @@ Prelude> if elem "pony" ["foo","bar","baz"] then ["foo","bar","baz"]
             rewrite it to a function:
         </para>
         <para>
-            <screen>Prelude> let elemOrAdd e l = if elem e l then l else e:l
-Prelude> elemOrAdd "foo" ["foo", "bar", "baz"]
+            <screen>Prelude> <userinput>let elemOrAdd e l = if elem e l then l else e:l</userinput>
+Prelude> <userinput>elemOrAdd "foo" ["foo", "bar", "baz"]</userinput>
 ["foo","bar","baz"]
-Prelude> elemOrAdd "pony" ["foo", "bar", "baz"]
+Prelude> <userinput>elemOrAdd "pony" ["foo", "bar", "baz"]</userinput>
 ["pony","foo","bar","baz"]</screen>
         </para>
         <para>
@@ -953,14 +953,14 @@ Prelude> elemOrAdd "pony" ["foo", "bar", "baz"]
             arguments of <function>foldl</function>:
         </para>
         <para>
-            <screen>Prelude> :type foldl
+            <screen>Prelude> <userinput>:type foldl</userinput>
 foldl :: (a -> b -> a) -> a -> [b] -> a</screen>
         </para>
         <para>
             Now consider this example using <function>foldl</function>:
         </para>
         <para>
-            <screen>Prelude> foldl (+) 0 [1,2,3,4,5]
+            <screen>Prelude> <userinput>foldl (+) 0 [1,2,3,4,5]</userinput>
 15</screen>
         </para>
         <para>
@@ -993,9 +993,9 @@ foldl (+) ((((((0)+1)+2)+3)+4)+5)) []
             signatures:
         </para>
         <para>
-            <screen>Prelude> :type foldl
+            <screen>Prelude> <userinput>:type foldl</userinput>
 foldl :: (a -> b -> a) -> a -> [b] -> a
-Prelude> :type elemOrAdd
+Prelude> <userinput>:type elemOrAdd</userinput>
 elemOrAdd :: (Eq a) => a -> [a] -> [a]</screen>
         </para>
         <para>
@@ -1008,8 +1008,8 @@ elemOrAdd :: (Eq a) => a -> [a] -> [a]</screen>
             plug it into foldl:
         </para>
         <para>
-            <screen>Prelude> let elemOrAdd l e = if elem e l then l else e:l
-Prelude> foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]
+            <screen>Prelude> <userinput>let elemOrAdd l e = if elem e l then l else e:l</userinput>
+Prelude> <userinput>foldl elemOrAdd [] ["blue", "blue", "red", "blue", "red"]</userinput>
 ["red","blue"]</screen>
         </para>
         <para>
@@ -1033,8 +1033,8 @@ foldl elemOrAdd ("red":("blue":([]))) []
             functions that, together, make word lists:
         </para>
         <para>
-            <screen>Prelude> let wordList = foldl elemOrAdd []
-Prelude> wordList ["blue", "blue", "red", "blue", "red"]
+            <screen>Prelude> <userinput>let wordList = foldl elemOrAdd []</userinput>
+Prelude> <userinput>wordList ["blue", "blue", "red", "blue", "red"]</userinput>
 ["red","blue"]</screen>
         </para>
         <para>
@@ -1084,7 +1084,7 @@ Prelude> wordList ["blue", "blue", "red", "blue", "red"]
             module. For instance, this will give us the empty set:
         </para>
         <para>
-            <screen>Prelude> Data.Set.empty
+            <screen>Prelude> <userinput>Data.Set.empty</userinput>
 fromList []</screen>
         </para>
         <para>
@@ -1093,7 +1093,7 @@ fromList []</screen>
             <function>empty</function> function:
         </para>
         <para>
-            <screen>Prelude> :type Data.Set.empty
+            <screen>Prelude> <userinput>:type Data.Set.empty</userinput>
 Data.Set.empty :: Data.Set.Set a</screen>
         </para>
         <para>
@@ -1103,7 +1103,7 @@ Data.Set.empty :: Data.Set.Set a</screen>
             <function>fromList</function> function:
         </para>
         <para>
-            <screen>Prelude> Data.Set.fromList [5,2,5,8,1,1,23]
+            <screen>Prelude> <userinput>Data.Set.fromList [5,2,5,8,1,1,23]</userinput>
 fromList [1,2,5,8,23]</screen>
         </para>
         <para>
@@ -1113,7 +1113,7 @@ fromList [1,2,5,8,23]</screen>
             <function>toList</function>:
         </para>
         <para>
-            <screen>Prelude> Data.Set.toList (Data.Set.fromList [5,2,5,8,1,1,23])
+            <screen>Prelude> <userinput>Data.Set.toList (Data.Set.fromList [5,2,5,8,1,1,23])</userinput>
 [1,2,5,8,23]</screen>
         </para>
         <para>
@@ -1123,9 +1123,9 @@ fromList [1,2,5,8,23]</screen>
             with that element inserted or removed:
         </para>
         <para>
-            <screen>Prelude> Data.Set.insert 42 (Data.Set.fromList [5,2,5,8,1,1,23])
+            <screen>Prelude> <userinput>Data.Set.insert 42 (Data.Set.fromList [5,2,5,8,1,1,23])</userinput>
 fromList [1,2,5,8,23,42]
-Prelude> Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])
+Prelude> <userinput>Data.Set.delete 5 (Data.Set.fromList [5,2,5,8,1,1,23])</userinput>
 fromList [1,2,8,23]</screen>
         </para>
         <para>
@@ -1133,9 +1133,9 @@ fromList [1,2,8,23]</screen>
             using the <function>member</function> function:
         </para>
         <para>
-            <screen>Prelude> Data.Set.member 23 (Data.Set.fromList [5,2,5,8,1,1,23])
+            <screen>Prelude> <userinput>Data.Set.member 23 (Data.Set.fromList [5,2,5,8,1,1,23])</userinput>
 True
-Prelude> Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23])
+Prelude> <userinput>Data.Set.member 24 (Data.Set.fromList [5,2,5,8,1,1,23])</userinput>
 False</screen>
         </para>
         <para>
@@ -1145,8 +1145,8 @@ False</screen>
             is not:
         </para>
         <para>
-            <screen>Prelude> let elemOrAdd s e = if Data.Set.member e s then s else Data.Set.insert e s
-Prelude> elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24
+            <screen>Prelude> <userinput>let elemOrAdd s e = if Data.Set.member e s then s else Data.Set.insert e s</userinput>
+Prelude> <userinput>elemOrAdd (Data.Set.fromList [5,2,5,8,1,1,23]) 24</userinput>
 fromList [1,2,5,8,23,24]</screen>
         </para>
         <para>
@@ -1159,7 +1159,7 @@ fromList [1,2,5,8,23,24]</screen>
             starting with the empty set. Our first take is this:
         </para>
         <para>
-            <screen>Prelude> let wordSet = foldl Data.Set.insert Data.Set.empty</screen>
+            <screen>Prelude> <userinput>let wordSet = foldl Data.Set.insert Data.Set.empty</userinput></screen>
         </para>
         <para>
             However, this will not work. Remember that in the function we give
@@ -1169,7 +1169,7 @@ fromList [1,2,5,8,23,24]</screen>
             We will pull a little trick out of our hat.
         </para>
         <para>
-            <screen>Prelude> let wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty </screen>
+            <screen>Prelude> <userinput>let wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty</userinput> </screen>
         </para>
         <para>
             You might be thinking &quot;Oh, no, more syntax terror! Does it
@@ -1180,7 +1180,7 @@ fromList [1,2,5,8,23,24]</screen>
             Check out the type signature of the lambda:
         </para>
         <para>
-            <screen>Prelude> :type (\s e -> Data.Set.insert e s)
+            <screen>Prelude> <userinput>:type (\s e -> Data.Set.insert e s)</userinput>
 (\s e -> Data.Set.insert e s)
   :: (Ord a) => Data.Set.Set a -> a -> Data.Set.Set a</screen>
         </para>
@@ -1207,7 +1207,7 @@ myFun s e = Data.Set.insert e ss </screen>
             works as expected:
         </para>
         <para>
-            <screen>Prelude> wordSet ["blue", "blue", "red", "blue", "red"]
+            <screen>Prelude> <userinput>wordSet ["blue", "blue", "red", "blue", "red"]</userinput>
 fromList ["blue","red"]</screen>
         </para>
         <para>
@@ -1267,11 +1267,11 @@ palindrome word = word == reverse word </screen>
             <emphasis>:l</emphasis> (shorthand for <emphasis>:load</emphasis>)
             command:
         </para>
-            <programlisting>Prelude> :l chapter1
+            <screen>Prelude> <userinput>:l chapter1</userinput>
 [1 of 1] Compiling Main             ( chapter1.hs, interpreted )
 Ok, modules loaded: Main.
 *Main> palindrome "racecar"
-True </programlisting>
+True </screen>
         <para>
             For code fragments that use a module other than the prelude, add an
             import statement at the top of the file. For example, the
@@ -1329,11 +1329,11 @@ wordSet = foldl (\s e -> Data.Set.insert e s) Data.Set.empty </programlisting>
             for each position is fixed:
         </para>
         <para>
-            <screen>Prelude> :type (1,2,3)
+            <screen>Prelude> <userinput>:type (1,2,3)</userinput>
 (1,2,3) :: (Num t, Num t1, Num t2) => (t, t1, t2)
-Prelude> :type ("hello","world")
+Prelude> <userinput>:type ("hello","world")</userinput>
 ("hello","world") :: ([Char], [Char])
-Prelude> :type ("hello",1)
+Prelude> <userinput>:type ("hello",1)</userinput>
 ("hello",1) :: (Num t) => ([Char], t) </screen>
         </para>
         <para>
@@ -1363,7 +1363,7 @@ Prelude> :type ("hello",1)
             empty map:
         </para>
         <para>
-            <screen>Prelude> Data.Map.empty fromList
+            <screen>Prelude> <userinput>Data.Map.empty fromList</userinput>
 []</screen>
         </para>
         <para>
@@ -1372,7 +1372,7 @@ Prelude> :type ("hello",1)
             for values:
         </para>
         <para>
-            <screen>Prelude> :type Data.Map.empty
+            <screen>Prelude> <userinput>:type Data.Map.empty</userinput>
 Data.Map.empty :: Data.Map.Map k a </screen>
         </para>
         <para>
@@ -1381,9 +1381,9 @@ Data.Map.empty :: Data.Map.Map k a </screen>
             tuple becomes the key, and the second the value:
         </para>
         <para>
-            <screen>Prelude> Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+            <screen>Prelude> <userinput>Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]</userinput>
 fromList [("be",2),("not",1),("or",1),("to",2)]
-Prelude> :type Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
+Prelude> <userinput>:type Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]</userinput>
 Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
   :: (Num t) => Data.Map.Map [Char] t</screen>
         </para>
@@ -1399,9 +1399,9 @@ Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)]
             given key already exists, the existing mapping is replaced:
         </para>
         <para>
-            <screen>Prelude> Data.Map.insert "hello" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+            <screen>Prelude> <userinput>Data.Map.insert "hello" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 fromList [("be",2),("hello",1),("not",1),("or",1),("to",2)]
-Prelude> Data.Map.insert "be" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Prelude> <userinput>Data.Map.insert "be" 1 (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 fromList [("be",1),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para>
@@ -1411,7 +1411,7 @@ fromList [("be",1),("not",1),("or",1),("to",2)]</screen>
             is:
         </para>
         <para>
-            <screen>Prelude> :type Data.Map.lookup
+            <screen>Prelude> <userinput>:type Data.Map.lookup</userinput>
 Data.Map.lookup :: (Ord k) => k -> Data.Map.Map k a -> Maybe a</screen>
         </para>
         <para>
@@ -1424,15 +1424,15 @@ Data.Map.lookup :: (Ord k) => k -> Data.Map.Map k a -> Maybe a</screen>
             <emphasis>Just a</emphasis> constructor:
         </para>
         <para>
-            <screen>Prelude> Just 22
+            <screen>Prelude> <userinput>Just 22</userinput>
 Just 22
-Prelude> :type Just 22
+Prelude> <userinput>:type Just 22</userinput>
 Just 22 :: (Num t) => Maybe t
-Prelude> Just [1,2,3,4,5]
+Prelude> <userinput>Just [1,2,3,4,5]</userinput>
 Just [1,2,3,4,5]
-Prelude> Just "stay calm"
+Prelude> <userinput>Just "stay calm"</userinput>
 Just "stay calm"
-Prelude> :type Just "stay calm"
+Prelude> <userinput>:type Just "stay calm"</userinput>
 Just "stay calm" :: Maybe [Char]</screen>
         </para>
         <para>
@@ -1440,9 +1440,9 @@ Just "stay calm" :: Maybe [Char]</screen>
             <emphasis>Nothing</emphasis> constructor:
         </para>
         <para>
-            <screen>Prelude> Nothing
+            <screen>Prelude> <userinput>Nothing</userinput>
 Nothing
-Prelude> :type Nothing
+Prelude> <userinput>:type Nothing</userinput>
 Nothing :: Maybe a </screen>
         </para>
         <para> These boxes turn out to be pretty cool: you can use them to return something or
@@ -1453,9 +1453,9 @@ Nothing :: Maybe a </screen>
             in a <emphasis>Just</emphasis> constructor if the key occurred in the map, or <emphasis
                 role="italic">Nothing</emphasis> otherwise: </para>
         <para>
-            <screen>Prelude> Data.Map.lookup "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+            <screen>Prelude> <userinput>Data.Map.lookup "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 Just 2
-Prelude> Data.Map.lookup "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+Prelude> <userinput>Data.Map.lookup "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 Nothing </screen>
         </para>
         <para>
@@ -1465,16 +1465,17 @@ Nothing </screen>
             <emphasis>Map</emphasis>, the original map is returned:
         </para>
         <para>
-            <screen>Prelude> Data.Map.delete "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+            <screen>Prelude> <userinput>Data.Map.delete "to" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 fromList [("be",2),("not",1),("or",1)]
-Prelude> Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</screen>
+Prelude> <userinput>Data.Map.delete "wrong" (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
+fromList [("be",2),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para>
             Finally, a <emphasis>Map</emphasis> can be converted to a list
             using the <function>toList</function> function:
         </para>
         <para>
-            <screen>Prelude> Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])
+            <screen>Prelude> <userinput>Data.Map.toList (Data.Map.fromList [("to",2),("be",2),("or",1),("not",1)])</userinput>
 [("be",2),("not",1),("or",1),("to",2)]</screen>
         </para>
         <para> Alright. Back to our task at hand: constructing a word frequency list. As with word
@@ -1504,7 +1505,7 @@ countElem m e = case (Data.Map.lookup e m) of
                 <emphasis role="italic">Map</emphasis>. So, we will add it, and give it a
             (frequency) value of 1.</para>
         <para>The <function>countElem</function> function works as intended:</para>
-        <screen>*Main> foldl countElem Data.Map.empty ["to","be","or","not","to","be"]
+        <screen>*Main> <userinput>foldl countElem Data.Map.empty ["to","be","or","not","to","be"]</userinput>
 fromList [("be",2),("not",1),("or",1),("to",2)]</screen>
         <para>While this was a nice exercise, the <emphasis role="italic"
                 >Data.Map.insertWith</emphasis> function can drastically shorten our function. This
@@ -1553,16 +1554,17 @@ freqList = foldl countElem Data.Map.empty</programlisting>
         <para>Functions that do IO return a value wrapped in IO. For instance, the
                 <function>putStrLn</function> function returns an empty tuple packed in the
                 <emphasis role="italic">IO</emphasis>
-            monad:<screen>putStrLn "hello world!" :: IO ()
-Prelude> putStrLn "hello world!" :: IO ()</screen></para>
+            monad:<screen>Prelude> <userinput>:type putStrLn "hello world!"</userinput>
+putStrLn "hello world!" :: IO ()</screen></para>
         <para>This is just a normal value, you can bind it to a name in
-            <command>ghci</command>:<screen>Prelude> let v = putStrLn "hello world!"
+            <command>ghci</command>:<screen>Prelude> <userinput>let v = putStrLn "hello world!"</userinput>
 v :: IO ()</screen></para>
         <para>However, if we evaluate the value in <command>ghci</command>, it will execute this
-            so-called I/O action:<screen>Prelude> v
+            so-called I/O
+            action:<screen>Prelude> <userinput>v</userinput>
 hello world!</screen></para>
         <para>Of course, the same thing happens if we evaluate <function>putStrLn</function>
-            directly:<screen>Prelude> putStrLn "hello world!"
+            directly:<screen>Prelude> <userinput>putStrLn "hello world!"</userinput>
 hello world!</screen></para>
         <para>Now, let's get to the interesting part: reading a file. In the files distributed with
             this book, you will find the file <filename>brown.txt</filename>. This file contains the
@@ -1571,7 +1573,7 @@ hello world!</screen></para>
             the <function>IO.openFile</function> function. <function>openFile</function> requires a
             filename and an I/O mode as its arguments, and it returns a handle packed in the
                 <emphasis role="italic"
-            >IO</emphasis>monad:<screen>Prelude> :type IO.openFile
+            >IO</emphasis>monad:<screen>Prelude> <userinput>:type IO.openFile</userinput>
 IO.openFile
   :: FilePath
      -> GHC.IO.IOMode.IOMode
@@ -1579,8 +1581,8 @@ IO.openFile
 </screen></para>
         <para>We use <emphasis role="italic">IO.ReadMode</emphasis> to open
                 <filename>brown.txt</filename> for reading:</para>
-        <screen>Prelude> let h = IO.openFile "brown.txt" IO.ReadMode
-Prelude> :type h
+        <screen>Prelude> <userinput>let h = IO.openFile "brown.txt" IO.ReadMode</userinput>
+Prelude> <userinput>:type h</userinput>
 h :: IO GHC.IO.Handle.Types.Handle</screen>
         <para>The handle is bound to <emphasis role="italic">h</emphasis>, but still in the
                 <emphasis role="italic">IO</emphasis> monad. It would be nicer if we can access that
@@ -1590,14 +1592,14 @@ h :: IO GHC.IO.Handle.Types.Handle</screen>
             lives in the <emphasis role="italic">IO</emphasis> monad itself. So, the value will
             still never leave <emphasis role="italic">IO</emphasis>. We can bind the value to a name
             (or pattern) using <emphasis role="italic"
-            >&lt;-</emphasis>:<screen>Prelude> h &lt;- IO.openFile "brown.txt" IO.ReadMode
-Prelude> :type h
+            >&lt;-</emphasis>:<screen>Prelude> <userinput>h &lt;- IO.openFile "brown.txt" IO.ReadMode</userinput>
+Prelude> <userinput>:type h</userinput>
 h :: GHC.IO.Handle.Types.Handle</screen></para>
         <para>That gives us the handle, bound to <emphasis role="italic">h</emphasis>. The next
             function that we will use is <emphasis role="italic">IO.hGetContents</emphasis>, which
             returns unread data as a <emphasis role="italic">String</emphasis> packed in the
                 <emphasis role="italic">IO</emphasis>
-            monad:<screen>Prelude> :type IO.hGetContents
+            monad:<screen>Prelude> <userinput>:type IO.hGetContents</userinput>
 IO.hGetContents :: GHC.IO.Handle.Types.Handle -> IO String</screen></para>
         <para>As we mentioned earlier, Haskell is a lazy language: expressions are only evaluated
             when necessary. The same thing applies to I/O: the relevant contents of a file are only
@@ -1605,22 +1607,22 @@ IO.hGetContents :: GHC.IO.Handle.Types.Handle -> IO String</screen></para>
                 >String</emphasis>. With some smart programming, it is not necessary for your
             program to read the whole file into memory, it will allocate and deallocate chunks of
             the file as they are used. Now, get the contents of the
-            file:<screen>Prelude> c &lt;- IO.hGetContents h
+            file:<screen>Prelude> <userinput>c &lt;- IO.hGetContents h</userinput>
 Prelude> :type c
 c :: String</screen></para>
         <para>We can apply the usual list functions to this <emphasis role="italic"
-                >String</emphasis>:<screen>Prelude> head c
+                >String</emphasis>:<screen>Prelude> <userinput>head c</userinput>
 'T'
-Prelude> length c
+Prelude> <userinput>length c</userinput>
 6157180</screen></para>
         <para>Since the file is sentence-splitted using newlines and tokenized using spaces, you can
             use the <function>lines</function> and <function>words</function> functions to apply
             sentence splitting and tokenization. For instance, the first word of the corpus
-            is:<screen>Prelude> head (words (head (lines c)))
+            is:<screen>Prelude> <userinput>head (words (head (lines c)))</userinput>
 "The"</screen></para>
         <para>The frequency of the word <emphasis role="italic">the</emphasis> is (nicely packed in
             a <emphasis role="italic">Just</emphasis>
-            constructor:<screen>Data.Map.lookup "the" (freqList (words c))
+            constructor:<screen>Prelude> <userinput>Data.Map.lookup "the" (freqList (words c))</userinput>
 Just 62713</screen></para>
         <para>Congratulations! This was your first venture into the world of corpus
             statistics!</para>

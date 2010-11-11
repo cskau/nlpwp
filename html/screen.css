@@ -12,3 +12,19 @@ p {
 .italic {
   font-style: italic;
 }
+
+pre.screen {
+  border: 1px dashed #94da3a;
+  background-color: #e7ffc7;
+  color: #000000;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+pre.programlisting {
+  border: 1px dashed #b4baea;
+  background-color: #f0f4ff;
+  color: #000000;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+}
