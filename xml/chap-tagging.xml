@@ -455,7 +455,7 @@ backoffTagger f bt t = let pick = f t in
                 </tgroup>
             </table></para>
     </sect1>
-    <sect1>
+    <sect1 xml:id="sec-tagging-tbl">
         <title>Transformation-based tagging</title>
         <para>While the frequency-tagger that you developed over the last two sections was a good
             first attempt at POS tagging, the performance of taggers can be improved by taking
@@ -550,7 +550,51 @@ data TransformationRule =
 NextTagRule (Replacement "TO" "IN") "AT"
 *Main> <userinput>PrevTagRule (Replacement "NN" "VB") "TO"</userinput>
 PrevTagRule (Replacement "NN" "VB") "TO"</screen>
-        <para>Awesome!</para>
+        <para>Awesome! Now on to rule instantiation. We need to instantiate rules for tags that are
+            incorrect, so ideally we have the corpus represented as a list of binary tuples, where
+            the first element is the correct tag, and the second element the tag that is currently
+            assigned by the tagger. For instance:</para>
+        <programlisting>[("AT","AT"),("NN","VB"),("TO", "TO")]</programlisting>
+        <para>This can simply be done by using Haskell's <function>zip</function> function, that
+            'zips' together two lists into one list of binary
+            tuples:<screen>*Main> <userinput>:type zip</userinput>
+zip :: [a] -> [b] -> [(a, b)]
+*Main> <userinput>let correct = ["AT","NN","TO"]</userinput>
+*Main> <userinput>let tagged = ["AT","VB","TO"]</userinput>
+*Main> <userinput>zip correct tagged</userinput>
+[("AT","AT"),("NN","VB"),("TO","TO")]</screen></para>
+        <para>However, using lists is not really practical in this case. By the way they are
+            normally traversed, the current element is always the head, meaning that we do not
+            readily have access to previous elements. But we no need to access previous elements for
+            the <type>PrevTagRule</type> and <type>SurroundTagRule</type> templates. We can write
+            our own function that keeps track of previous elements, but a package with such
+            functionality, called <package>ListZipper</package>, is already available. After using
+                <command>cabal</command> to install the <package>ListZipper</package> package, you
+            will have access to the <emphasis role="italic">Data.List.Zipper</emphasis> module. A
+                <type>Zipper</type> can be seen as a list that can be traversed in two directions.
+            We can construct a <type>Zipper</type> from a
+            list:<screen>*Main> <userinput>let taggingState = Data.List.Zipper.fromList $
+  zip ["AT","NN","TO"]  ["AT","VB","TO"]</userinput>
+*Main> <userinput>taggingState</userinput>
+Zip [] [("AT","AT"),("NN","VB"),("TO","TO")]</screen></para>
+        <para>We can get the current element (the element the so-called <emphasis role="italic"
+                >cursor</emphasis> is pointing at) in the zipper using
+                <function>Data.List.Zipper.cursor</function>:</para>
+        <screen>*Main> <userinput>Data.List.Zipper.cursor taggingState</userinput>
+("AT","AT")</screen>
+        <para>We can move the cursor to the left (point to the previous element) with
+                <function>Data.List.Zipper.left</function>, and to the right (point to the next
+            element) with <function>Data.List.Zipper.right</function>:</para>
+        <screen>*Main> <userinput>Data.List.Zipper.right taggingState</userinput>
+Zip [("AT","AT")] [("NN","VB"),("TO","TO")]
+*Main> <userinput>Data.List.Zipper.cursor $ Data.List.Zipper.right taggingState</userinput>
+("NN","VB")
+*Main> <userinput>Data.List.Zipper.left $ Data.List.Zipper.right $ taggingState</userinput>
+Zip [] [("AT","AT"),("NN","VB"),("TO","TO")]
+*Main> <userinput>Data.List.Zipper.cursor $ Data.List.Zipper.left $
+  Data.List.Zipper.right $ taggingState</userinput>
+("AT","AT")</screen>
+        <para>This allows us to do the kind of maneuvering necessary to extract rules.</para>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">
