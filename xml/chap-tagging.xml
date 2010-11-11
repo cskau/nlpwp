@@ -594,7 +594,65 @@ Zip [] [("AT","AT"),("NN","VB"),("TO","TO")]
 *Main> <userinput>Data.List.Zipper.cursor $ Data.List.Zipper.left $
   Data.List.Zipper.right $ taggingState</userinput>
 ("AT","AT")</screen>
-        <para>This allows us to do the kind of maneuvering necessary to extract rules.</para>
+        <para>This allows us to do the kind of maneuvering necessary to extract rules. The rule
+            instantiations are modelled as functions, and are pretty simple: they just pick the
+            information that is necessary out of their environment. We have to bit careful at the
+            boundaries of the <type>Zipper</type> though: at the beginning of the
+                <type>Zipper</type> only <type>NextTagRule</type> can extract the necessary
+            information, and at the end of the <type>Zipper</type> this applies to
+                <type>PrevTagRule</type>. To be able to handle such situations, we make the return
+            type of the instantiation functions <type>Maybe TransformationRule</type>. Let's go
+            through the instantiation functions one by one, starting with
+                <function>instNextTagRule</function>:<screen>import qualified Data.List.Zipper as Z
+
+instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule z
+    | Z.endp z = Nothing
+    | Z.endp $ Z.right z = Nothing
+    | otherwise = Just $ NextTagRule (Replacement incorrectTag correctTag) nextTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          nextTag = snd $ Z.cursor $ Z.right z</screen></para>
+        <para>When instantiating a rule from the current element in the <type>Zipper</type>, we have
+            two problematic conditions to check for. The first is that the <type>Zipper</type> does
+            not point to an element. This happens when we would traverse to the right when are
+            already at the last element of the <type>Zipper</type>. In the second condition, we are
+            actually at the last element of the <type>Zipper</type>. In this situation, we cannot
+            extract the next <type>Tag</type>. For both conditions, we return <type>Nothing</type>.
+            When these conditions do not hold, we can extract a <type>NextTagRule</type>. We do this
+            by defining the replacement, replacing the incorrect tag by the correct one, and
+            extracting the next tag. We can test this instantiation function, assuming that
+                <varname>taggingState</varname> is defined as
+            above:<screen>*Main> <userinput>instNextTagRule $ Data.List.Zipper.right taggingState</userinput>
+Just (NextTagRule (Replacement "VB" "NN") "TO")</screen></para>
+        <para>The <function>instPrevTag</function> function is almost similar, except that in the
+            second condition returns <type>Nothing</type> if the current element is the first
+            element of the <type>Zipper</type>. And, of course, we extract the previous tag rather
+            than the next
+            tag:<programlisting>instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule z
+    | Z.endp z = Nothing
+    | Z.beginp z = Nothing
+    | otherwise = Just $ PrevTagRule (Replacement incorrectTag correctTag) prevTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          prevTag = snd $ Z.cursor $ Z.left z</programlisting></para>
+        <para>Let's do a sanity check to be
+            safe:<screen>*Main> <userinput>instPrevTagRule $ Data.List.Zipper.right taggingState</userinput>
+Just (PrevTagRule (Replacement "VB" "NN") "AT")</screen></para>
+        <para>Finally, we write the <function>instSurroundTag</function> function, which combines
+            the functionality of <function>instNextTag</function> and
+                <function>instPrevTag</function>:<programlisting>instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule z
+    | Z.endp z = Nothing
+    | Z.beginp z = Nothing
+    | Z.endp $ Z.right z = Nothing
+    | otherwise = Just $ SurroundTagRule (Replacement incorrectTag correctTag)
+                  prevTag nextTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          prevTag = snd $ Z.cursor $ Z.left z
+          nextTag = snd $ Z.cursor $ Z.right z</programlisting></para>
+        <para>And this also works as
+            intended:<screen>*Main> <userinput>instSurroundTagRule $ Data.List.Zipper.right taggingState</userinput>
+Just (SurroundTagRule (Replacement "VB" "NN") "AT" "TO")</screen></para>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">

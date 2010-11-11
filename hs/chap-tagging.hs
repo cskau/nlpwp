@@ -1,4 +1,5 @@
 import qualified Data.List as L
+import qualified Data.List.Zipper as Z
 import qualified Data.Map as M
 
 type Token = String
@@ -79,3 +80,30 @@ data TransformationRule =
     | PrevTagRule     Replacement Tag
     | SurroundTagRule Replacement Tag Tag
       deriving Show
+
+instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule z
+    | Z.endp z = Nothing
+    | Z.endp $ Z.right z = Nothing
+    | otherwise = Just $ NextTagRule (Replacement incorrectTag correctTag) nextTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          nextTag = snd $ Z.cursor $ Z.right z
+
+instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule z
+    | Z.endp z = Nothing
+    | Z.beginp z = Nothing
+    | otherwise = Just $ PrevTagRule (Replacement incorrectTag correctTag) prevTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          prevTag = snd $ Z.cursor $ Z.left z
+
+instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule z
+    | Z.endp z = Nothing
+    | Z.beginp z = Nothing
+    | Z.endp $ Z.right z = Nothing
+    | otherwise = Just $ SurroundTagRule (Replacement incorrectTag correctTag)
+                  prevTag nextTag
+    where (correctTag, incorrectTag) = Z.cursor z
+          prevTag = snd $ Z.cursor $ Z.left z
+          nextTag = snd $ Z.cursor $ Z.right z
