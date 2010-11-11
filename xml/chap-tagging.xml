@@ -489,6 +489,7 @@ backoffTagger f bt t = let pick = f t in
                 </listitem>
                 <listitem>
                     <para>Select the a rule according to the following equation:<equation>
+                            <title>Transformation rule selection criterium</title>
                             <xi:include href="eq-tbl-rule-score.mml"/>
                         </equation></para>
                 </listitem>
