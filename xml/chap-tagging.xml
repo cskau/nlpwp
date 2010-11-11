@@ -603,10 +603,12 @@ Zip [] [("AT","AT"),("NN","VB"),("TO","TO")]
                 <type>PrevTagRule</type>. To be able to handle such situations, we make the return
             type of the instantiation functions <type>Maybe TransformationRule</type>. Let's go
             through the instantiation functions one by one, starting with
-                <function>instNextTagRule</function>:<screen>import qualified Data.List.Zipper as Z
+                <function>instNextTagRule0</function> (we add the '0' suffix, since we will prettify
+            these functions
+            later):<screen>import qualified Data.List.Zipper as Z
 
-instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instNextTagRule z
+instNextTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule0 z
     | Z.endp z = Nothing
     | Z.endp $ Z.right z = Nothing
     | otherwise = Just $ NextTagRule (Replacement incorrectTag correctTag) nextTag
@@ -622,26 +624,26 @@ instNextTagRule z
             by defining the replacement, replacing the incorrect tag by the correct one, and
             extracting the next tag. We can test this instantiation function, assuming that
                 <varname>taggingState</varname> is defined as
-            above:<screen>*Main> <userinput>instNextTagRule $ Data.List.Zipper.right taggingState</userinput>
+            above:<screen>*Main> <userinput>instNextTagRule0 $ Data.List.Zipper.right taggingState</userinput>
 Just (NextTagRule (Replacement "VB" "NN") "TO")</screen></para>
-        <para>The <function>instPrevTag</function> function is almost similar, except that in the
+        <para>The <function>instPrevTag0</function> function is almost similar, except that in the
             second condition returns <type>Nothing</type> if the current element is the first
             element of the <type>Zipper</type>. And, of course, we extract the previous tag rather
             than the next
-            tag:<programlisting>instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instPrevTagRule z
+            tag:<programlisting>instPrevTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule0 z
     | Z.endp z = Nothing
     | Z.beginp z = Nothing
     | otherwise = Just $ PrevTagRule (Replacement incorrectTag correctTag) prevTag
     where (correctTag, incorrectTag) = Z.cursor z
           prevTag = snd $ Z.cursor $ Z.left z</programlisting></para>
         <para>Let's do a sanity check to be
-            safe:<screen>*Main> <userinput>instPrevTagRule $ Data.List.Zipper.right taggingState</userinput>
+            safe:<screen>*Main> <userinput>instPrevTagRule0 $ Data.List.Zipper.right taggingState</userinput>
 Just (PrevTagRule (Replacement "VB" "NN") "AT")</screen></para>
-        <para>Finally, we write the <function>instSurroundTag</function> function, which combines
-            the functionality of <function>instNextTag</function> and
-                <function>instPrevTag</function>:<programlisting>instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instSurroundTagRule z
+        <para>Finally, we write the <function>instSurroundTag0</function> function, which combines
+            the functionality of <function>instNextTag0</function> and
+                <function>instPrevTag0</function>:<programlisting>instSurroundTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule0 z
     | Z.endp z = Nothing
     | Z.beginp z = Nothing
     | Z.endp $ Z.right z = Nothing
@@ -651,8 +653,54 @@ instSurroundTagRule z
           prevTag = snd $ Z.cursor $ Z.left z
           nextTag = snd $ Z.cursor $ Z.right z</programlisting></para>
         <para>And this also works as
-            intended:<screen>*Main> <userinput>instSurroundTagRule $ Data.List.Zipper.right taggingState</userinput>
+            intended:<screen>*Main> <userinput>instSurroundTagRule0 $ Data.List.Zipper.right taggingState</userinput>
 Just (SurroundTagRule (Replacement "VB" "NN") "AT" "TO")</screen></para>
+        <para>We will make these functions simpler by making use of the <type>Maybe</type> monad.
+            First, we define two functions to get the previous and the next element of the zipper,
+            wrapped in <type>Maybe</type>. To accomplish this, we use the
+                <function>safeCursor</function> function, which returns the element the cursor
+            points at using <type>Maybe</type>. It will return value <type>Nothing</type> if the
+            cursor points beyond the last element of the
+            zipper.<programlisting>rightCursor :: Z.Zipper (Tag, Tag) -> Maybe (Tag, Tag)
+rightCursor = Z.safeCursor . Z.right
+
+leftCursor :: Z.Zipper (Tag, Tag) -> Maybe (Tag, Tag)
+leftCursor z = if Z.beginp z then
+                   Nothing
+               else
+                   Z.safeCursor $ Z.left z</programlisting></para>
+        <para>The <function>rightCursor</function> is trivial. The <function>leftCursor</function>
+            is a bit more complicated, since calling <function>left</function> on a
+                <type>Zipper</type> with a cursor pointing at the first element, will return an
+            equivalent <type>Zipper</type>. So, we return <type>Nothing</type> when we are pointing
+            at the first element (and cannot move left).</para>
+        <para>In our previous implementations of the instantiation functions, we checked all failure
+            conditions using guards. However, once we work with expressions evaluating to
+                <type>Maybe</type>, we can use the <type>Maybe</type> monad instead. The
+                <type>Maybe</type> monad represents computations that could fail (return
+                <type>Nothing</type>), and a failure will be propagated (the monad will end in
+                <type>Nothing</type>).</para>
+        <para>Using the <type>Maybe</type> monad, we can simplify the instantiation
+            functions:</para>
+        <programlisting>instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule z = do
+    (_, next) &lt;- rightCursor z
+    (correct, incorrect) &lt;- Z.safeCursor z
+    return $ NextTagRule (Replacement incorrect correct) next
+
+instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule z = do
+    (_, prev)            &lt;- leftCursor z
+    (correct, incorrect) &lt;- Z.safeCursor z
+    return $ PrevTagRule (Replacement incorrect correct) prev
+
+
+instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule z = do
+    (_, next)            &lt;- rightCursor z
+    (_, prev)            &lt;- leftCursor z
+    (correct, incorrect) &lt;- Z.safeCursor z
+    return $ SurroundTagRule (Replacement incorrect correct) prev next</programlisting>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">

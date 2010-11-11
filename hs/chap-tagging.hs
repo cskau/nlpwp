@@ -81,24 +81,24 @@ data TransformationRule =
     | SurroundTagRule Replacement Tag Tag
       deriving Show
 
-instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instNextTagRule z
+instNextTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule0 z
     | Z.endp z = Nothing
     | Z.endp $ Z.right z = Nothing
     | otherwise = Just $ NextTagRule (Replacement incorrectTag correctTag) nextTag
     where (correctTag, incorrectTag) = Z.cursor z
           nextTag = snd $ Z.cursor $ Z.right z
 
-instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instPrevTagRule z
+instPrevTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule0 z
     | Z.endp z = Nothing
     | Z.beginp z = Nothing
     | otherwise = Just $ PrevTagRule (Replacement incorrectTag correctTag) prevTag
     where (correctTag, incorrectTag) = Z.cursor z
           prevTag = snd $ Z.cursor $ Z.left z
 
-instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
-instSurroundTagRule z
+instSurroundTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule0 z
     | Z.endp z = Nothing
     | Z.beginp z = Nothing
     | Z.endp $ Z.right z = Nothing
@@ -107,3 +107,32 @@ instSurroundTagRule z
     where (correctTag, incorrectTag) = Z.cursor z
           prevTag = snd $ Z.cursor $ Z.left z
           nextTag = snd $ Z.cursor $ Z.right z
+
+rightCursor :: Z.Zipper (Tag, Tag) -> Maybe (Tag, Tag)
+rightCursor = Z.safeCursor . Z.right
+
+leftCursor :: Z.Zipper (Tag, Tag) -> Maybe (Tag, Tag)
+leftCursor z = if Z.beginp z then
+                   Nothing
+               else
+                   Z.safeCursor $ Z.left z
+
+instNextTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instNextTagRule z = do
+    (_, next) <- rightCursor z
+    (correct, incorrect) <- Z.safeCursor z
+    return $ NextTagRule (Replacement incorrect correct) next
+
+instPrevTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instPrevTagRule z = do
+    (_, prev)            <- leftCursor z
+    (correct, incorrect) <- Z.safeCursor z
+    return $ PrevTagRule (Replacement incorrect correct) prev
+
+
+instSurroundTagRule :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
+instSurroundTagRule z = do
+    (_, next)            <- rightCursor z
+    (_, prev)            <- leftCursor z
+    (correct, incorrect) <- Z.safeCursor z
+    return $ SurroundTagRule (Replacement incorrect correct) prev next
