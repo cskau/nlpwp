@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <munder>
+        <mi>argmax</mi>
+        <mrow>
+            <mi>r</mi>
+            <mo>&#x2208;</mo>
+            <mi>R</mi>
+        </mrow>
+    </munder>
+    <mspace width="1ex"/>
+    <mi>score(r)</mi>
+    <mo>=</mo>
+    <mo>|</mo>
+    <msub>
+        <mi>correct</mi><mi>r</mi>
+    </msub>
+    <mo>|</mo>
+    <mspace width="1ex"/>
+    <mi>-</mi>
+    <mspace width="1ex"/>
+    <mo>|</mo>
+    <msub>
+        <mi>error</mi><mi>r</mi>
+    </msub>
+    <mo>|</mo>
+</math>
