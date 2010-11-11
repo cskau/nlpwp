@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:html="http://www.w3.org/1999/xhtml"
-    version="1.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    
     <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/xhtml/chunk.xsl" />
     
     <xsl:output method="xml"
@@ -24,4 +24,9 @@
     
     <xsl:param name="section.autolabel" select="1" />
     <xsl:param name="section.label.includes.component.label" select="1" />
+    
+    <!-- Add 'head' elements. -->
+    <xsl:template name="user.head.content">
+        <script type="text/javascript" src="/MathJax/MathJax.js"/>
+    </xsl:template>
 </xsl:stylesheet>
