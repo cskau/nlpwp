@@ -8,6 +8,7 @@ Accumulator -> words -> wordlist
 Currying: words -> tokenization
 if/then/else: words -> wordlist
 Modules (basic function calling): words -> wordlist
+Maybe monad: tagging -> transformation-based
 
 Data types
 ==========
@@ -15,6 +16,7 @@ Data types
 []: words -> playwithwords, words -> sentences
 Bool: words -> playwithwords
 Data.Set: words -> wordlist
+Data.List.Zipper: tagging -> transformation-based
 
 Functions
 =========
