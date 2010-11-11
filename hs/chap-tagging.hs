@@ -42,7 +42,16 @@ trainFreqTagger :: [TrainingInstance] -> M.Map Token Tag
 trainFreqTagger = tokenMostFreqTag . tokenTagFreqs
 
 freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
-freqTagWord m w = M.lookup w m
+freqTagWord m t = M.lookup t m
+
+backoffTagger :: (Token -> Maybe Tag) -> Tag -> Token -> Maybe Tag
+backoffTagger f bt t = let pick = f t in
+                       case pick of
+                         Just tag -> Just tag
+                         Nothing  -> Just bt
+
+baselineTagger :: Tag -> Token -> Maybe Tag
+baselineTagger tag _ = Just tag
 
 evalTagger :: (Token -> Maybe Tag) -> [TrainingInstance] -> (Int, Int, Int)
 evalTagger tagFun = L.foldl' eval (0, 0, 0)
@@ -54,3 +63,5 @@ evalTagger tagFun = L.foldl' eval (0, 0, 0)
                          else
                              (n+1, c, u)
             Nothing  -> (n+1, c, u+1)
+
+

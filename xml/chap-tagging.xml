@@ -297,7 +297,7 @@ trainFreqTagger = tokenMostFreqTag . tokenTagFreqs</programlisting></para>
                 >Nothing</emphasis> in the case we do not know how to tag a word. We will define the
             function <function>freqTagWord</function> as a simple wrapper around
                 <function>Data.Map.lookup</function>:<programlisting>freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
-freqTagWord m w = M.lookup w m</programlisting></para>
+freqTagWord m t = M.lookup w t</programlisting></para>
         <para>We can now train our model from the Brown corpus, and tag some
             sentences:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
@@ -376,6 +376,89 @@ freqTagWord m w = M.lookup w m</programlisting></para>
             the remaining 13.74% of the tokens, <emphasis role="italic">11536 / 272901 * 100% =
                 4.23%</emphasis> of the words were not known. This means that we tagged <emphasis
                 role="italic">235402 / (272901 - 11536) * 100% = 90.07%</emphasis> of the words
-            known to our model correctly. </para>
+            known to our model correctly.</para>
+        <para>To get an impression what these numbers actually mean, we will create a baseline. A
+            baseline is a dumb model that indicates (more or less) the range we are working in. Our
+            basline will simply pick the most frequent tag for every token (as in, most frequent in
+            the corpus, not for the token). We will generalize the function a bit, allowing us to
+            specify the tag to be
+            used:<programlisting>baselineTagger :: Tag -> Token -> Maybe Tag
+baselineTagger tag _ = Just tag</programlisting></para>
+        <para>The most frequent tag in the Brown corpus is <emphasis role="italic">NN</emphasis>,
+            the singular common noun. Let's evaluate the baseline
+            tagger:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>evalTagger (baselineTagger "NN") $ map toTrainingInstance $ words c</userinput>
+(272901,31815,0)</screen></para>
+        <para>We sure do a lot better than this baseline at <emphasis role="italic">31815 / 272901 *
+                100% = 11.66%</emphasis>! What if we implement the same heuristic for unknown words
+            in our frequency tagger? You may expect it to only correct a small proportion of unknown
+            words, but trying never hurts. We add a function named
+                <function>backOffTagger</function> that wraps a tagger, returning some default tag
+            if the tagger failed to find a tag for a
+            token:<programlisting>backoffTagger :: (Token -> Maybe Tag) -> Tag -> Token -> Maybe Tag
+backoffTagger f bt t = let pick = f t in
+                       case pick of
+                         Just tag -> Just tag
+                         Nothing  -> Just bt</programlisting></para>
+        <para>See how we can nicely cascade taggers by writing higher-order functions? We proceed to
+            evaluate this
+            tagger:<screen>*Main> h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode
+*Main> c &lt;- IO.hGetContents h
+*Main> let model = trainFreqTagger $ map toTrainingInstance $ words c
+*Main> i &lt;- IO.openFile "/Users/daniel/book/brown-pos-test.txt" IO.ReadMode
+*Main> d &lt;- IO.hGetContents i
+*Main> evalTagger (backoffTagger (freqTagWord model) "NN") $
+  map toTrainingInstance $ words d
+(272901,237762,0)</screen></para>
+        <para>That did improve performance some. Of the 11536 tokens that we did not tag in the
+            frequency-based tagger, we now tagged 2360 tokens correctly. This means that we tagged
+            20.46% of the unknown words correctly. This is almost double of the baseline, how is
+            that possible? It turns out that of some classes of tokens, such as articles,
+            prepositions, and tokens, you will never encounter new ones in unseen data. Unknown
+            words are often nouns, verbs, and adjectives. Since nouns form a larger proposotion of
+            unknown words than all words, you will also get a better performance when guessing that
+            a word is a singular common noun in unseen data.</para>
+        <para><xref linkend="tbl-tagging-freq-performance"/> summarizes the result so far. We have
+            also added the score of the <emphasis role="italic">oracle</emphasis> this is the
+            performance that you would attain if the tagger was omniscient. In this task, the
+                <emphasis role="italic">oracle</emphasis> performs the task perfectly, but this is
+            not true for every task.<table frame="all" xml:id="tbl-tagging-freq-performance">
+                <title>Performance of the frequency tagger.</title>
+                <tgroup cols="2">
+                    <colspec colname="c1" colnum="1" colwidth="1.0*"/>
+                    <colspec colname="c2" colnum="2" colwidth="1.0*"/>
+                    <thead>
+                        <row>
+                            <entry>Tagger</entry>
+                            <entry>Accuracy (%)</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>Baseline</entry>
+                            <entry>11.66</entry>
+                        </row>
+                        <row>
+                            <entry>Frequency-based</entry>
+                            <entry>86.26</entry>
+                        </row>
+                        <row>
+                            <entry>Frequency-based + backoff</entry>
+                            <entry>87.12</entry>
+                        </row>
+                        <row>
+                            <entry>Oracle</entry>
+                            <entry>100.00</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table></para>
+    </sect1>
+    <sect1>
+        <title>Transformation-based tagging</title>
+        <para>While the frequency-tagger that you developed over the last two sections was a good
+            first attempt at POS tagging, the performance of taggers can be improved by taking
+            context intro account.</para>
     </sect1>
 </chapter>
