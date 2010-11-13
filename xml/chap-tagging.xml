@@ -742,7 +742,7 @@ initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
 *Main> <userinput>let proposedRules = instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule] $
   initialLearningState $ map toTrainingInstance $ words c</userinput>
-*Main> Data.Set.size proposedRules
+*Main> <userinput>Data.Set.size proposedRules</userinput>
 18992</screen></para>
     </sect1>
     <bibliography>
