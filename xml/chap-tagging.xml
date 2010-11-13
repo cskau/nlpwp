@@ -700,10 +700,10 @@ instSurroundTagRule z = do
         <screen>*Main> <userinput>:type Data.List.Zipper.foldlz'</userinput>
 Data.List.Zipper.foldlz'
   :: (b -> Z.Zipper a -> b) -> b -> Z.Zipper a -> b</screen>
-        <para>Using this function, we write the <function>instRules</function>
-            function:<programlisting>instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+        <para>Using this function, we write the <function>instRules0</function>
+            function:<programlisting>instRules0 :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
              Z.Zipper (Tag, Tag) -> S.Set TransformationRule
-instRules funs = Z.foldlz' applyFuns S.empty
+instRules0 funs = Z.foldlz' applyFuns S.empty
     where applyFuns s z
               | correct == proposed = s
               | otherwise = foldl (applyFun z) s funs
@@ -711,7 +711,7 @@ instRules funs = Z.foldlz' applyFuns S.empty
                     applyFun z s f = case f z of
                                      Nothing -> s
                                      Just r -> S.insert r s</programlisting></para>
-        <para><function>instRules</function> accepts a list of instantiation functions
+        <para><function>instRules0</function> accepts a list of instantiation functions
                 (<varname>funs</varname>) and a zipper, and returns a Set of instantiated rules. It
             folds over the zipper, applying all functions (<function>applyFuns</function>) to the
             current element. If the tag that is currently proposed is already correct, the
@@ -719,7 +719,7 @@ instRules funs = Z.foldlz' applyFuns S.empty
             the proposed tag differs from the correct tag, rules are instantiated by folding over
             the instantiation functions. Applying this to our little test data, shows that the
             function is operating
-            correctly:<screen>*Main> <userinput>instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule]
+            correctly:<screen>*Main> <userinput>instRules0 [instNextTagRule, instPrevTagRule, instSurroundTagRule]
   taggingState</userinput>
 fromList [NextTagRule (Replacement "VB" "NN") "TO",
   PrevTagRule (Replacement "VB" "NN") "AT",
@@ -731,7 +731,7 @@ fromList [NextTagRule (Replacement "VB" "NN") "TO",
             list is converted to a
             <type>Zipper</type>:<programlisting>initialLearningState :: [TrainingInstance] -> Z.Zipper (Tag, Tag)
 initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
-    where proposed    = map tagger . corpusWords
+    where proposed    = map tagger . trainTokens
           correct     = map (\(TrainingInstance _ tag) -> tag)
           tagger      = DM.fromJust . backoffTagger (freqTagWord model) "NN"
           trainTokens = map (\(TrainingInstance token _) -> token)
@@ -740,10 +740,61 @@ initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
             learner, and extract all possible transformation
             rules:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
-*Main> <userinput>let proposedRules = instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule] $
+*Main> <userinput>let proposedRules = instRules0 [instNextTagRule, instPrevTagRule, instSurroundTagRule] $
   initialLearningState $ map toTrainingInstance $ words c</userinput>
 *Main> <userinput>Data.Set.size proposedRules</userinput>
 18992</screen></para>
+        <para>Good, this allows us to find all possible correction rules. We could now calculate the
+            scores for all rules. But the rule selection can be made somewhat more efficient. Each
+            rule instantiation was actually an instance of a correct rule application. If we
+            register the correct counts, we can start with scoring the most promising rules first.
+            Once the score of a rule is higher than the correct count of the next rule, we have
+            found the most effective rule. We can modify <function>instRules0</function> to do
+            this:<programlisting>instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+             Z.Zipper (Tag, Tag) -> M.Map TransformationRule Int
+instRules funs = Z.foldlz' applyFuns M.empty
+    where applyFuns m z
+              | correct == proposed = m
+              | otherwise = foldl (applyFun z) m funs
+              where (correct, proposed) = Z.cursor z
+                    applyFun z m f = case f z of
+                                       Nothing -> m
+                                       Just r -> M.insertWith' (+) r 1 m</programlisting></para>
+        <para>We then use this frequency map to create a list of rules sorted by
+            frequency:<programlisting>sortRules :: M.Map TransformationRule Int -> [(TransformationRule, Int)]
+sortRules = L.sortBy (\(_,a) (_,b) -> compare b a) . M.toList</programlisting></para>
+        <para><function>Data.List.sortBy</function> sorts a list according to some comparison
+            function. We use the stock <function>compare</function>
+            function:<screen>Prelude> <userinput>:type compare</userinput>
+compare :: (Ord a) => a -> a -> Ordering
+Prelude> <userinput>compare 1 2</userinput>
+LT
+Prelude> <userinput>compare 2 2</userinput>
+EQ
+Prelude> <userinput>compare 2 1</userinput>
+GT</screen></para>
+        <para>The compare function returns a value of the <type>Ordering</type> type, returning
+                <type>LT</type>, <type>EQ</type>, <type>GT</type>, depending on whether the first
+            argument is smaller than, equal to, or larger than the second argument. In
+                <function>sortRules</function>, we use a lambda to get the second tuple element
+            (representing a frequency). We also swap the arguments to <function>compare</function>
+            function to get a reverse ordering, making larger elements come first.</para>
+        <para>Let's get some immediate gratification by extracting the ten rules with the most
+            corrections:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let proposedRules = instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule] $
+  initialLearningState $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>take 10 $ sortRules proposedRules</userinput>
+[(NextTagRule (Replacement "TO" "IN") "AT",3471),
+  (PrevTagRule (Replacement "TO" "IN") "NN",2459),
+  (PrevTagRule (Replacement "NN" "VB") "TO",1690),
+  (NextTagRule (Replacement "VBN" "VBD") "AT",1154),
+  (PrevTagRule (Replacement "TO" "IN") "VBN",1088),
+  (SurroundTagRule (Replacement "TO" "IN") "NN" "AT",1034),
+  (NextTagRule (Replacement "TO" "IN") "NN",994),
+  (NextTagRule (Replacement "NN" "VB") "AT",846),
+  (PrevTagRule (Replacement "TO" "IN") "JJ",813),
+  (NextTagRule (Replacement "VBD" "VBN") "IN",761)]</screen></para>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">

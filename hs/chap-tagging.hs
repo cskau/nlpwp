@@ -140,9 +140,9 @@ instSurroundTagRule z = do
     (correct, incorrect) <- Z.safeCursor z
     return $ SurroundTagRule (Replacement incorrect correct) prev next
 
-instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+instRules0 :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
              Z.Zipper (Tag, Tag) -> S.Set TransformationRule
-instRules funs = Z.foldlz' applyFuns S.empty
+instRules0 funs = Z.foldlz' applyFuns S.empty
     where applyFuns s z
               | correct == proposed = s
               | otherwise = foldl (applyFun z) s funs
@@ -153,8 +153,22 @@ instRules funs = Z.foldlz' applyFuns S.empty
 
 initialLearningState :: [TrainingInstance] -> Z.Zipper (Tag, Tag)
 initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
-    where proposed    = map tagger . corpusWords
+    where proposed    = map tagger . trainTokens
           correct     = map (\(TrainingInstance _ tag) -> tag)
           tagger      = DM.fromJust . backoffTagger (freqTagWord model) "NN"
           trainTokens = map (\(TrainingInstance token _) -> token)
           model       = trainFreqTagger train
+
+instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+             Z.Zipper (Tag, Tag) -> M.Map TransformationRule Int
+instRules funs = Z.foldlz' applyFuns M.empty
+    where applyFuns m z
+              | correct == proposed = m
+              | otherwise = foldl (applyFun z) m funs
+              where (correct, proposed) = Z.cursor z
+                    applyFun z m f = case f z of
+                                       Nothing -> m
+                                       Just r -> M.insertWith' (+) r 1 m
+
+sortRules :: M.Map TransformationRule Int -> [(TransformationRule, Int)]
+sortRules = L.sortBy (\(_,a) (_,b) -> compare b a) . M.toList
