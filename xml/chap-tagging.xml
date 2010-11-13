@@ -527,13 +527,13 @@ backoffTagger f bt t = let pick = f t in
             (previous tag, next tag, both surrounding tags). Thanks to Haskell's algabraic data
             types, we can easily model these
             templates:<programlisting>data Replacement = Replacement Tag Tag
-                   deriving Show
+                   deriving (Eq, Ord, Show)
 
 data TransformationRule = 
       NextTagRule     Replacement Tag
     | PrevTagRule     Replacement Tag
     | SurroundTagRule Replacement Tag Tag
-      deriving Show</programlisting></para>
+      deriving (Eq, Ord, Show)</programlisting></para>
         <para>To confirm that these templates are indeed working as expected, we can recreate the
             rules that were mentioned earlier:</para>
         <screen>*Main> <userinput>NextTagRule (Replacement "TO" "IN") "AT"</userinput>
@@ -693,6 +693,57 @@ instSurroundTagRule z = do
     (_, prev)            &lt;- leftCursor z
     (correct, incorrect) &lt;- Z.safeCursor z
     return $ SurroundTagRule (Replacement incorrect correct) prev next</programlisting>
+        <para>With the instantiation functions set in place, we can fold over the <type>Zipper</type>
+            using <function>Data.List.Zipper.foldlz'</function>. This is a left fold with a strict
+            accumulator. The folding function gets the accumulator as its first argument and the
+            current <type>Zipper</type> (state) as its second:</para>
+        <screen>*Main> <userinput>:type Data.List.Zipper.foldlz'</userinput>
+Data.List.Zipper.foldlz'
+  :: (b -> Z.Zipper a -> b) -> b -> Z.Zipper a -> b</screen>
+        <para>Using this function, we write the <function>instRules</function>
+            function:<programlisting>instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+             Z.Zipper (Tag, Tag) -> S.Set TransformationRule
+instRules funs = Z.foldlz' applyFuns S.empty
+    where applyFuns s z
+              | correct == proposed = s
+              | otherwise = foldl (applyFun z) s funs
+              where (correct, proposed) = Z.cursor z
+                    applyFun z s f = case f z of
+                                     Nothing -> s
+                                     Just r -> S.insert r s</programlisting></para>
+        <para><function>instRules</function> accepts a list of instantiation functions
+                (<varname>funs</varname>) and a zipper, and returns a Set of instantiated rules. It
+            folds over the zipper, applying all functions (<function>applyFuns</function>) to the
+            current element. If the tag that is currently proposed is already correct, the
+                <type>Set</type> is unchanged, because there is no transformation to be learnt. If
+            the proposed tag differs from the correct tag, rules are instantiated by folding over
+            the instantiation functions. Applying this to our little test data, shows that the
+            function is operating
+            correctly:<screen>*Main> <userinput>instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule]
+  taggingState</userinput>
+fromList [NextTagRule (Replacement "VB" "NN") "TO",
+  PrevTagRule (Replacement "VB" "NN") "AT",
+  SurroundTagRule (Replacement "VB" "NN") "AT" "TO"]</screen></para>
+        <para>Now we have to massage the corpus and the proposed corpus to the correct format. The
+                <function>initialLearningState</function> function extracts the list of correct tags
+            from the corpus, and uses the word frequency tagger with 'NN' as the back-off for
+            unknown words to get a list of proposed tags. Both lists are then zipped and the zipped
+            list is converted to a
+            <type>Zipper</type>:<programlisting>initialLearningState :: [TrainingInstance] -> Z.Zipper (Tag, Tag)
+initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
+    where proposed    = map tagger . corpusWords
+          correct     = map (\(TrainingInstance _ tag) -> tag)
+          tagger      = DM.fromJust . backoffTagger (freqTagWord model) "NN"
+          trainTokens = map (\(TrainingInstance token _) -> token)
+          model       = trainFreqTagger train</programlisting></para>
+        <para>Now we can use this function to create the initial state for the transformation-based
+            learner, and extract all possible transformation
+            rules:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let proposedRules = instRules [instNextTagRule, instPrevTagRule, instSurroundTagRule] $
+  initialLearningState $ map toTrainingInstance $ words c</userinput>
+*Main> Data.Set.size proposedRules
+18992</screen></para>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">

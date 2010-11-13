@@ -1,6 +1,8 @@
 import qualified Data.List as L
 import qualified Data.List.Zipper as Z
 import qualified Data.Map as M
+import qualified Data.Maybe as DM
+import qualified Data.Set as S
 
 type Token = String
 type Tag = String
@@ -27,8 +29,8 @@ tokenTagFreqs :: [TrainingInstance] -> M.Map Token (M.Map Tag Int)
 tokenTagFreqs = L.foldl' countWord M.empty
     where
       countWord m (TrainingInstance token tag) = 
-          M.insertWith (countTag tag) token (M.singleton tag 1) m
-      countTag tag _ old = M.insertWith
+          M.insertWith' (countTag tag) token (M.singleton tag 1) m
+      countTag tag _ old = M.insertWith'
           (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old
 
 tokenMostFreqTag :: M.Map Token (M.Map Tag Int) -> M.Map Token Tag
@@ -45,14 +47,15 @@ trainFreqTagger = tokenMostFreqTag . tokenTagFreqs
 freqTagWord :: M.Map Token Tag -> Token -> Maybe Tag
 freqTagWord m t = M.lookup t m
 
+----------------
+-- Evaluation --
+----------------
+
 backoffTagger :: (Token -> Maybe Tag) -> Tag -> Token -> Maybe Tag
 backoffTagger f bt t = let pick = f t in
                        case pick of
                          Just tag -> Just tag
                          Nothing  -> Just bt
-----------------
--- Evaluation --
-----------------
 
 baselineTagger :: Tag -> Token -> Maybe Tag
 baselineTagger tag _ = Just tag
@@ -73,13 +76,13 @@ evalTagger tagFun = L.foldl' eval (0, 0, 0)
 -----------------------------------
 
 data Replacement = Replacement Tag Tag
-                   deriving Show
+                   deriving (Eq, Ord, Show)
 
 data TransformationRule = 
       NextTagRule     Replacement Tag
     | PrevTagRule     Replacement Tag
     | SurroundTagRule Replacement Tag Tag
-      deriving Show
+      deriving (Eq, Ord, Show)
 
 instNextTagRule0 :: Z.Zipper (Tag, Tag) -> Maybe TransformationRule
 instNextTagRule0 z
@@ -136,3 +139,22 @@ instSurroundTagRule z = do
     (_, prev)            <- leftCursor z
     (correct, incorrect) <- Z.safeCursor z
     return $ SurroundTagRule (Replacement incorrect correct) prev next
+
+instRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+             Z.Zipper (Tag, Tag) -> S.Set TransformationRule
+instRules funs = Z.foldlz' applyFuns S.empty
+    where applyFuns s z
+              | correct == proposed = s
+              | otherwise = foldl (applyFun z) s funs
+              where (correct, proposed) = Z.cursor z
+                    applyFun z s f = case f z of
+                                     Nothing -> s
+                                     Just r -> S.insert r s
+
+initialLearningState :: [TrainingInstance] -> Z.Zipper (Tag, Tag)
+initialLearningState train = Z.fromList $ zip (correct train) (proposed train)
+    where proposed    = map tagger . corpusWords
+          correct     = map (\(TrainingInstance _ tag) -> tag)
+          tagger      = DM.fromJust . backoffTagger (freqTagWord model) "NN"
+          trainTokens = map (\(TrainingInstance token _) -> token)
+          model       = trainFreqTagger train
