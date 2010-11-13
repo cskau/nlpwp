@@ -89,7 +89,7 @@
             interpreter. It allows you to try Haskell expressions and get immediate feedback. On
             UNIX systems, type <command>ghci -XNoMonomorphismRestriction</command> in a terminal to
             launch the interpreter. You will be greeted with a prompt that resembles the
-            following:<screen>$ ghci
+            following:<screen>$ <userinput>ghci -XNoMonomorphismRestriction</userinput>
 GHCi, version 6.12.3: http://www.haskell.org/ghc/  :? for help
 Loading package ghc-prim ... linking ... done.
 Loading package integer-gmp ... linking ... done.
