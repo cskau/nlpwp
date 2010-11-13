@@ -28,7 +28,7 @@ tokenTagFreqs = L.foldl' countWord M.empty
     where
       countWord m (TrainingInstance token tag) = 
           M.insertWith (countTag tag) token (M.singleton tag 1) m
-      countTag tag old _ = M.insertWith
+      countTag tag _ old = M.insertWith
           (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old
 
 tokenMostFreqTag :: M.Map Token (M.Map Tag Int) -> M.Map Token Tag

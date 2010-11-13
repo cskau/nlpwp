@@ -208,7 +208,7 @@ tokenTagFreqs = L.foldl' countWord M.empty
     where
       countWord m (TrainingInstance token tag) = 
           M.insertWith (countTag tag) token (M.singleton tag 1) m
-      countTag tag old _ = M.insertWith
+      countTag tag _ old = M.insertWith
           (\newFreq oldFreq -> oldFreq + newFreq) tag 1 old</programlisting></para>
         <para>This function is very comparable to the <function>countElem</function> function we saw
             earlier, the primary difference being that we have to handle two levels of maps. Every
@@ -359,12 +359,12 @@ freqTagWord m t = M.lookup w t</programlisting></para>
 *Main> <userinput>i &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode</userinput>
 *Main> <userinput>d &lt;- IO.hGetContents i</userinput>
 *Main> <userinput>evalTagger (freqTagWord model) $ map toTrainingInstance $ words d</userinput>
-(272901,235402,11536)</screen>
-        <para>Those are quite impressive numbers for a first try, <emphasis role="italic">235402 /
-                272901 * 100% = 86.26%</emphasis> of the tokens were tagged and tagged correctly. Of
-            the remaining 13.74% of the tokens, <emphasis role="italic">11536 / 272901 * 100% =
+(272901,239230,11536)</screen>
+        <para>Those are quite impressive numbers for a first try, <emphasis role="italic">239230 /
+                272901 * 100% = 87.66%</emphasis> of the tokens were tagged and tagged correctly. Of
+            the remaining 12.34% of the tokens, <emphasis role="italic">11536 / 272901 * 100% =
                 4.23%</emphasis> of the words were not known. This means that we tagged <emphasis
-                role="italic">235402 / (272901 - 11536) * 100% = 90.07%</emphasis> of the words
+                role="italic">239230 / (272901 - 11536) * 100% = 91.53%</emphasis> of the words
             known to our model correctly.</para>
         <para>To get an impression what these numbers actually mean, we will create a baseline. A
             baseline is a dumb model that indicates (more or less) the range we are working in. Our
@@ -392,14 +392,14 @@ backoffTagger f bt t = let pick = f t in
                          Nothing  -> Just bt</programlisting></para>
         <para>See how we can nicely cascade taggers by writing higher-order functions? We proceed to
             evaluate this
-            tagger:<screen>*Main> <userinput>h &lt;- IO.openFile "/Users/daniel/book/brown-pos-train.txt" IO.ReadMode</userinput>
+            tagger:<screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
 *Main> <userinput>let model = trainFreqTagger $ map toTrainingInstance $ words c</userinput>
-*Main> <userinput>i &lt;- IO.openFile "/Users/daniel/book/brown-pos-test.txt" IO.ReadMode</userinput>
+*Main> <userinput>i &lt;- IO.openFile "brown-pos-test.txt" IO.ReadMode</userinput>
 *Main> <userinput>d &lt;- IO.hGetContents i</userinput>
 *Main> <userinput>evalTagger (backoffTagger (freqTagWord model) "NN") $
   map toTrainingInstance $ words d</userinput>
-(272901,237762,0)</screen></para>
+(272901,241590,0)</screen></para>
         <para>That did improve performance some. Of the 11536 tokens that we did not tag in the
             frequency-based tagger, we now tagged 2360 tokens correctly. This means that we tagged
             20.46% of the unknown words correctly. This is almost double of the baseline, how is
@@ -430,11 +430,11 @@ backoffTagger f bt t = let pick = f t in
                         </row>
                         <row>
                             <entry>Frequency-based</entry>
-                            <entry>86.26</entry>
+                            <entry>87.66</entry>
                         </row>
                         <row>
                             <entry>Frequency-based + backoff</entry>
-                            <entry>87.12</entry>
+                            <entry>88.53</entry>
                         </row>
                         <row>
                             <entry>Oracle</entry>
