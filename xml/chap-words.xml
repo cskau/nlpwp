@@ -1522,6 +1522,138 @@ countElem m e = Data.Map.insertWith (\n o -> n + o) e 1 m</programlisting>
         <programlisting language="haskell">freqList :: (Ord k) => [k] -> Data.Map.Map k Int
 freqList = foldl countElem Data.Map.empty</programlisting>
     </sect1>
+    <sect1>
+        <title>Monads</title>
+        <para>In the next section you will see how to read real text corpora using the so-called
+                <emphasis role="italic">IO monad</emphasis>. Before diving into the <emphasis
+                role="italic">IO monad</emphasis>, we will give a short introduction to <emphasis
+                role="italic">monads</emphasis>. In Haskell, it very often happens that you want to
+            perform a series of computations on values that are wrapped using some type, such as
+                <type>Maybe</type> or a list. For instance, suppose that you have a <type>Map</type>
+            that maps a customer name to a customer number, and yet another <type>Map</type> that
+            maps a customer number to a list of order
+            numbers:<screen>*Main> <userinput>let customers = Data.Map.fromList [("Daniel de Kok", 1000),
+  ("Harm Brouwer", 1001)]</userinput>
+*Main> <userinput>let orders = Data.Map.fromList [(1001, [128])]</userinput>
+Prelude> <userinput>Data.Map.lookup "Harm Brouwer" customers</userinput>
+Just 1001
+Prelude> <userinput>Data.Map.lookup 1001 orders</userinput>
+Just [128]</screen></para>
+        <para>Now, we want to write a function that extracts a list orders for a given customer,
+            wrapped in a <type>Maybe</type>, so that <type>Nothing</type> can be returned if the
+            customer is not in the list or if the custromer had no orders. Your first attempt will
+            probably be along the following
+            lines:<programlisting>lookupOrder0 :: Data.Map.Map String Int -> Data.Map.Map Int Int ->
+                String -> Maybe Int
+lookupOrder0 customers orders customer =
+    case Data.Map.lookup customer customers of
+      Nothing -> Nothing
+      Just customerId -> Data.Map.lookup customerId orders</programlisting></para>
+        <para>This function works as
+            intended:<screen>*Main> <userinput>lookupOrder0 customers orders "Jack Sparrow"</userinput>
+Nothing
+*Main> <userinput>lookupOrder0 customers orders "Daniel de Kok"</userinput>
+Nothing
+*Main> <userinput>lookupOrder0 customers orders "Harm Brouwer"</userinput>
+Just [128]</screen></para>
+        <para>But <emphasis role="italic">case</emphasis> constructs will quickly start to stack up
+            when more functions are called that return <type>Maybe</type>. For each
+                <type>Maybe</type> we follow the same procedure: if the value is
+                <type>Nothing</type> we end the computation with that value, if the value is
+                <type>Just x</type> we call the next function that possibly uses
+                <varname>x</varname> as an argument. This is where the <type>Monad</type> typeclass
+            kicks in: all data types that are of the <type>Monad</type> typeclass implement the
+                <function>(>>=)</function> function. This function <emphasis role="italic"
+                >joins</emphasis> computations resulting in that data type according to some logic.
+            For instance, the <type>Maybe</type> monad combines expressions that return
+                <type>Maybe</type> in such a way that if one expression returns
+            <type>Nothing</type>, the whole joined expression also returns <type>Nothing</type>,
+            just like our <emphasis role="italic">case</emphasis> construct in the example above.
+            Consequently, we could rewrite the example above
+            as:<programlisting>lookupOrder1 :: Data.Map.Map String Integer ->
+                Data.Map.Map Integer [Integer] ->
+                String -> Maybe [Integer]
+lookupOrder1 customers orders customer =
+    Data.Map.lookup customer customers >>= (\m -> Data.Map.lookup m orders)</programlisting></para>
+        <para>That surely shortened the function! The function performs the following steps:<itemizedlist>
+                <listitem>
+                    <para><function>Data.Map.lookup customer customers</function>: Lookup
+                            <varname>customer</varname> in <varname>customers</varname>.</para>
+                </listitem>
+                <listitem>
+                    <para><function>(>>=)</function>: If the expression on the left-hand returned
+                            <type>Nothing</type>, the value of the full expression, and consequently
+                            <function>lookupOrder1</function>, is <type>Nothing</type>. If the
+                        lookup returned a value of type <type>Just Integer</type>, extract the
+                            <type>Integer</type> from the <type>Just</type> constructor, and pass it
+                        as the argument of the next function.</para>
+                </listitem>
+                <listitem>
+                    <para><function>(\m -> Data.Map.lookup m orders)</function>: Lookup the supplied
+                        argument in the <varname>orders</varname>
+                        <type>Map</type>. The result becomes the result of
+                            <function>lookupOrder1</function>. We had to use a lambda, to make the
+                        element to be looked up the last argument.</para>
+                </listitem>
+            </itemizedlist></para>
+        <para>The type signature of <type>(>>=)</type> is also very
+            illustrative:<screen>*Main> <userinput>:type (>>=)</userinput>
+(>>=) :: (Monad m) => m a -> (a -> m b) -> m b</screen></para>
+        <para>The <type>(>>=)</type> simply unwraps a value from the monad and feeds it to a
+            function that returns a value wrapped in the same monad. The <function>(>>=)</function>
+            function has the freedom to perform any operation (including not calling <type>(a ->
+                mb)</type>), as long as it returns a value of type <type>m b</type>.</para>
+        <para>The actual implementation of <type>(>>=)</type> for the <type>Maybe</type> monad is
+            very
+            simple:<programlisting>(Just x) >>= k = k x
+Nothing  >>= _ = Nothing</programlisting></para>
+        <para>That's all! If the left-hand side expressian evaluates to <type>Just x</type>, the
+            expression on the left hand side is evaluated with <varname>x</varname> as its argument.
+            If the left-hand side evaluates to <type>Nothing</type>, the right-end side is not
+            evaluated, and the whole expression returns <type>Nothing</type>.</para>
+        <para>There is yet another function that is essential to monads named <type>return</type>,
+            it does nothing else than wrapping a value in that monad. For instance, the
+                <function>maybeBool</function> function wraps a <type>Bool</type> value in a
+                <type>Maybe</type>
+            monad:<programlisting>maybeBool :: Bool -> Maybe Bool
+maybeBool = return</programlisting></para>
+        <para>This is <function>maybeBool</function> in
+            action:<screen>*Main> <userinput>maybeBool True</userinput>
+Just True
+*Main> <userinput>maybeBool False</userinput>
+Just False</screen></para>
+        <para>The implementation of <function>return</function> for the <type>Maybe</type> monad is
+            trivial:<programlisting>return = Just</programlisting></para>
+        <para>Let's get back to our order lookup function. You may have noticed that the
+                <function>(>>=)</function> function is somewhat imperative in nature: it chains a
+            set of expressions, where the left-hand expression is evaluated before the right-hand.
+            Due to this nature, Haskell has a <emphasis role="italic">do notation</emphasis> that
+            resembles imperative programs. This is <function>lookupOrder1</function> using the
+            do-notation:<programlisting>lookupOrder2 :: Data.Map.Map String Integer ->
+                Data.Map.Map Integer [Integer] ->
+                String -> Maybe [Integer]
+lookupOrder2 customers orders customer = do
+    customerId &lt;- Data.Map.lookup customer customers
+    orders     &lt;- Data.Map.lookup customerId orders
+    return orders</programlisting></para>
+        <para>You can see that we added the <emphasis role="italic">do</emphasis> keyword to start
+            the do-notation. Every expression that follows can be seen as just one element in a
+            squence of <type>(>>=)</type> expressions. Consquently, each line is governed by the
+            'laws' of the monad. If the first lookup fails, no further evaluation is performed, and
+                <function>lookupOrder2</function> will return <type>Nothing</type>. Otherwise,
+            computation continues. The do-notation also allows the use of the backward arrow
+                (<emphasis role="italic">&lt;-</emphasis>) this arrow extracts a value from the
+            monad, and binds it to a variable.</para>
+        <para>We can simplify lookupOrder2 further. The last lookup already returns a value wrapped
+            in the <type>Maybe</type> monad, there is no need to extract it using <emphasis
+                role="italic">&lt;-</emphasis> and wrap it again with
+            <function>return</function>:<programlisting>lookupOrder :: Data.Map.Map String Integer ->
+               Data.Map.Map Integer [Integer] ->
+               String -> Maybe [Integer]
+lookupOrder customers orders customer = do
+    customerId &lt;- Data.Map.lookup customer customers
+    Data.Map.lookup customerId orders</programlisting></para>
+    </sect1>
     <sect1 xml:id="sec-words-read-text-corpus">
         <title>Reading a text corpus</title>
         <para>Up to this point we have been using very artificial text corpora. At most a few
@@ -1542,18 +1674,24 @@ freqList = foldl countElem Data.Map.empty</programlisting>
             the file.</para>
         <para>The Haskell developers have, clever as they are, found a solution to get Pandora's box
             into Haskell. I/O in Haskell is performed in the so-called <emphasis role="italic"
-                >IO</emphasis> monad. Monads by themselves are yet another interesting topic, but
-            for the time being you can imagine it to be a room where all I/O takes place. However,
-            it is a very special room: once you get into the room, you can never get out. For
-            example, if you read a file as a list of <emphasis role="italic">Char</emphasis> it
-            resides in the <emphasis role="italic">IO</emphasis> monad. You can apply any list
-            function to this list, however, the result of the function that is applied to a list
-            will also reside in the IO monad. It cannot get out. The <emphasis role="italic"
-                >IO</emphasis> monad is a room of impurity in a pure world. While this may sound
-            like esoteric mumbo-jumbo, it actually does the job very well.</para>
-        <para>Functions that do IO return a value wrapped in IO. For instance, the
-                <function>putStrLn</function> function returns an empty tuple packed in the
-                <emphasis role="italic">IO</emphasis>
+                >IO</emphasis> monad. The <type>IO</type> monad is not very different from the
+                <type>Maybe</type> monad, it implements the <function>(>>=)</function> and
+                <type>return</type> functions as required for monads. However, there is a subtle,
+            but very important difference. Rember that you can extract a value from a
+                <type>Maybe</type> value using its <type>Just</type>
+            constructor?<programlisting>value = case someMaybe of
+  Just x = x</programlisting></para>
+        <para>The <type>IO</type> monad does not have a public constructor, so there is no way to
+            pry a value out of an <type>IO</type> monad. If you read a file as a list of <emphasis
+                role="italic">Char</emphasis>, it resides in the <emphasis role="italic"
+                >IO</emphasis> monad. You can apply any list function to this list, however, the
+            result of the function that is applied to a list will also have to reside in the IO
+            monad. A value can never escape the <type>IO</type> monad. And this is how impure I/O is
+            possible in Haskell without sacrificing purity of the language: impure data stays in the
+                <type>IO</type> monad, and can never escape.</para>
+        <para>Now on to some real work. As said, functions that do IO return a value wrapped in
+                <type>IO</type>. For instance, the <function>putStrLn</function> function returns an
+            empty tuple packed in the <emphasis role="italic">IO</emphasis>
             monad:<screen>Prelude> <userinput>:type putStrLn "hello world!"</userinput>
 putStrLn "hello world!" :: IO ()</screen></para>
         <para>This is just a normal value, you can bind it to a name in
@@ -1597,7 +1735,7 @@ Prelude> <userinput>:type h</userinput>
 h :: GHC.IO.Handle.Types.Handle</screen></para>
         <para>That gives us the handle, bound to <emphasis role="italic">h</emphasis>. The next
             function that we will use is <emphasis role="italic">IO.hGetContents</emphasis>, which
-            returns unread data as a <emphasis role="italic">String</emphasis> packed in the
+            returns unread data as a <emphasis role="italic">String</emphasis> wrapped in the
                 <emphasis role="italic">IO</emphasis>
             monad:<screen>Prelude> <userinput>:type IO.hGetContents</userinput>
 IO.hGetContents :: GHC.IO.Handle.Types.Handle -> IO String</screen></para>
@@ -1620,7 +1758,7 @@ Prelude> <userinput>length c</userinput>
             sentence splitting and tokenization. For instance, the first word of the corpus
             is:<screen>Prelude> <userinput>head (words (head (lines c)))</userinput>
 "The"</screen></para>
-        <para>The frequency of the word <emphasis role="italic">the</emphasis> is (nicely packed in
+        <para>The frequency of the word <emphasis role="italic">the</emphasis> is (nicely wrapped in
             a <emphasis role="italic">Just</emphasis>
             constructor:<screen>Prelude> <userinput>Data.Map.lookup "the" (freqList (words c))</userinput>
 Just 62713</screen></para>
