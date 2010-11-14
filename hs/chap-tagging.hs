@@ -221,3 +221,18 @@ selectRule_ ((rule, correct):xs) z best@(bestRule, bestScore) =
         else
             selectRule_ xs z (rule, score)
     where score = scoreRule rule z
+
+updateState :: TransformationRule -> Z.Zipper (Tag, Tag) ->
+               Z.Zipper (Tag, Tag)
+updateState r = Z.fromList . reverse . Z.foldlz' (update r) []
+    where update r xs z =
+              case ruleApplication r z of
+                Just tag -> (correct, tag):xs
+                Nothing  -> e:xs
+              where e@(correct, _) =  Z.cursor z
+
+transformationRules :: [(Z.Zipper (Tag, Tag) -> Maybe TransformationRule)] ->
+                       Z.Zipper (Tag, Tag) -> [TransformationRule]
+transformationRules funs state = bestRule:(rules funs nextState)
+    where (bestRule, _) = selectRule (sortRules $ instRules funs state) state
+          nextState     = updateState bestRule state
