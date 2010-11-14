@@ -172,3 +172,52 @@ instRules funs = Z.foldlz' applyFuns M.empty
 
 sortRules :: M.Map TransformationRule Int -> [(TransformationRule, Int)]
 sortRules = L.sortBy (\(_,a) (_,b) -> compare b a) . M.toList
+
+ruleApplication :: TransformationRule -> Z.Zipper (Tag, Tag) -> Maybe Tag
+ruleApplication (NextTagRule (Replacement old new) next) z = do
+  (_, proposed)     <- Z.safeCursor z
+  (_, nextProposed) <- rightCursor z
+  if proposed == old && nextProposed == next then Just new else Nothing
+ruleApplication (PrevTagRule (Replacement old new) prev) z = do
+  (_, proposed)     <- Z.safeCursor z
+  (_, prevProposed) <- leftCursor z
+  if proposed == old && prevProposed == prev then Just new else Nothing
+ruleApplication (SurroundTagRule (Replacement old new) prev next) z = do
+  (_, proposed)     <- Z.safeCursor z
+  (_, nextProposed) <- rightCursor z
+  (_, prevProposed) <- leftCursor z
+  if proposed == old && prevProposed == prev &&
+      nextProposed == next then Just new else Nothing
+
+scoreRule :: TransformationRule -> Z.Zipper (Tag, Tag) -> Int
+scoreRule r z = nCorrect - nIncorrect
+    where (nCorrect, nIncorrect) = scoreRule_ r z
+
+scoreRule_ :: TransformationRule -> Z.Zipper (Tag, Tag) -> (Int, Int)
+scoreRule_ r = Z.foldlz' (scoreElem r) (0, 0)
+    where scoreElem r s@(nCorrect, nIncorrect) z =
+              case ruleApplication r z of
+                Just tag -> if tag == correct then
+                                (nCorrect + 1, nIncorrect)
+                            else
+                                (nCorrect, nIncorrect + 1)
+                Nothing  -> s
+              where (correct, _) = Z.cursor z
+
+
+selectRule :: [(TransformationRule, Int)] -> Z.Zipper (Tag, Tag) ->
+              (TransformationRule, Int)
+selectRule ((rule, _):xs) z = selectRule_ xs z (rule, (scoreRule rule z))
+
+selectRule_ :: [(TransformationRule, Int)] -> Z.Zipper (Tag, Tag) ->
+              (TransformationRule, Int) -> (TransformationRule, Int)
+selectRule_ [] _ best = best
+selectRule_ ((rule, correct):xs) z best@(bestRule, bestScore) =
+    if bestScore >= correct then
+        best
+    else
+        if bestScore >= score then
+            selectRule_ xs z best
+        else
+            selectRule_ xs z (rule, score)
+    where score = scoreRule rule z

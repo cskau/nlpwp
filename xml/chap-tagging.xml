@@ -795,6 +795,100 @@ GT</screen></para>
   (NextTagRule (Replacement "NN" "VB") "AT",846),
   (PrevTagRule (Replacement "TO" "IN") "JJ",813),
   (NextTagRule (Replacement "VBD" "VBN") "IN",761)]</screen></para>
+        <para>The next thing we need to be able to do is to evaluate a rule. However, we currently
+            have no way to see whether a rule applies. To this end, we write the
+                <function>ruleApplication</function> function, this function returns the replacement
+            tag wrapped in <type>Maybe</type>'s <type>Just</type> constructor. If the rule could not
+            be applied to the current corpus element, <type>Nothing</type> is
+            returned:<programlisting>ruleApplication :: TransformationRule -> Z.Zipper (Tag, Tag) -> Maybe Tag
+ruleApplication (NextTagRule (Replacement old new) next) z = do
+  (_, proposed)     &lt;- Z.safeCursor z
+  (_, nextProposed) &lt;- rightCursor z
+  if proposed == old &amp;&amp; nextProposed == next then Just new else Nothing
+ruleApplication (PrevTagRule (Replacement old new) prev) z = do
+  (_, proposed)     &lt;- Z.safeCursor z
+  (_, prevProposed) &lt;- leftCursor z
+  if proposed == old &amp;&amp; prevProposed == prev then Just new else Nothing
+ruleApplication (SurroundTagRule (Replacement old new) prev next) z = do
+  (_, proposed)     &lt;- Z.safeCursor z
+  (_, nextProposed) &lt;- rightCursor z
+  (_, prevProposed) &lt;- leftCursor z
+  if proposed == old &amp;&amp; prevProposed == prev &amp;&amp;
+      nextProposed == next then Just new else Nothing</programlisting></para>
+        <para>This function closely matches the instantiation functions, except that we check
+            whether the context corresponds to the context specified by the rule. We can then apply
+            a rule to every element in the <type>Zipper</type>, checking whether the change was
+            correct when a <type>Just</type> value is
+            returned:<programlisting>scoreRule :: TransformationRule -> Z.Zipper (Tag, Tag) -> Int
+scoreRule r z = nCorrect - nIncorrect
+    where (nCorrect, nIncorrect) = scoreRule_ r z
+
+scoreRule_ :: TransformationRule -> Z.Zipper (Tag, Tag) -> (Int, Int)
+scoreRule_ r = Z.foldlz' (scoreElem r) (0, 0)
+    where scoreElem r s@(nCorrect, nIncorrect) z =
+              case ruleApplication r z of
+                Just tag -> if tag == correct then
+                                (nCorrect + 1, nIncorrect)
+                            else
+                                (nCorrect, nIncorrect + 1)
+                Nothing  -> s
+              where (correct, _) = Z.cursor z</programlisting></para>
+        <para>The main action happens in the <function>scoreRule_</function> function. It traverses
+            the zipper, applying the rule to each element. If the rule applies to an element, we
+            check whether the application corrected the tag, and update the counts
+                (<varname>nCorrect</varname> and <varname>nIncorrect</varname>) accordingly. If the
+            rule does not apply, we keep the counts as they are. <function>scoreRule</function> is
+            just a simple wrapper arround <function>scoreRule_</function>, and subtracts the number
+            of errors introduced from the number of corrections. You can try to apply this function
+            to some rules, for instance the best rule of the initial ranking:</para>
+        <para>
+            <screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let learningState = initialLearningState $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>let proposedRules = instRules
+  [instNextTagRule, instPrevTagRule, instSurroundTagRule] learningState</userinput>
+*Main> <userinput>head $ sortRules proposedRules</userinput>
+(NextTagRule (Replacement "TO" "IN") "AT",3471)
+*Main> <userinput>let (firstRule, _) = head $ sortRules proposedRules</userinput>
+*Main> <userinput>scoreRule firstRule learningState</userinput>
+3470</screen>
+        </para>
+        <para>So, given a set of rules, we have to select the best rule. We know that we have found
+            the best rule when its score is higher than the number of corrections of the next rule
+            in the sorted rule list. The <function>selectRule_</function> function does exactly
+            this:<programlisting>selectRule :: [(TransformationRule, Int)] -> Z.Zipper (Tag, Tag) ->
+              (TransformationRule, Int)
+selectRule ((rule, _):xs) z = selectRule_ xs z (rule, (scoreRule rule z))
+
+selectRule_ :: [(TransformationRule, Int)] -> Z.Zipper (Tag, Tag) ->
+              (TransformationRule, Int) -> (TransformationRule, Int)
+selectRule_ [] _ best = best
+selectRule_ ((rule, correct):xs) z best@(bestRule, bestScore) =
+    if bestScore >= correct then
+        best
+    else
+        if bestScore >= score then
+            selectRule_ xs z best
+        else
+            selectRule_ xs z (rule, score)
+    where score = scoreRule rule z</programlisting></para>
+        <para>First we check whether the stopping condition is reached (<code>bestScore >
+                correct</code>). If this is not the case, we have to decide whether the currently
+            best rule is better than the current rule (<code>bestScore >= score)</code>. If this is
+            is not the case, the current rule becomes the best rule. Let us use this function to
+            select the best rule:</para>
+        <para>
+            <screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
+*Main> <userinput>c &lt;- IO.hGetContents h</userinput>
+*Main> <userinput>let learningState = initialLearningState $ map toTrainingInstance $ words c</userinput>
+*Main> <userinput>let proposedRules = instRules
+  [instNextTagRule, instPrevTagRule, instSurroundTagRule] learningState</userinput>
+*Main> <userinput>selectRule (sortRules proposedRules) learningState</userinput>
+(NextTagRule (Replacement "TO" "IN") "AT",3470)</screen>
+        </para>
+        <para>Excellent! Our learner is now almost done! Once we have selected a rule, we need to
+            update the training state, and then we can rinse and repeat until we are happy with the
+            list of rules.</para>
     </sect1>
     <bibliography>
         <biblioentry xml:id="bib-brill1992">
