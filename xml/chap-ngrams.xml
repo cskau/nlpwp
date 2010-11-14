@@ -261,18 +261,38 @@ bigram [3,4] = [3,4] : []
 bigram [2,3,4] = [2,3] : [3,4] : []
 bigram [1,2,3,4] = [1,2] : [2,3] : [3,4] : []
 [[1,2],[2,3],[3,4]]</screen>Check?
-            We are almost there now. There is one tiny aesthetically unpleasing detail left. In the
-            pattern of our step condition we use the variable <emphasis role="italic">x</emphasis>,
-            whereas we do not use this variable in the body of the function. It is therefore not
-            necessary to bind the list element to this variable. Fortnutaly, Haskell provides a
-            pattern that matches anything, without doing binding. This pattern is represented by an
-            underscore. Using this underscore, we can patch up the aesthetics of our function, and
-            we are
-            set:<programlisting>bigram :: [a] -> [[a]]
+            We are almost there now. There two things left that we should look at before we mark our
+            function as production ready. The first is a tiny aesthetically unpleasing detail. In
+            the pattern of our step condition we use the variable <emphasis role="italic"
+                >x</emphasis>, whereas we do not use this variable in the body of the function. It
+            is therefore not necessary to bind the list element to this variable. Fortnutaly,
+            Haskell provides a pattern that matches anything, without doing binding. This pattern is
+            represented by an underscore. Using this underscore, we can patch up the aesthetics of
+            our
+            function:<programlisting>bigram :: [a] -> [[a]]
 bigram (_:[]) = []
 bigram xs = take 2 xs : bigram (tail xs)</programlisting></para>
-        <para>Good, we have our bigrams now... time for some applications a bigram language
-            model!</para>
+        <para>Secondly, our function fails if we apply it to an empty
+            list:<screen>Prelude> <userinput>bigram []</userinput>
+[[]*** Exception: Prelude.tail: empty list</screen></para>
+        <para>But hey! That error message looks familiar, doesn't it? Our function fails, again
+            because we attempted to extract a bigram from the tail of an ampty list. Indeed, an
+            empty list does not match with the pattern of our stop condition, and therefore the
+            recursive step is applied to it. We can solve this by adding a pattern for an empty
+            list:</para>
+        <programlisting>bigram :: [a] -> [[a]]
+bigram [] = []
+bigram (_:[]) = []
+bigram xs = take 2 xs : bigram (tail xs)</programlisting>
+        <para>This new pattern basically states that the list of a bigrams of an empty word list is
+            in turn an empty list. This assures that our function will not fail when applied to an
+            empty list:</para>
+        <para>
+            <screen>Prelude> <userinput>bigram []</userinput>
+[]</screen>
+        </para>
+        <para>Good, we are all set! We have our bigram function now... time for some applications of
+            a bigram language model!</para>
 	</sect1>
     <sect1>
         <title>Collocations</title>
