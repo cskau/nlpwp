@@ -917,7 +917,7 @@ transformationRules funs state = bestRule:(transformationRules funs nextState)
         <screen>*Main> <userinput>h &lt;- IO.openFile "brown-pos-train.txt" IO.ReadMode</userinput>
 *Main> <userinput>c &lt;- IO.hGetContents h</userinput>
 *Main> <userinput>let learningState = initialLearningState $ map toTrainingInstance $ words c</userinput>
-*Main> <userinput>take 10 $ rules [instNextTagRule, instPrevTagRule, instSurroundTagRule]
+*Main> <userinput>take 10 $ transformationRules [instNextTagRule, instPrevTagRule, instSurroundTagRule]
   learningState</userinput>
 [NextTagRule (Replacement "TO" "IN") "AT",
   PrevTagRule (Replacement "NN" "VB") "TO",
