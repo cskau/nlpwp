@@ -295,6 +295,10 @@ bigram xs = take 2 xs : bigram (tail xs)</programlisting>
             a bigram language model!</para>
 	</sect1>
     <sect1>
+        <title>A few words on Pattern Matching</title>
+        <para>Stub</para>
+    </sect1>
+    <sect1>
         <title>Collocations</title>
         <para>Stub</para>
     </sect1>
