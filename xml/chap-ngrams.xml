@@ -86,52 +86,200 @@
 ["Colorless","green","ideas","sleep","furiously"]</screen>
         <para>Hey! That looks like… indeed, that looks like a list of unigrams! Well, that was
             convenient. Unfortunately, things do not remain so simple if we move from unigrams to
-            bigrams or <emphasis role="italic">some-very-large-n-grams</emphasis>. Bigrams and n-gram require
-				us to construct 'windows' that cover more than one word at a time. In case of bigrams, for instance,
-				this means that we would like to obtain a list of lists of two words (bigrams).
-				Represented in such a way, the list of bigrams in the sentence <emphasis role="italic">Colorless green ideas sleep
-                furiously</emphasis> would look like this:</para>
+            bigrams or <emphasis role="italic">some-very-large-n-grams</emphasis>. Bigrams and
+            n-grams require us to construct 'windows' that cover more than one word at a time. In
+            case of bigrams, for instance, this means that we would like to obtain a list of lists
+            of two words (bigrams). Represented in such a way, the list of bigrams in the sentence
+                <emphasis role="italic">Colorless green ideas sleep furiously</emphasis> would look
+            like this:</para>
 	<screen><userinput>[["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"]]</userinput></screen>
-		<para>To arrive at such a list, we could start out with a list of words (yes indeed, the unigrams),
-			and complete the following sequence of steps:
-			<orderedlist>
-				<listitem>
-		 			<para>Place a window on the first bigram, and add it to our bigram list</para>
-				</listitem>
-				<listitem>
-					<para>Move the window one word to the right</para>
-				</listitem>
-				<listitem>
-					<para>Repeat from the first step, until the last bigram is stored</para>
-				</listitem>
-			</orderedlist>
-			Provided these steps, we first need a way to place a window on the first bigram, that is, we need to
-			isolate the first two items of the list of words. In the prelude, Haskell defines
-			a function named <emphasis role="italic">take</emphasis> that seems to suit our needs:
-		</para> 
+		<para>To arrive at such a list, we could start out with a list of words (yes indeed, the
+            unigrams), and complete the following sequence of steps: <orderedlist>
+                <listitem>
+                    <para>Place a window on the first bigram, and add it to our bigram list</para>
+                </listitem>
+                <listitem>
+                    <para>Move the window one word to the right</para>
+                </listitem>
+                <listitem>
+                    <para>Repeat from the first step, until the last bigram is stored</para>
+                </listitem>
+            </orderedlist>Provided these steps, we first need a way to place a window on the first
+            bigram, that is, we need to isolate the first two items of the list of words. In its
+            prelude, Haskell defines a function named <emphasis role="italic">take</emphasis> that
+            seems to suit our needs: </para> 
 		<screen>Prelude> <userinput>:type take</userinput> 
 take :: Int -> [a] -> [a]</screen>
-		<para>
-		This function takes an <emphasis role="italic">Integer</emphasis> denoting <emphasis role="italic">n</emphasis> number of elements, 
-		and a list of some type <emphasis role="italic">a</emphasis>. Given these arguments, it returns the first
-		<emphasis role="italic">n</emphasis> elements of a list of <emphasis role="italic">a</emphasis>s.
-		Thus, passing it the number two and a list of words should give us... our first bigram:</para>
+		<para>This function takes an <emphasis role="italic">Integer</emphasis> denoting <emphasis
+                role="italic">n</emphasis> number of elements, and a list of some type <emphasis
+                role="italic">a</emphasis>. Given these arguments, it returns the first <emphasis
+                role="italic">n</emphasis> elements of a list of <emphasis role="italic"
+                >a</emphasis>s. Thus, passing it the number two and a list of words should give
+            us... our first bigram:</para>
         <screen>Prelude> <userinput>take 2 ["Colorless", "green", "ideas", "sleep", "furiously"]</userinput>
 ["Colorless","green"]</screen>
 		<para>Great! That worked out nice! Now from here on off, the idea is to add this bigram to a list,
-			and to move the window one word to the right, so that we obtain the second bigram. Let us first
-			turn to the latter (as we will get the list part for free later on). How do we move the window
-			one word to the right? That is, how do we extract the second and third word in the list, instead
-			of the first and second? A possible answer to this question would be to use the <emphasis role="italic">!!</emphasis>
-			operator:
-		</para>
-    </sect1>
+            and to move the window one word to the right, so that we obtain the second bigram. Let
+            us first turn to the latter (as we will get the list part for free later on). How do we
+            move the window one word to the right? That is, how do we extract the second and third
+            word in the list, instead of the first and second? A possible would be to use Haskell's
+                <emphasis role="italic">!!</emphasis> operator: </para>
+		<screen>Prelude> <userinput>:t (++)</userinput>
+(!!) :: [a] -> Int -> a</screen>
+        <para>This operator takes a list of <emphasis role="italic">a</emphasis>s, and returns the
+                <emphasis role="italic">n</emphasis>th element;</para>
+		<screen>Prelude> <userinput>["Colorless", "green", "ideas", "sleep", "furiously"] !! 1</userinput> 
+"green"
+Prelude> <userinput>["Colorless", "green", "ideas", "sleep", "furiously"] !! 2</userinput> 
+"ideas"</screen>
+		<para>Great, this gives us the two words that make up the second bigram. Now all we have to do is
+            stuff them together in a list: </para>
+		<screen>Prelude> <userinput>["Colorless", "green", "ideas", "sleep", "furiously"] !! 1 : 
+["Colorless", "green", "ideas", "sleep", "furiously"] !! 2 : []</userinput> 
+["green","ideas"]</screen>		
+		<para>Well, this does the trick. However, it is not very convenient to wrap this up in a function,
+            and moreover, this approach is not very Haskellish. In fact, there is a better and more
+            elegant solution, namely to move the list instead of the window. Wait! What? Yes, move
+            the list instead of the window. But how? Well, we could just look at the first and
+            second word in the list again, after getting rid of the (previous) first word. In other
+            words, we could look at the first two words of the tail of the list of words: </para>
+		<screen>Prelude> <userinput>take 2 (tail ["Colorless", "green", "ideas", "sleep", "furiously"])</userinput>
+["green","ideas"]</screen>
+        <para>Now that looks Haskellish! What about the next bigram? and the one after that? Well, we
+            could apply the same trick over and over again. We can look at the first two words of
+            the tail of the tails of the list of words:</para>
+        <screen>Prelude> <userinput>take 2 (tail (tail ["Colorless", "green", "ideas", "sleep", "furiously"]))</userinput>
+["ideas","sleep"]</screen>
+        <para>... and the tail of the tail of the tail of the list of words:</para>
+        <screen>Prelude> <userinput>take 2 (tail (tail (tail ["Colorless", "green", "ideas", "sleep", "furiously"])))</userinput>
+["sleep","furiously"]</screen>
+        <para>In fact, that last step already gives us the last bigrams in the sentence <emphasis
+                role="italic">Colorless green ideas sleep furiously</emphasis>. The last step would
+            be to throw all these two word lists in a larger list, and we have ourselves a list of
+            bigrams. However, whereas this is managable by hand for this particular example, think
+            about obtaining all the bigrams in the Brown corpus in this manner (gives you
+            nightmares, doesn't it?). Indeed, we would rather like to wrap this approach up in a
+            function that does all the hard word for us. Provided a list, this function should take
+            its first two arguments, and then repetitively do this for the tail of this, and the
+            tail of the tail of this list, and so forth. In other words, it should simply constantly
+            take the first bigram of a list, and do the same for its
+            tail:<programlisting>bigram :: [a] -> [[a]]
+bigram xs = take 2 xs : bigram (tail xs)</programlisting></para>
+        <para>Wow! That almost looks like black magic, doesn't it? The type signature reveals that
+            the function <emphasis role="italic">bigram</emphasis> takes a list of <emphasis
+                role="italic">a</emphasis>s, and returns a list of list of <emphasis role="italic"
+                >a</emphasis>s. The latter could be a list of bigrams, so this looks promising. The
+            function takes the first two elements of the list of <emphasis role="italic"
+                >a</emphasis>s, and places them in front of the result of applying the same function
+            to the tail of the list of <emphasis role="italic">a</emphasis>s. Eehh.. what?
+            Congratulations! You have just seen your first share of <emphasis role="italic"
+                >recursion</emphasis> magic (or madness). A recursive function is a function that
+            calls itself, and whereas it might look dazzling on first sight, this function actually
+            does nothing more than what we have done by hand in the above. It collects the first two
+            elements of a list, and then does the same for the tail of this list. Moreover, it
+            stuffs the two word lists in a larger list on the fly (we told you the list stuff would
+            come in for free, didn't we?). But wait, will this work? Well, let us put it to a
+            test:<screen>Prelude> <userinput>bigram ["Colorless", "green", "ideas", "sleep", "furiously"]</userinput>
+[["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"],
+["furiously"],[],*** Exception: Prelude.tail: empty list</screen></para>
+        <para>And the answer is... almost! The function gives us the four bigrams, but it seems to
+            be too greedy: it does not stop looking for bigrams after collecting the last bigram in
+            the list of words. But did we tell it when to stop then? Nope, we didn't. In fact, we
+            have only specified a so-called <emphasis role="italic">recursive step</emphasis> of our
+            recursive function. What we miss is what is called a <emphasis role="italic">stop
+                condition</emphasis> (also known as a <emphasis role="italic">base case</emphasis>).
+            In a recursive definition, a stop condition defines when a function should stop calling
+            itself, that is, when our recusrive problem is solved. In absence of a stop condition, a
+            recursive function will keep calling itself for eternity. In fact, this explains above
+            the error, we didn't specify a stop condition so the function will keep looking for
+            bigrams for eternity. However, as the list of words is finite, the function will run
+            into trouble when trying to look for bigrams in the tail of an empty list, and this is
+            exactly what the exception tells us. So, how to fix it? Well, add a stop condition that
+            specifies that we should stop looking for bigrams when the tail of a list contains only
+            one item (as it is difficult to construct a bigram out of only one word). We could do
+            this using an if..then..else structure:</para>
+        <programlisting>bigram :: [a] -> [[a]]
+bigram xs = if length(xs) >= 2
+	then take 2 xs : bigram (tail xs)
+	else []</programlisting>
+        <para>This should solve our
+            problems:<screen>Prelude> <userinput>bigram ["Colorless", "green", "ideas", "sleep", "furiously"]</userinput>
+[["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"]]</screen></para>
+        <para>And, indeed it does. When there is only one word left in our list of words, the bigram
+            function returns an empty list, and moreover, it will stop calling itself therewith
+            ending the recursion. So, lets see how this works with an artificial example. First we
+            will recursively apply the bigram function until it is applied to a list that has less
+            than two elements:</para>
+        <screen>Prelude> <userinput>bigram [1,2,3,4]</userinput>
+bigram [1,2,3,4] = [1,2] : bigram (tail [1,2,3,4])
+bigram [2,3,4] = [2,3] : bigram (tail [2,3,4])
+bigram [3,4] = [3,4] : bigram (tail [3,4])
+bigram [4] = []</screen>
+        <para>Application of the bigram function to a list with less than two elements results in an
+            empty list. Moreover, the bigram function will not be applied recursively again as we
+            have reached our stop condition. Now, the only thing that remains is to <emphasis
+                role="italic">unwind</emphasis> the recursion. That is, we have called the bigram
+            function from within itself for three times, and as we have just found the result to its
+            third and last self call, we can now reversely construct the result of the outermost
+            function call:</para>
+        <screen>bigram [3,4] = [3,4] : []
+bigram [2,3,4] = [2,3] : [3,4] : []
+bigram [1,2,3,4] = [1,2] : [2,3] : [3,4] : []
+[[1,2],[2,3],[3,4]]</screen>
+        <para>Great! Are you still with us? As L. Peter Deutsch put it: "to iterate is human, to
+            recurse divine." Whereas recursive defintions may seem difficult on first sight, you
+            will find they are very powerful once you get the hang of them. In fact, they are very
+            common in Haskell, and this will certainly be the first of many to come in the course of
+            this book. Lets stick to the bigram function a little longer, because whereas the above
+            works, it is aesthetically unpleasing. That is, we used an if..then..else structure to
+            define our stop condition, but Haskell provides a more elegant way to do this through
+            so-called <emphasis role="italic">pattern matching</emphasis>. Pattern matching can be
+            though of as defining multiple defintion of the same functions, each tailored and honed
+            for a specific argument pattern. Provided an argument, Haskell will then pick the first
+            matching defintion of a function, and return the result its application. Hence, we can
+            define patterns for the stop condition and recursive step as follows:</para>
+        <programlisting>bigram :: [a] -> [[a]]
+bigram (x:[]) = []
+bigram xs = take 2 xs : bigram (tail xs)</programlisting>
+        <para>The second line represents the stop condition, and the third the familiar recursive
+            step. Provided the list of words in the sentence <emphasis role="italic">Colorless green
+                ideas sleep furiously</emphasis>, Haskell will match this to the recursive step, and
+            apply this definition of the function to the list. When the recursive step calls the
+            bigram function with a list that contains only one word (indeed, the tail of the list
+            containing the last bigram), Haskell will match this call with the stop condition. The
+            result of this call will simply an empty list. Lets first proof that this indeed
+            works:<screen>Prelude> <userinput>bigram ["Colorless", "green", "ideas", "sleep", "furiously"]</userinput>
+[["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"]]</screen>It
+            did! To make the working of the use of pattern matching more insightful weagain  can
+            write out an artificial example in
+            steps:<screen>Prelude> <userinput>bigram [1,2,3,4]</userinput>
+bigram [1,2,3,4] = [1,2] : bigram (tail [1,2,3,4])
+bigram [2,3,4] = [2,3] : bigram (tail [2,3,4])
+bigram [3,4] = [3,4] : bigram (tail [3,4])
+bigram (4:[]) = []
+bigram [3,4] = [3,4] : []
+bigram [2,3,4] = [2,3] : [3,4] : []
+bigram [1,2,3,4] = [1,2] : [2,3] : [3,4] : []
+[[1,2],[2,3],[3,4]]</screen>Check?
+            We are almost there now. There is one tiny aesthetically unpleasing detail left. In the
+            pattern of our step condition we use the variable <emphasis role="italic">x</emphasis>,
+            whereas we do not use this variable in the body of the function. It is therefore not
+            necessary to bind the list element to this variable. Fortnutaly, Haskell provides a
+            pattern that matches anything, without doing binding. This pattern is represented by an
+            underscore. Using this underscore, we can patch up the aesthetics of our function, and
+            we are
+            set:<programlisting>bigram :: [a] -> [[a]]
+bigram (_:[]) = []
+bigram xs = take 2 xs : bigram (tail xs)</programlisting></para>
+        <para>Good, we have our bigrams now... time for some applications a bigram language
+            model!</para>
+	</sect1>
     <sect1>
-        <title>From bigrams to n-grams</title>
+        <title>Collocations</title>
         <para>Stub</para>
     </sect1>
     <sect1>
-        <title>Collocations</title>
+        <title>From bigrams to n-grams</title>
         <para>Stub</para>
     </sect1>
 </chapter>

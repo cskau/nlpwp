@@ -9,6 +9,8 @@ Currying: words -> tokenization
 if/then/else: words -> wordlist
 Modules (basic function calling): words -> wordlist
 Maybe monad: tagging -> transformation-based
+Pattern matching: ngrams -> bigrams
+Recursion -> ngrams -> bigrams
 
 Data types
 ==========
@@ -28,5 +30,7 @@ fromIntegral: words -> sentences
 lines: words -> tokenization
 map: words -> sentences
 sum: words -> sentences
+take: ngrams -> bigrams
+
 words: words -> tokenization
 
