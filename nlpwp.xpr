@@ -481,5 +481,6 @@
         <file name="xml/eq-tt-ratio.xml"/>
         <file name="xsl/html-chunk.xsl"/>
         <file name="xml/nlpwp.xml"/>
+        <file name="xml/preface.xml"/>
     </projectTree>
 </project>

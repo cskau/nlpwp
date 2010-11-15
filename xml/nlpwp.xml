@@ -29,6 +29,7 @@
         </legalnotice>
     </info>
 
+    <xi:include href="preface.xml"/>
     <xi:include href="chap-intro.xml"/>
     <xi:include href="chap-words.xml"/>
     <xi:include href="chap-ngrams.xml"/>
