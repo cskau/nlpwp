@@ -478,6 +478,7 @@
         <file name="xml/chap-ngrams.xml"/>
         <file name="xml/chap-tagging.xml"/>
         <file name="xml/chap-words.xml"/>
+        <file name="xml/eq-tbl-rule-score.mml"/>
         <file name="xml/eq-tt-ratio.xml"/>
         <file name="xsl/html-chunk.xsl"/>
         <file name="xml/nlpwp.xml"/>
