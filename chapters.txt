@@ -1,0 +1,35 @@
+1. Introduction
+
+2. Words
+
+3. N-grams
+	- Suffix Array
+
+4. Measuring distance and similarity
+
+a. Classification
+	- Bayesian learning
+	- Maximum entropy modeling
+	
+b. Information Retrieval
+	- Building Inverted Indexes
+	- Vector Space Models
+	
+c. Part of speech tagging
+
+d. Regular Languages
+	- Regular Expressions
+	- Finite State Automata
+	- Tokenization Revisited
+
+f. Context Free Grammars
+	- CFG's
+		- Top-down
+		- Earley
+	- PCFG's
+		- Top-down
+		- CKY
+		
+g. (Unification Grammars)
+
+x. Performance

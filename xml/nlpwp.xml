@@ -6,6 +6,8 @@
         <title>Natural Language Processing for the Working Programmer</title>
         <copyright>
             <year>2010</year>
+            <holder>Daniël de Kok</holder>
+            <holder>Harm Brouwer</holder>
         </copyright>
         <author>
             <personname>Daniël de Kok</personname>
@@ -15,8 +17,19 @@
             <personname>Harm Brouwer</personname>
             <email>me@hbrouwer.eu</email>
         </author>
+        
+        <legalnotice>
+            <title>License</title>
+            
+            <para>
+                Some rights reserved. This book is made available under the Creative Commons
+                Attribution 3.0 License (CC-BY). This license is available from:
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+        </legalnotice>
     </info>
 
+    <xi:include href="preface.xml"/>
     <xi:include href="chap-intro.xml"/>
     <xi:include href="chap-words.xml"/>
     <xi:include href="chap-ngrams.xml"/>
