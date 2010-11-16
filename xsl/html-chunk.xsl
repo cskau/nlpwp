@@ -26,6 +26,9 @@
     
     <xsl:param name="section.autolabel" select="1" />
     <xsl:param name="section.label.includes.component.label" select="1" />
+
+    <!-- No 'title' atttributes. -->
+    <xsl:template match="*" mode="html.title.attribute"/>
     
     <!-- Add 'head' elements. -->
     <xsl:template name="user.head.content">
