@@ -219,7 +219,7 @@ tail :: [a] -> [a] </screen>
 "level"</screen>
         </para>
         <para>We bumped into a <function>palindrome</function>, a word that can be read forward and
-            backward. Now, suppose we would like to write our own function to determine wether a
+            backward. Now, suppose we would like to write our own function to determine whether a
             word is a palindrome? We first need to make a slightly more abstract definition of a
             palindrome: a word is a palindrome if it is equal to its reverse. In Haskell we can
             compare values using the <function>==</function> operator: </para>
@@ -532,13 +532,10 @@ sum :: (Num a) => [a] -> a</screen>
             <screen>Prelude> <userinput>(/) 1.0 2.0</userinput>
 0.5</screen>
         </para>
-        <para>
-            Anyway, the verdict of the typesignature of
-            <function>(/)</function> is clear, it requires two arguments that
-            belong to the <emphasis>Fractional</emphasis> typeclass. The sum
-            and length that we calculated clearly do not belong to this
-            typeclass, since they are of the type <emphasis>Int</emphasis>:
-        </para>
+        <para> Anyway, the verdict of the type signature of <function>(/)</function> is clear, it
+            requires two arguments that belong to the <emphasis>Fractional</emphasis> typeclass. The
+            sum and length that we calculated clearly do not belong to this typeclass, since they
+            are of the type <emphasis>Int</emphasis>: </para>
         <para>
             <screen>Prelude> <userinput>:type sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])</userinput>
 sum (map length ["Oh", ",", "no", ",", "flying", ",", "pink", "ponies"])
@@ -1606,7 +1603,7 @@ lookupOrder1 customers orders customer =
             very
             simple:<programlisting>(Just x) >>= k = k x
 Nothing  >>= _ = Nothing</programlisting></para>
-        <para>That's all! If the left-hand side expressian evaluates to <type>Just x</type>, the
+        <para>That's all! If the left-hand side expression evaluates to <type>Just x</type>, the
             expression on the left hand side is evaluated with <varname>x</varname> as its argument.
             If the left-hand side evaluates to <type>Nothing</type>, the right-end side is not
             evaluated, and the whole expression returns <type>Nothing</type>.</para>
@@ -1637,7 +1634,7 @@ lookupOrder2 customers orders customer = do
     return orders</programlisting></para>
         <para>You can see that we added the <emphasis role="italic">do</emphasis> keyword to start
             the do-notation. Every expression that follows can be seen as just one element in a
-            squence of <type>(>>=)</type> expressions. Consquently, each line is governed by the
+            sequence of <type>(>>=)</type> expressions. Consequently, each line is governed by the
             'laws' of the monad. If the first lookup fails, no further evaluation is performed, and
                 <function>lookupOrder2</function> will return <type>Nothing</type>. Otherwise,
             computation continues. The do-notation also allows the use of the backward arrow
@@ -1676,7 +1673,7 @@ lookupOrder customers orders customer = do
                 >IO</emphasis> monad. The <type>IO</type> monad is not very different from the
                 <type>Maybe</type> monad, it implements the <function>(>>=)</function> and
                 <type>return</type> functions as required for monads. However, there is a subtle,
-            but very important difference. Rember that you can extract a value from a
+            but very important difference. Remember that you can extract a value from a
                 <type>Maybe</type> value using its <type>Just</type>
             constructor?<programlisting>value = case someMaybe of
   Just x = x</programlisting></para>
