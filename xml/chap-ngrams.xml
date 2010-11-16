@@ -30,7 +30,7 @@
             not play by the rules of the English language. In other words, the fact that languages
             have rules constraints the way in which words can be combined into an acceptable
             sentences.</para>
-        <para>Hey! That sounds good for us NLP programmers (we can almost here you think), language
+        <para>Hey! That sounds good for us NLP programmers (we can almost hear you think), language
             plays by rules, computers work with rules, well, we’re done, aren’t we? We’ll infer a
             set of rules, and there! we have ourselves <emphasis role="italic">language
                 model</emphasis>. A model that describes how a language, say English, works and
