@@ -87,9 +87,11 @@ TrainingInstance "the" "AT"
 *Main> <userinput>TrainingInstance "pony" "NN"</userinput>
 TrainingInstance "pony" "NN"</screen></para>
         <para>Since our first POS tagger is trained purely on tokens and tags, and requires no
-            sentencial information, the corpus will be represented as a list of <type>TrainingInstance</type>. Since we can use the <function>words</function> function to tokenize the corpus, the task at hand is
-            to convert a list of strings of the format "token/tag" to a list of <type>TrainingInstance</type>. This is done by splitting the <type
-                >String</type> on the forward slash character (/). We can use the
+            sentential information, the corpus will be represented as a list of
+                <type>TrainingInstance</type>. Since we can use the <function>words</function>
+            function to tokenize the corpus, the task at hand is to convert a list of strings of the
+            format "token/tag" to a list of <type>TrainingInstance</type>. This is done by splitting
+            the <type>String</type> on the forward slash character (/). We can use the
                 <function>break</function> function to break the string on the first element for
             which the supplied function is true. For
             instance:<screen>Prelude> <userinput>break (== '/') "the/AT"</userinput>
@@ -197,8 +199,8 @@ TrainingInstance token tag</programlisting></para>
   TrainingInstance "Jury" "NN",TrainingInstance "said" "VBD",
   TrainingInstance "Friday" "NR",TrainingInstance "an" "AT",
   TrainingInstance "investigation" "NN",TrainingInstance "of" "IN"]</screen></para>
-        <para>Allright! That's indeed our corpus in beautified format. The next step is to traverse
-            this corpus, registering for each word with which tag it occured (and how often). For
+        <para>Alright! That's indeed our corpus in beautified format. The next step is to traverse
+            this corpus, registering for each word with which tag it occurred (and how often). For
             this we write the <function>tokenTagFreq</function>
             function:<programlisting>import qualified Data.List as L
 import qualified Data.Map as M
@@ -231,7 +233,7 @@ fromList [("County",fromList [("NN",1)]),("Friday",fromList [("NR",1)]),
   ("Jury",fromList [("NN",1)]),("The",fromList [("AT",1)]),
   ("an",fromList [("AT",1)]),("investigation",fromList [("NN",1)]),
   ("of",fromList [("IN",1)]),("said",fromList [("VBD",1)])]</screen></para>
-        <para>It seems to work, but we cannot be sure until we have seen duplicatesand ambiguous
+        <para>It seems to work, but we cannot be sure until we have seen duplicates and ambiguous
             tokens. You may want to play a little with larger corpus samples or artificial training
             data to confirm that <function>tokenTagFreqs</function> works as intended.</para>
         <para>The next thing we need for our first part of speech tagger is use the map defined by
@@ -368,7 +370,7 @@ freqTagWord m t = M.lookup w t</programlisting></para>
             known to our model correctly.</para>
         <para>To get an impression what these numbers actually mean, we will create a baseline. A
             baseline is a dumb model that indicates (more or less) the range we are working in. Our
-            basline will simply pick the most frequent tag for every token (as in, most frequent in
+            baseline will simply pick the most frequent tag for every token (as in, most frequent in
             the corpus, not for the token). We will generalize the function a bit, allowing us to
             specify the tag to be
             used:<programlisting>baselineTagger :: Tag -> Token -> Maybe Tag
@@ -405,7 +407,7 @@ backoffTagger f bt t = let pick = f t in
             20.46% of the unknown words correctly. This is almost double of the baseline, how is
             that possible? It turns out that of some classes of tokens, such as articles,
             prepositions, and tokens, you will never encounter new ones in unseen data. Unknown
-            words are often nouns, verbs, and adjectives. Since nouns form a larger proposotion of
+            words are often nouns, verbs, and adjectives. Since nouns form a larger proposition of
             unknown words than all words, you will also get a better performance when guessing that
             a word is a singular common noun in unseen data.</para>
         <para><xref linkend="tbl-tagging-freq-performance"/> summarizes the result so far. We have
@@ -474,7 +476,7 @@ backoffTagger f bt t = let pick = f t in
             rules is very tedious work, and specific to one language and tag set. Fortunately, <xref
                 linkend="bib-brill1992"/> has shown that such rules can be learnt automatically
             using so-called <emphasis role="italic">transformation-based learning</emphasis>. The
-            learning produre is straightforward:<orderedlist>
+            learning procedure is straightforward:<orderedlist>
                 <listitem>
                     <para>Tag every token in the training corpus using the most frequent tag for a
                         word.</para>
@@ -489,7 +491,7 @@ backoffTagger f bt t = let pick = f t in
                 </listitem>
                 <listitem>
                     <para>Select the a rule according to the following equation:<equation>
-                            <title>Transformation rule selection criterium</title>
+                            <title>Transformation rule selection criterion</title>
                             <xi:include href="eq-tbl-rule-score.mml"/>
                         </equation></para>
                 </listitem>
@@ -524,7 +526,7 @@ backoffTagger f bt t = let pick = f t in
             on three tag-based templates, but after implementing the learning procedure, it should
             be fairly obvious how to had other contexts and integrating words in templates. The
             templates that we will create, will take be all variations on directly surrounding tags
-            (previous tag, next tag, both surrounding tags). Thanks to Haskell's algabraic data
+            (previous tag, next tag, both surrounding tags). Thanks to Haskell's algebraic data
             types, we can easily model these
             templates:<programlisting>data Replacement = Replacement Tag Tag
                    deriving (Eq, Ord, Show)
@@ -838,7 +840,7 @@ scoreRule_ r = Z.foldlz' (scoreElem r) (0, 0)
             check whether the application corrected the tag, and update the counts
                 (<varname>nCorrect</varname> and <varname>nIncorrect</varname>) accordingly. If the
             rule does not apply, we keep the counts as they are. <function>scoreRule</function> is
-            just a simple wrapper arround <function>scoreRule_</function>, and subtracts the number
+            just a simple wrapper around <function>scoreRule_</function>, and subtracts the number
             of errors introduced from the number of corrections. You can try to apply this function
             to some rules, for instance the best rule of the initial ranking:</para>
         <para>
