@@ -14,11 +14,11 @@
     <sect1 xml:id="sec-intro-whats-haskell">
         <title>What is Haskell?</title>
         <para>Haskell is a static, pure, lazy, functional language. Gee, that sounds an awful lot
-            like buzzword lingo! They may well be, but the make Haskell a very disarable language
-            most of the time, and a painful language sometimes. These properties are also opposite
-            to most mainstream language. For instance, Java is static, impure, eager, and not
-            functional, Ruby is dynamic, impure, eager, and only functional at times. While it is
-            hard to give an accurate definition of every characteristic, we will try anyway.</para>
+            like buzzword lingo! That may well be, but these properties make Haskell a very
+            effective language, and sometimes a bit odd. These properties are also opposite to most
+            mainstream languages. For instance, Java is static, impure, eager, and not functional,
+            Ruby is dynamic, impure, eager, and only functional at times. While it is hard to give
+            an accurate definition of every characteristic, we will try anyway.</para>
         <para><emphasis role="bold">Functional:</emphasis> Haskell puts an emphasis on functions and
             treats computation as the evaluation of functions. This in contrast to so-called
             imperative languages, that specify an order of instructions. As such, Haskell functions
