@@ -48,7 +48,7 @@
         <para>You may ask why we chose Haskell as the main programming language for this book,
             rather than a more mainstream language. During our own experiences developing natural
             language processing tools, we noticed that very many natural language processing tasks
-            are relatively straighforward data transformations. Haskell is a language that is
+            are relatively straightforward data transformations. Haskell is a language that is
             exceptionally good at data transformations. First of all, because it has <emphasis
                 role="italic">higher order functions</emphasis> (functions that take functions as an
             argument) that traverse lists, sets, mappings, etc. Second, Haskell makes it easy to
