@@ -27,7 +27,7 @@
             becomes evident. The sentence <emphasis role="italic">Furiously sleep ideas green
                 colorless</emphasis> is grammatically unacceptable, and so is <emphasis
                 role="italic">Ideas furiously colorless sleep green</emphasis>: these sentences do
-            not play by the rules of the english language. In other words, the fact that languages
+            not play by the rules of the English language. In other words, the fact that languages
             have rules constraints the way in which words can be combined into an acceptable
             sentences.</para>
         <para>Hey! That sounds good for us NLP programmers (we can almost here you think), language
@@ -78,7 +78,7 @@
             found by placing a window on its first two words, and by moving this window to the right
             one word at a time in a stepwise manner. We then repeat this procedure, until the window
             covers the last two words of a sentence. In fact, the same holds for unigrams and
-            N-grams with <emphasis role="italic">n</emphasis> greater than two. So, say we we have a
+            N-grams with <emphasis role="italic">n</emphasis> greater than two. So, say we have a
             body of text represented as a list of words or tokens (whatever you prefer). For the
             sake of legacy, we will stick to a list of tokens representing the sentence <emphasis
                 role="italic">Colorless green ideas sleep furiously</emphasis>:</para>
@@ -156,7 +156,7 @@ Prelude> <userinput>["Colorless", "green", "ideas", "sleep", "furiously"] !! 2</
         <para>In fact, that last step already gives us the last bigrams in the sentence <emphasis
                 role="italic">Colorless green ideas sleep furiously</emphasis>. The last step would
             be to throw all these two word lists in a larger list, and we have ourselves a list of
-            bigrams. However, whereas this is managable by hand for this particular example, think
+            bigrams. However, whereas this is manageable by hand for this particular example, think
             about obtaining all the bigrams in the Brown corpus in this manner (gives you
             nightmares, doesn't it?). Indeed, we would rather like to wrap this approach up in a
             function that does all the hard word for us. Provided a list, this function should take
@@ -189,7 +189,7 @@ bigram xs = take 2 xs : bigram (tail xs)</programlisting></para>
             recursive function. What we miss is what is called a <emphasis role="italic">stop
                 condition</emphasis> (also known as a <emphasis role="italic">base case</emphasis>).
             In a recursive definition, a stop condition defines when a function should stop calling
-            itself, that is, when our recusrive problem is solved. In absence of a stop condition, a
+            itself, that is, when our recursive problem is solved. In absence of a stop condition, a
             recursive function will keep calling itself for eternity. In fact, this explains above
             the error, we didn't specify a stop condition so the function will keep looking for
             bigrams for eternity. However, as the list of words is finite, the function will run
@@ -227,16 +227,16 @@ bigram [2,3,4] = [2,3] : [3,4] : []
 bigram [1,2,3,4] = [1,2] : [2,3] : [3,4] : []
 [[1,2],[2,3],[3,4]]</screen>
         <para>Great! Are you still with us? As L. Peter Deutsch put it: "to iterate is human, to
-            recurse divine." Whereas recursive defintions may seem difficult on first sight, you
+            recurse divine." Whereas recursive definitions may seem difficult on first sight, you
             will find they are very powerful once you get the hang of them. In fact, they are very
             common in Haskell, and this will certainly be the first of many to come in the course of
             this book. Lets stick to the bigram function a little longer, because whereas the above
             works, it is aesthetically unpleasing. That is, we used an if..then..else structure to
             define our stop condition, but Haskell provides a more elegant way to do this through
             so-called <emphasis role="italic">pattern matching</emphasis>. Pattern matching can be
-            though of as defining multiple defintion of the same functions, each tailored and honed
+            though of as defining multiple definition of the same functions, each tailored and honed
             for a specific argument pattern. Provided an argument, Haskell will then pick the first
-            matching defintion of a function, and return the result its application. Hence, we can
+            matching definition of a function, and return the result its application. Hence, we can
             define patterns for the stop condition and recursive step as follows:</para>
         <programlisting>bigram :: [a] -> [[a]]
 bigram (x:[]) = []
@@ -250,7 +250,7 @@ bigram xs = take 2 xs : bigram (tail xs)</programlisting>
             result of this call will simply an empty list. Lets first proof that this indeed
             works:<screen>Prelude> <userinput>bigram ["Colorless", "green", "ideas", "sleep", "furiously"]</userinput>
 [["Colorless","green"],["green","ideas"],["ideas","sleep"],["sleep","furiously"]]</screen>It
-            did! To make the working of the use of pattern matching more insightful weagain  can
+            did! To make the working of the use of pattern matching more insightful weagain can
             write out an artificial example in
             steps:<screen>Prelude> <userinput>bigram [1,2,3,4]</userinput>
 bigram [1,2,3,4] = [1,2] : bigram (tail [1,2,3,4])
@@ -265,7 +265,7 @@ bigram [1,2,3,4] = [1,2] : [2,3] : [3,4] : []
             function as production ready. The first is a tiny aesthetically unpleasing detail. In
             the pattern of our step condition we use the variable <emphasis role="italic"
                 >x</emphasis>, whereas we do not use this variable in the body of the function. It
-            is therefore not necessary to bind the list element to this variable. Fortnutaly,
+            is therefore not necessary to bind the list element to this variable. Fortunately,
             Haskell provides a pattern that matches anything, without doing binding. This pattern is
             represented by an underscore. Using this underscore, we can patch up the aesthetics of
             our
@@ -276,7 +276,7 @@ bigram xs = take 2 xs : bigram (tail xs)</programlisting></para>
             list:<screen>Prelude> <userinput>bigram []</userinput>
 [[]*** Exception: Prelude.tail: empty list</screen></para>
         <para>But hey! That error message looks familiar, doesn't it? Our function fails, again
-            because we attempted to extract a bigram from the tail of an ampty list. Indeed, an
+            because we attempted to extract a bigram from the tail of an empty list. Indeed, an
             empty list does not match with the pattern of our stop condition, and therefore the
             recursive step is applied to it. We can solve this by adding a pattern for an empty
             list:</para>
